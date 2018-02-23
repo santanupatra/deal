@@ -23,14 +23,14 @@
 					echo $this->Form->input('email',array('required'=>'required','type'=>'email'));
                                         echo $this->Form->input('paypal_business_email',array('required'=>'required','type'=>'email','label'=>'Paypal business email'));
 					
-					echo $this->Form->input('company_name',array('required'=>'required','label'=>'Legit Business Name'));
+					//echo $this->Form->input('company_name',array('required'=>'required','label'=>'Legit Business Name'));
 					echo $this->Form->input('password',array('required'=>'required'));
 					echo $this->Form->input('mobile_number');
 					
                                         
                                         
-                                        echo $this->Form->input('dba',array('required'=>'required','label'=>'DBA'));
-                                        echo $this->Form->input('ein',array('required'=>'required','label'=>'EIN'));
+                                        //echo $this->Form->input('dba',array('required'=>'required','label'=>'DBA'));
+                                        //echo $this->Form->input('ein',array('required'=>'required','label'=>'EIN'));
                                         
                                         
 				?>
@@ -41,7 +41,7 @@
 					<?php
 
 
-					echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
+					//echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
                                       
 					echo $this->Form->input('is_active');
                                         

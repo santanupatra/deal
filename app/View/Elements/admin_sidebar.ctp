@@ -53,29 +53,61 @@ if(count($pass_data)>0){
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/activities/list"><?php if($this->params['controller']=='activities')
         {?><i class="icon-chevron-right"></i><?php } ?> Tracking Activity</a>
 	</li> -->
-	<li <?php if($this->params['controller']=='shops')
-        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/shops/list"><?php if($this->params['controller']=='shops')
+	<li <?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_list' || $this->params['action']=='admin_edit' ||  $this->params['action']=='admin_add'))
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/shops/list"><?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_list' || $this->params['action']=='admin_edit' ||  $this->params['action']=='admin_add'))
         {?><i class="icon-chevron-right"></i><?php } ?><span <?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_list' || $this->params['action']=='admin_add' || $this->params['action']=='admin_edit' || $this->params['action']=='admin_view'))
         {?>class="badge badge-info1 pull-right"<?php }else{ ?>class="badge badge-info pull-right"<?php } ?>><?php echo($getTotalnormalVendor)?></span> Vendor Management</a>
 	</li>
+        
+        
+        <li <?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_shop_list' || $this->params['action']=='admin_shop_edit' ||  $this->params['action']=='admin_shop_add'))
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/shops/shop_list"><?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_shop_list' || $this->params['action']=='admin_shop_edit' ||  $this->params['action']=='admin_shop_add'))
+        {?><i class="icon-chevron-right"></i><?php } ?><span <?php if($this->params['controller']=='shops' && ($this->params['action']=='admin_shop_list' || $this->params['action']=='admin_shop_add' || $this->params['action']=='admin_shop_edit' || $this->params['action']=='admin_shop_view'))
+        {?>class="badge badge-info1 pull-right"<?php }else{ ?>class="badge badge-info pull-right"<?php } ?>></span> Shops Management</a>
+	</li>
+        
+        
+        
+        
+        
+        
         
        
         <li <?php if($this->params['controller']=='banners')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/banners/list">
             <?php if($this->params['controller']=='banners')
-        {?><i class="icon-chevron-right"></i><?php } ?> Banner Management</a>
+        {?><i class="icon-chevron-right"></i><?php } ?> Banner Video Management</a>
 	</li>
        
         
 	<li <?php if($this->params['controller']=='categories' && $this->params['action']=='admin_add')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/add"><?php if($this->params['controller']=='categories')
-         { ?><i class="icon-chevron-right"></i><?php } ?> Add Category</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?> Add Deal Category</a>
 	</li>
 	
 	<li <?php if($this->params['controller']=='categories' && $this->params['action']=='admin_index')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/"><?php if($this->params['controller']=='categories')
-         { ?><i class="icon-chevron-right"></i><?php } ?> Category Management</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?>Deal Category Management</a>
 	</li>
+        
+        
+        
+        
+        
+        <li <?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_edit' ||  $this->params['action']=='admin_coupon_add'))
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/coupon_list"><?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_edit' ||  $this->params['action']=='admin_coupon_add'))
+        {?><i class="icon-chevron-right"></i><?php } ?><span <?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_add' || $this->params['action']=='admin_coupon_edit'))
+        {?>class="badge badge-info1 pull-right"<?php }else{ ?>class="badge badge-info pull-right"<?php } ?>></span> Coupon Category Management</a>
+	</li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <li <?php if($this->params['controller']=='coupons')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/coupons/"><?php if($this->params['controller']=='coupons'){ ?><i class="icon-chevron-right"></i><?php } ?> Coupon Management</a>
@@ -88,12 +120,12 @@ if(count($pass_data)>0){
         
     <li <?php if($this->params['controller']=='products' && $this->params['action']=='admin_add')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/products/add"><?php if($this->params['controller']=='products' && $this->params['action']=='admin_add')
-         { ?><i class="icon-chevron-right"></i><?php } ?> Add Product</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?> Add Deal</a>
 	</li>
 	
 	<li <?php if($this->params['controller']=='products' && $this->params['action']=='admin_index')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/products/"><?php if($this->params['controller']=='products' && $this->params['action']=='admin_index')
-         { ?><i class="icon-chevron-right"></i><?php } ?> Product Management</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?> Deal Management</a>
 	</li>
         <!--spandan-->
         <!--end-->

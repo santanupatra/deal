@@ -61,7 +61,7 @@ class BannersController extends AppController {
         public function admin_add() {
             
             
-		$title_for_layout = 'Add Banner';
+		$title_for_layout = 'Add Banner Video';
 		$userid = $this->Session->read('Auth.User.id');
 		if(!isset($userid) && $userid=='')
 		{
@@ -71,27 +71,7 @@ class BannersController extends AppController {
             if ($this->request->is('post')) {
     
    
-      if(!empty($this->request->data['Banner']['image']['name'])){
-      $pathpart=pathinfo($this->request->data['Banner']['image']['name']);
-      $ext=$pathpart['extension'];
-      $extensionValid = array('jpg','jpeg','png','gif');
-     
-      if(in_array(strtolower($ext),$extensionValid)){
-      $uploadFolder = "banner_image/";
-      $uploadPath = WWW_ROOT . $uploadFolder;
-      $filename =uniqid().'.'.$ext;
-      $full_flg_path = $uploadPath . '/' . $filename;
-      move_uploaded_file($this->request->data['Banner']['image']['tmp_name'],$full_flg_path);
-      }
-      else{
-       $this->Session->setFlash(__('Invalid image type.'));
-       return $this->redirect(array('action' => 'add'));
-      }
-     }
-     else{
-      $filename='';
-     }
-      $this->request->data['Banner']['image'] = $filename;
+      
       $this->request->data['Banner']['title'] = $this->request->data['Banner']['title'];
       
       $this->Banner->create();

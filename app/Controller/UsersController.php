@@ -2193,9 +2193,9 @@ class UsersController extends AppController {
 			$this->Session->setFlash(__('Email already exists. Please, try another.', 'default', array('class' => 'error')));
 		}  
 	  }
-          $this->loadModel('Percentage');
-        $percentage_value = $this->Percentage->find('list',array());
-         $this->set(compact('percentage_value'));
+         // $this->loadModel('Percentage');
+        //$percentage_value = $this->Percentage->find('list',array());
+         //$this->set(compact('percentage_value'));
      }
 
      public function admin_user_delete($id = null) 
@@ -2301,9 +2301,9 @@ class UsersController extends AppController {
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 		$this->request->data = $this->User->find('first', $options);
 	}
-        $this->loadModel('Percentage');
-        $percentage_value = $this->Percentage->find('list',array());
-         $this->set(compact('percentage_value'));
+        //$this->loadModel('Percentage');
+        //$percentage_value = $this->Percentage->find('list',array());
+        // $this->set(compact('percentage_value'));
     }
     
  public function getmakername($mid=null)

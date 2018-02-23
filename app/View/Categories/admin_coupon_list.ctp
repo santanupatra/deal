@@ -11,7 +11,7 @@
 		<div class="block">
 			<div class="navbar navbar-inner block-header">
 				<div class="muted pull-left"><?php echo __('Categories'); ?></div>
-				<div style="float:right;"><?php echo $this->Html->link(__('Add New Category'), array('controller' => 'categories', 'action' => 'add')); ?></div>
+				<div style="float:right;"><?php echo $this->Html->link(__('Add New Category'), array('controller' => 'categories', 'action' => 'coupon_add')); ?></div>
 			</div>
 			<div class="block-content collapse in">
                             <div class="span12">
@@ -25,15 +25,7 @@
 					</tr>
                                     </thead>
                                     <tbody id="sortable">
-                                    <!--<ul id="sortable">
-                                        <?php
-                                        /*foreach ($properties as $key=>$property)
-                                        {
-                                        ?>
-
-                                        <li class="ui-state-default" id="<?php echo $key;?>"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><?php echo $property;?></li>
-                                        <?php }*/ ?>
-                                    </ul>   --> 
+                                     
 					<?php foreach ($categories as $category): ?>
 					<tr class="ui-state-default" id="<?php echo $category['Category']['id'];?>">
                                             <td><?php echo h($category['Category']['id']); ?>&nbsp;</td>
@@ -42,9 +34,9 @@
                                             </td>
                                             <td><?php echo h($category['Category']['is_active']==1?'Yes':'No'); ?>&nbsp;</td>
                                             <td class="actions">
-<!--                                             <a href="<?php echo $this->webroot;?>admin/categories/addsubcategory/<?php echo $category['Category']['id'];?>"><img src="<?php echo $this->webroot;?>img/subcat_add.png" title="Add Sub Category" width="22" height="21"></a>-->
+                                            
 
-                                             <a href="<?php echo $this->webroot;?>admin/categories/edit/<?php echo $category['Category']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Category" width="22" height="21"></a>
+                                             <a href="<?php echo $this->webroot;?>admin/categories/coupon_edit/<?php echo $category['Category']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Category" width="22" height="21"></a>
 
                                              <a href="<?php echo $this->webroot;?>admin/categories/delete/<?php echo $category['Category']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Category" width="24" height="24"></a>
                                             </td>

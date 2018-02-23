@@ -33,13 +33,7 @@ class OrderDetail extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Shipday' => array(
-			'className' => 'ShippingDay',
-			'foreignKey' => 'shipping_cost',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
+		
 		'Product' => array(
 			'className' => 'Product',
 			'foreignKey' => 'product_id',

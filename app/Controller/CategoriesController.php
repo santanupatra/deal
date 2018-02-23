@@ -43,16 +43,44 @@ class CategoriesController extends AppController {
             {
                     $this->redirect('/admin');
             }
-            $this->Category->recursive = 0;
+            //$this->Category->recursive = 0;
             $this->Paginator->settings = array(
                 'limit' =>15,
                 'order' => array(
-                   'Category.ordering' => 'asc'
+                   'Category.id' => 'asc'
+                ),'conditions' => array(
+                   'Category.type'=> 'D'
                 )
             );
-            $this->set('categories', $this->Paginator->paginate('Category', array('Category.parent_id' => 0)));
+            $this->set('categories', $this->Paginator->paginate('Category'));
             $this->set(compact('title_for_layout'));
 	}
+        
+        
+        public function admin_coupon_list() {		
+            $title_for_layout = 'Category List';
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid) && $userid=='')
+            {
+                    $this->redirect('/admin');
+            }
+           //$this->Category->recursive = 0;
+            $this->Paginator->settings = array(
+                'limit' =>15,
+                'order' => array(
+                   'Category.id' => 'asc'
+                ),
+                'conditions' => array(
+                   'Category.type'=> 'C'
+                )
+            );
+            
+            $this->set('categories', $this->Paginator->paginate('Category'));
+            $this->set(compact('title_for_layout'));
+	}
+        
+        
+        
         
         public function admin_saveorder() {
             $this->autoRender = false;
@@ -68,30 +96,7 @@ class CategoriesController extends AppController {
             }
 	}
 
-	public function admin_subcategories($id = null) {
-		$userid = $this->Session->read('Auth.User.id');
-		if(!isset($userid) && $userid=='')
-		{
-			$this->redirect('/admin');
-		}
-		$title_for_layout = 'Sub Category List';
-		$options = array('conditions' => array('Category.id' => $id));
-		$categoryname = $this->Category->find('list', $options);
-		if($categoryname){
-			$categoryname = $categoryname[$id];
-		} else {
-			$categoryname = '';
-		}
-		$this->Category->recursive = 0;
-        $this->Paginator->settings = array(
-			'limit' =>15,
-			'order' => array(
-				'Category.id' => 'desc'
-			)
-        );
-		$this->set('categories1', $this->Paginator->paginate('Category', array('Category.parent_id' => $id)));
-		$this->set(compact('title_for_layout','categoryname'));
-	}
+	
 /**
  * view method
  *
@@ -197,6 +202,60 @@ class CategoriesController extends AppController {
 		$this->set(compact('title_for_layout'));
 	}
 
+        
+        
+        
+        
+        public function admin_coupon_add() {			
+		$title_for_layout = 'Category Add';
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+		if ($this->request->is('post')) {
+                    
+                    
+			$options = array('conditions' => array('Category.name'  => $this->request->data['Category']['name'],'Category.parent_id'=>0));
+			$name = $this->Category->find('first', $options);
+			if(!$name){
+                            
+                           if(!empty($this->request->data['Category']['image']['name'])){
+      $pathpart=pathinfo($this->request->data['Category']['image']['name']);
+      $ext=$pathpart['extension'];
+      $extensionValid = array('jpg','jpeg','png','gif');
+      if(in_array(strtolower($ext),$extensionValid)){
+      $uploadFolder = "category_images/";
+      $uploadPath = WWW_ROOT . $uploadFolder;
+      $filename =uniqid().'.'.$ext;
+      $full_flg_path = $uploadPath . '/' . $filename;
+      move_uploaded_file($this->request->data['Category']['image']['tmp_name'],$full_flg_path);
+      }
+      else{
+       $this->Session->setFlash(__('Invalid image type.'));
+      }
+     }
+     else{
+      $filename='';
+     }
+     $this->request->data['Category']['image'] = $filename;
+     
+     $this->request->data['Category']['type']= "C";
+                            
+                            
+				if ($this->Category->save($this->request->data)) {
+					$this->Session->setFlash('The category has been saved.', 'default', array('class' => 'success'));
+					return $this->redirect(array('action' => 'index'));
+				} else {
+					$this->Session->setFlash(__('The category could not be saved. Please, try again.'));
+				}
+
+			} else {
+				$this->Session->setFlash(__('The category name already exists. Please, try again.'));
+			}
+		}
+		$this->set(compact('title_for_layout'));
+	}
 
 	public function admin_addsubcategory($id = null) {	
 		$userid = $this->Session->read('Auth.User.id');
@@ -341,6 +400,94 @@ class CategoriesController extends AppController {
 
 		$this->set(compact('title_for_layout'));
 	}
+        
+        
+        
+        public function admin_coupon_edit($id = null) 
+	{
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+		$redirectid='';
+		if (!$this->Category->exists($id)) 
+		{
+			throw new NotFoundException(__('Invalid category'));
+		}
+
+		if ($this->request->is(array('post', 'put')))
+		{
+			$options = array('conditions' => array('Category.name'  => $this->request->data['Category']['name'], 'Category.parent_id'=>$this->request->data['Category']['parent_id'], 'Category.id <>'=>$id));
+            $name = $this->Category->find('first', $options);
+                    
+			if(!$name)
+			{
+                            
+                            if(!empty($this->request->data['Category']['image']['name'])){
+        $pathpart=pathinfo($this->request->data['Category']['image']['name']);
+        $ext=$pathpart['extension'];
+        $extensionValid = array('jpg','jpeg','png','gif');
+        if(in_array(strtolower($ext),$extensionValid)){
+        $uploadFolder = "category_images/";
+        $uploadPath = WWW_ROOT . $uploadFolder;
+        $filename =uniqid().'.'.$ext;
+        $full_flg_path = $uploadPath . '/' . $filename;
+        move_uploaded_file($this->request->data['Category']['image']['tmp_name'],$full_flg_path);
+        }
+        else{
+         $this->Session->setFlash(__('Invalid image type.'));
+        }
+       }
+       else{
+        $filename=$this->request->data['Category']['hid_img'];
+       }
+       $this->request->data['Category']['image'] = $filename;
+				$options3=array('conditions' => array('Category.'. $this->Category->primaryKey => $id));
+				$cat=$this->Category->find('first', $options3);
+                if($cat['Category']['parent_id']!=0)
+				{
+					$redirectid=$cat['Category']['parent_id'];
+				}
+				else
+				{
+                    $redirectid='';
+				}
+				$this->request->data['Category']['id']=$id;
+                        
+				if ($this->Category->save($this->request->data)) 
+				{                    
+					$this->Session->setFlash('The category has been saved.', 'default', array('class' => 'success'));
+				    if (isset($redirectid) && !empty($redirectid)) {
+					  return $this->redirect(array('action' => 'subcategories',$redirectid));
+				    }  
+				    else {
+					 return $this->redirect(array('action' => 'coupon_list'));  
+				   }
+				} 
+                else 
+				{
+					$this->Session->setFlash(__('The category could not be saved. Please, try again.'));
+				}
+			} 
+           else 
+			{
+				$this->Session->setFlash(__('The category already exists. Please, try again.'));
+			}
+         } 
+			
+		$options = array('conditions' => array('Category.'.$this->Category->primaryKey => $id));
+		$this->request->data = $this->Category->find('first', $options);
+
+		$this->set(compact('title_for_layout'));
+	}
+        
+        
+        
+        
+        
+        
+        
 
 /**
  * delete method

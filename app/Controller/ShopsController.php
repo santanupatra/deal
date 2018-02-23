@@ -941,6 +941,10 @@ class ShopsController extends AppController {
             return $this->redirect(array('controller' => 'shops', 'action' => 'myshop'));
         }
 
+        
+        //Vendor management start
+        
+        
 	public function admin_list() {	
             
                  $this->loadModel('User');
@@ -986,13 +990,13 @@ class ShopsController extends AppController {
          $this->request->data['User']['last_name']=$this->request->data['User']['last_name'];
          $this->request->data['User']['email']=$this->request->data['User']['email'];
          
-         $this->request->data['User']['company_name']=$this->request->data['User']['company_name'];
+         //$this->request->data['User']['company_name']=$this->request->data['User']['company_name'];
          $this->request->data['User']['mobile_number']=$this->request->data['User']['mobile_number'];
          $this->request->data['User']['dba']=$this->request->data['User']['dba'];
          $this->request->data['User']['ein']=$this->request->data['User']['ein'];
          
          $this->request->data['User']['type']='V';
-         $this->request->data['User']['percentage_id']=$this->request->data['User']['percentage_id'];;
+        // $this->request->data['User']['percentage_id']=$this->request->data['User']['percentage_id'];;
 
          $this->User->create();
          if ($this->User->save($this->request->data)) 
@@ -1014,7 +1018,7 @@ class ShopsController extends AppController {
 	        }
                 
                
-                $percentage_value = $this->Percentage->find('list',array());
+                //$percentage_value = $this->Percentage->find('list',array());
 		$is_active = array('0'=>'No','1'=>'Yes');
 	        $this->set(compact('users','title_for_layout','is_active','percentage_value'));
 	}
@@ -1089,7 +1093,7 @@ class ShopsController extends AppController {
                 $optionuser = array('conditions' => array('User.is_active'  => 1,'User.is_admin' => 0), 'fields' => array('User.id','User.name'));
                 $users = $this->User->find('list',$optionuser);
                
-                 $percentage_value = $this->Percentage->find('list',array());
+                 //$percentage_value = $this->Percentage->find('list',array());
 		$is_active = array('0'=>'No','1'=>'Yes');
 	        $this->set(compact('users','title_for_layout','is_active','percentage_value'));
 	}
@@ -1130,7 +1134,232 @@ class ShopsController extends AppController {
 	   return $this->redirect(array('action' => 'list'));
 	}
 	
-	public function getcatNames($id = null){
+        //vendor management end
+        
+	
+        
+        
+        
+        
+        
+       //shop manage ment start
+        
+        
+        
+        public function admin_shop_list() {	
+            
+                 $this->loadModel('User');
+                 $this->loadModel('Shop');
+                $userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+		$title_for_layout = 'Shop List';
+                $this->paginate = array(
+			'order' => array(
+				'Shop.id' => 'desc'
+			),'conditions'=>array('Shop.is_active'=>1)
+		);
+		$this->Shop->recursive = -1;
+                
+                $this->Paginator->settings = $this->paginate;
+		$this->set('shops', $this->Paginator->paginate('Shop'));
+		$this->set(compact('title_for_layout'));
+	}
+
+        public function admin_shop_add() {
+            $this->loadModel('User');
+            $this->loadModel('Shop');
+		$title_for_layout = 'Add Shop';
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+		    $this->redirect('/admin');
+		}
+		if ($this->request->is(array('post', 'put'))) {
+
+
+              
+          
+         
+         $this->request->data['Shop']['created_at'] = date('Y-m-d H:i:s');
+         $this->request->data['Shop']['user_id']=$this->request->data['Shop']['user_id'];
+         $this->request->data['Shop']['name']=$this->request->data['Shop']['name'];
+         $this->request->data['Shop']['description']=$this->request->data['Shop']['description'];
+         
+         
+        if(isset($this->request->data['Shop']['logo']) && $this->request->data['Shop']['logo']['name']!='')
+		  {
+		        $path = $this->request->data['Shop']['logo']['name'];
+                        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+			if($ext)
+			{
+				$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
+				$extensionValid = array('jpg','jpeg','png','gif');
+				if(in_array($ext,$extensionValid))
+				{
+					$imageName = rand().'_'.(strtolower(trim($this->request->data['Shop']['logo']['name'])));
+					$full_image_path = $uploadPath . '/' . $imageName;
+					move_uploaded_file($this->request->data['Shop']['logo']['tmp_name'],$full_image_path);
+					$this->request->data['Shop']['logo'] = $imageName;
+				} 
+				else
+				{
+					$this->Session->setFlash(__('Invalid image type.'));
+					return $this->redirect(array('action' => 'shop_add'));
+				 }
+			 }
+
+		 }
+		 else
+		 {
+			 $this->request->data['Shop']['logo']='';
+		 }
+         
+         
+        
+         $this->Shop->create();
+         if ($this->Shop->save($this->request->data)) 
+          {
+            $this->Session->setFlash('Shop added successfully.', 'default', array('class' => 'success'));
+            
+           return $this->redirect(array('action' => 'shop_list'));
+          }else 
+          {
+            $this->Session->setFlash(__('The Shop could not be saved. Please, try again.'));
+          }
+         
+        
+
+			
+	        }
+                
+               
+                $vendorlist = $this->User->find('all',array('conditions' => array('User.is_active'  => 1,'User.type'=> 'V')));
+		$is_active = array('0'=>'No','1'=>'Yes');
+	        $this->set(compact('users','title_for_layout','is_active','vendorlist'));
+	}
+
+        
+        
+        public function admin_shop_edit($id = null) {
+                $title_for_layout = 'Edit Shop';
+                $this->loadModel('Shop');
+                $this->loadModel('User');
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+		    $this->redirect('/admin');
+		}
+		if ($this->request->is(array('post', 'put'))) 
+		{
+		
+         $this->request->data['Shop']['name']=$this->request->data['Shop']['name'];
+         $this->request->data['Shop']['description']=$this->request->data['Shop']['description'];
+         $this->request->data['Shop']['user_id']=$this->request->data['Shop']['user_id'];
+         
+         if(isset($this->request->data['Shop']['logo']) && $this->request->data['Shop']['logo']['name']!='')
+		  {
+		        $path = $this->request->data['Shop']['logo']['name'];
+                        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+			if($ext)
+			{
+				$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
+				$extensionValid = array('jpg','jpeg','png','gif');
+				if(in_array($ext[1],$extensionValid)){
+					$imageName = rand().'_'.(strtolower(trim($this->request->data['Shop']['logo']['name'])));
+					$full_image_path = $uploadPath . '/' . $imageName;
+					move_uploaded_file($this->request->data['Shop']['logo']['tmp_name'],$full_image_path);
+					$this->request->data['Shop']['logo'] = $imageName;
+				} 
+				else
+				{
+					$this->Session->setFlash(__('Invalid image type.'));
+					return $this->redirect(array('action' => 'shop_edit',$id));
+				 }
+			 }
+		  }
+		  else 
+		  {
+			 $this->request->data['Shop']['logo'] = $this->request->data['Shop']['hid_img'];
+		  }
+         
+         if ($this->Shop->save($this->request->data)) 
+          {
+            
+           $this->Session->setFlash('The Shop successfully updated.','default', array('class' => 'success'));
+           
+          } 
+          else 
+          {
+            $this->Session->setFlash(__('The Shop could not be saved. Please, try again.'));
+          }
+          }
+		else 
+		{
+			$options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
+			$this->request->data = $this->Shop->find('first', $options);
+			
+         $this->request->data['Shop']['name']=$this->request->data['Shop']['name'];
+         $this->request->data['Shop']['description']=$this->request->data['Shop']['description'];
+         
+		}
+                $optionuser = array('conditions' => array('User.is_active'  => 1,'User.type' => 'V'));
+                $vendorlist = $this->User->find('all',$optionuser);
+               
+                $this->User->recursive = -1;
+		$is_active = array('0'=>'No','1'=>'Yes');
+	        $this->set(compact('users','title_for_layout','is_active','vendorlist'));
+	}
+
+
+	public function admin_shop_view($id = null) 
+	{
+		$title_for_layout = 'Vendor View';
+		$this->set(compact('title_for_layout'));
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+		if (!$this->User->exists($id)) 
+		{
+			throw new NotFoundException(__('Invalid Vendor.'));
+		}
+		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+		$this->set('shop', $this->User->find('first', $options));
+	}
+	
+        public function admin_shop_delete($id = null) {
+            $this->loadModel('Shop');
+	   $userid = $this->Session->read('Auth.User.id');
+	   if(!isset($userid) && $userid=='')
+	   {
+		$this->redirect('/admin');
+	   }
+	   $this->Shop->id = $id;
+	   if (!$this->Shop->exists()) {
+	      throw new NotFoundException(__('Invalid Shop.'));
+	   }
+	   if ($this->Shop->delete($id)) {
+		$this->Session->setFlash('The Shop has been deleted.', 'default', array('class' => 'success'));
+	   } else {
+		$this->Session->setFlash(__('The Shop could not be deleted. Please, try again.'));
+	   }
+	   return $this->redirect(array('action' => 'shop_list'));
+	}
+	
+	
+        
+        
+        //shop management end
+        
+        
+        
+        
+        
+        public function getcatNames($id = null){
 		$name = '';
 		if($id!=''){
 			$cat = explode(',',$id);

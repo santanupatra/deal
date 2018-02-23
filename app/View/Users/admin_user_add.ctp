@@ -18,7 +18,7 @@
 					echo $this->Form->input('password',array('required'=>'required'));
 					echo $this->Form->input('mobile_number');
                                         
-                                        echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
+                                        //echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
 					//echo $this->Form->input('bio',array('label'=>'Short Description'));
 					//echo $this->Form->input('address');
 					//echo $this->Form->input('zip_code');

@@ -16,7 +16,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = __d('cake_dev', 'Widding Admin Panel');
+$cakeDescription = __d('cake_dev', 'Deal Admin Panel');
 ?>
 <?php 
 if(($this->params['controller']=='users' && $this->params['action']=='admin_index') || ($this->params['controller']=='users' && $this->params['action']=='admin_login') || ($this->params['controller']=='users' && $this->params['action']=='admin_fotgot_password'))
