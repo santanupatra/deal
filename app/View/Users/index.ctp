@@ -1,472 +1,328 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
-
-<body>
-
-
-    <section class="home-slider">
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                
-                <?php
-                $a = 1;
-                foreach($banners as $ban){ ?>
-                <div class="carousel-item <?php echo (($a == 1)? 'active' : '');?>">
-                    <img src="<?php echo $this->webroot.'banner_image/'.$ban['Banner']['image'];?>" alt="..." class="w-100">
-                    <div class="carousel-caption d-flex flex-column flex-wrap align-items-center justify-content-center">
-                        <h1 class="text-uppercase font-weight-bold"><?=$ban['Banner']['title']?></h1>
-                        <a href="#" class="btn btn-primary btn-lg mt-3">Order Now</a>
+<section class="home-after-header">
+        <section class="filter-home py-5 mb-5">
+            <div class="container">
+                <h3 class="text-white mb-4 text-uppercase">You will not miss any great discount never ever again!</h3>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select class="form-control rounded-0 bg-transparent">
+                            <option selected>Select Category . . . . . . .</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select class="form-control rounded-0 bg-transparent">
+                            <option selected>Select Shop . . . . . . .</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="search-btn">
+                            <select class="form-control rounded-0 bg-transparent">
+                                <option selected>Location. . . . . . .</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                          <button class="btn btn-src btn-danger rounded-0">Search</button>
+                        </div>
                     </div>
                 </div>
-                <?php $a++; } ?>
-
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
-        </div>
-    </section>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="bg-white mb-4">
+                            <div>
+                                <img src="img/img3.png" class="w-100" alt="">
+                            </div>
+                            <div class="right-img-btm p-3">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div>
+                                            <span>
+                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
+                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
+                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
+                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
+                                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                            </span>
+                                            <span class="mr-2">(250) rates</span>
+                                            <span class="font-12">Expires in: <span class="text-red"> 22 days</span></span>
+                                        </div>
+                                        <h3 class="mt-2">Great Dinner For Two - 10% off</h3>
+                                        <ul class="list-unstyled facility">
+                                            <li class="font-12">
+                                                <img src="img/dinner.png" alt="">
+                                                <span>FOOD & DRINK</span>
+                                            </li>
+                                            <li class="font-12">
+                                                <img src="img/dinner.png" alt="">
+                                                <span>FOOD & DRINK</span>
+                                            </li>
+                                            <li class="font-12">
+                                                <img src="img/dinner.png" alt="">
+                                                <span>FOOD & DRINK</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4 text-md-right">
+                                        <div class="price">
+                                            <span class="current"> $ 55.55 </span>
+                                            <span class="old">$65.00</span>
+                                        </div>
+                                        <button type="button" name="button" class="btn btn-theme rounded-0">VIEW DEALS</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <img src="img/sdo.png" alt="" class="img-fluid w-100 image-top">
 
-    <!--   banner bottom  -->
-
-    <section class="banner-bottom bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <?php if(!empty($middlesections)){
-                    
-                 foreach($middlesections as $mid){?>
-                <div class="col-lg-4 col-sm-6 col-12">
-                    <div class="icon-img">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="<?php echo($this->webroot);?>middle_image/<?php echo $mid['Middle']['image']?>" alt="">
+                        <div>
+                          <h3 class="home-hdng">
+                            <span>Popular</span>
+                            Categories
+                          </h3>                          
+                          <div class="flexslider carousel">
+                            <ul class="slides">
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                              <li>
+                                <img src="img/img1.png" />
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                     </div>
-                    <div class="text-center mt-5">
-                        <h5><?php echo $mid['Middle']['title']?></h5>
-                        <p class="text-grey"><?php echo $mid['Middle']['description']?></p>
+                    <div class="col-lg-3">
+                        <div class="bg-white p-3">
+                            <div class="half-mark-header">
+                                <span></span>
+                            </div>
+                            <h5 class="mb-3">ADVERTISE</h5>
+                            <img src="img/img1.png" class="w-100" alt="">
+                            <div class="half-mark-header mt-5">
+                                <span></span>
+                            </div>
+                            <h5 class="mb-3 text-uppercase">Categories</h5>
+                            <ul class="cat-list p-0 m-0 list-unstyled">
+                              <?php
+                                foreach($right_category as $cat){
+                                  echo '<li class=""><a href="'.$this->webroot.'products/list/'.base64_encode($cat['Category']['id']).'">'.$cat['Category']['name'].'</a></li>';
+                                }
+                              ?>
+                                                             
+                            </ul>
+                        </div>
+                        <div class="grayBg p-3">
+                            <div class="half-mark-header">
+                                <span></span>
+                            </div>
+                            <h5 class="mb-3 text-uppercase">Rating and feedback</h5>
+                            <!-- <ul class="m-0 p-0 list-unstyled feedback">
+                                <li>
+                                    <div class="img"></div>
+                                    <div class="txt">
+                                        <h5></h5>
+                                    </div>
+                                </li>
+                            </ul> -->
+                            <div class="feebbk">
+                                <div class="media">
+                                  <img class="mr-3" src="img/img2.png" alt="Generic placeholder image">
+                                  <div class="media-body">
+                                    <h5 class="mt-0 mb-0">Wyndhan garden Mar - Puerto Rico</h5>
+                                    <div class="star font-12">
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="media">
+                                  <img class="mr-3" src="img/img2.png" alt="Generic placeholder image">
+                                  <div class="media-body">
+                                      <h5 class="mt-0 mb-0">Wyndhan garden Mar - Puerto Rico</h5>
+                                      <div class="star font-12">
+                                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <?php } } ?>
-                <!--<div class="col-lg-4 col-sm-6 col-12">
-                    <div class="icon-img">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="<?php echo($this->webroot);?>html/img/icon/2.png" alt="">
-                        </div>
-                    </div>
-                    <div class="text-center mt-5">
-                        <h5>Independent sellers</h5>
-                        <p class="text-grey">Buy directly from someone who put their heart and soul into making something special.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 col-12">
-                    <div class="icon-img">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="<?php echo($this->webroot);?>html/img/icon/3.png" alt="">
-                        </div>
-                    </div>
-                    <div class="text-center mt-5">
-                        <h5>Secure shopping</h5>
-                        <p class="text-grey">We use best-in-class technology to protect your transactions.</p>
-                    </div>
-                </div>-->
             </div>
+        </section>
+     </section>
+    <section class="pt-3">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-4">
+            <div class="img-wrp">
+              <img src="img/bg-2.png" class="w-100" alt="">
+              <div class="img-inr">
+                <div class="text-white text-uppercase font-36">
+                  <strong>Get the </strong> offer</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <a href="" class="underline-text">Lorem ipsum dolor sit amet,.</a>
+            <p class="text-secondary">Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien et, rhoncus feugiat justo.</p>
+          </div>
         </div>
+      </div>
     </section>
-    
-    <!--   product  list   -->
-    
-    <section class="product-list py-4">
+    <section class="py-2">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <h3 class="home-hdng">
+              <span>Deals</span>
+              benefit
+            </h3>
+            <div>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, </p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien et, rhoncus feugiat justo.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <img src="img/bg-1.png" class="w-100" alt="">
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pb-4">
+      <div class="container">
+        <h3 class="home-hdng">
+              <span>Coupons</span>
+               Here
+            </h3>
+        <div class="card-deck card-home">
+          <div class="card rounded-0">
+            <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
+            <div class="corner-add text-white">
+              <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            </div>
+            <div class="card-block p-2">
+              <h4 class="card-title">Lorem ipsum dolor sit amet.</h4>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted pull-left"><i class="fa fa-clock-o" aria-hidden="true"></i> June 26, 2018</small>
+              <small class="pull-right text-theme">
+                <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+              </small>
+            </div>
+          </div>
+          <div class="card rounded-0">
+            <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
+            <div class="corner-add text-white">
+              <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            </div>
+            <div class="card-block p-2">
+              <h4 class="card-title">Lorem ipsum dolor sit amet.</h4>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted pull-left"><i class="fa fa-clock-o" aria-hidden="true"></i> June 26, 2018</small>
+              <small class="pull-right text-theme">
+                <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+              </small>
+            </div>
+          </div>
+          <div class="card rounded-0">
+            <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
+            <div class="corner-add text-white">
+              <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            </div>
+            <div class="card-block p-2">
+              <h4 class="card-title">Lorem ipsum dolor sit amet.</h4>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted pull-left"><i class="fa fa-clock-o" aria-hidden="true"></i> June 26, 2018</small>
+              <small class="pull-right text-theme">
+                <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="app-link-warp pt-4">
         <div class="container">
-            <h4>Popular right now</h4>
+            <h3 class="text-white text-center">Deals Browsing</h3>
             <div class="row">
-                <?php foreach($ratingproduct as $or){ ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <figure class="mt-4">
-                        <div class="product-pic">
-                            <a href="<?php echo $this->webroot ?>products/product_details/<?php echo $or['id'] ; ?>">
-                                <?php if(isset($or['image'])) { ?>
-                                <img src="<?php echo($this->webroot)?>product_images/<?php echo($or['image']);?>" alt="">
-                                <?php }else{ ?>
-                                <img src="<?php echo($this->webroot)?>product_images/default.png" alt=""><?php } ?></a>
-                        </div>
-                        
-                        <figcaption class="p-2">
-                            <h6 class=""><?php echo $or['name']?></h6>
-                            <p class="text-grey mb-1"><?php echo ($or['username']);?></p>
-                            <h6 class="text-orange">
-                                 <span class="stars"><?php if($or['avgrate']!=''){echo $or['avgrate'];}else{ echo 0;}?></span>
-<!--                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>-->
-                                <span class="text-grey">(<?php echo $or['ratecount']?>)</span>
-                            </h6>
-                            <h6 class="float-left mt-2 font-weight-bold"><?php echo '$'.$or['price']?></h6>
-                            <a href="<?php echo $this->webroot ?>products/product_details/<?php echo $or['id'] ; ?>" class="btn btn-secondary btn-sm float-right">Shop Now</a>
-                        </figcaption>
-                    </figure>
+                <div class="col-lg-6">
+                    <img src="img/mobile.png" alt="" class="mw100">
                 </div>
-                <?php } ?>
-                <!--<div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/item/2.png" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6 class="">Product name goes here</h6>
-                            <p class="text-grey mb-1">UrbanRoseandco</p>
-                            <h6 class="text-orange">
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <span class="text-grey">(71)</span>
-                            </h6>
-                            <h6 class="float-left mt-2 font-weight-bold">$99.00</h6>
-                            <a href="#" class="btn btn-secondary btn-sm float-right">Shop Now</a>
-                        </figcaption>
-                    </figure>
+                <div class="col-lg-6">
+                    <div class="text-center app-link-btn mt-4">
+                        <a href="">
+                            <img src="img/icon1.png" alt="">
+                        </a>
+                        <h1 class="text-white font-48 mb0">+</h1>
+                        <a href="">
+                            <img src="img/icon2.png" alt="">
+                        </a>
+                    </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/item/3.png" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6 class="">Product name goes here</h6>
-                            <p class="text-grey mb-1">UrbanRoseandco</p>
-                            <h6 class="text-orange">
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <span class="text-grey">(71)</span>
-                            </h6>
-                            <h6 class="float-left mt-2 font-weight-bold">$99.00</h6>
-                            <a href="#" class="btn btn-secondary btn-sm float-right">Shop Now</a>
-                        </figcaption>
-                    </figure>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/item/4.png" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6 class="">Product name goes here</h6>
-                            <p class="text-grey mb-1">UrbanRoseandco</p>
-                            <h6 class="text-orange">
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <span class="text-grey">(71)</span>
-                            </h6>
-                            <h6 class="float-left mt-2 font-weight-bold">$99.00</h6>
-                            <a href="#" class="btn btn-secondary btn-sm float-right">Shop Now</a>
-                        </figcaption>
-                    </figure>
-                </div>-->
             </div>
         </div>
     </section>
-    
-    <section class="product-list shop-list py-4">
-        <div class="container">
-            <h4>Shop by Category</h4>
-            <div class="row">
-                
-               <?php if($incategories!=''){ foreach($incategories as $cat){?> 
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="<?php echo $this->webroot ?>products/search_option/<?php echo $cat['Category']['id']; ?>">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <?php if(isset($cat['Category']['image'])) { ?>
-                            <img src="<?php echo $this->webroot.'category_images/'.$cat['Category']['image'];?>" alt="">
-                            <?php }else{ ?>
-                            <img src="<?php echo($this->webroot)?>product_images/default.png" alt="">
-                            
-                            <?php } ?>
-                        </div>
-                        <figcaption class="p-2">
-                            <h6><?php echo $cat['Category']['name'];?></h6>
-                        </figcaption>
-                    </figure>
-                    </a>
+    <section class="py-5 grayBg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 offset-lg-3">
+            <div class="text-center">
+              <div class="font-18"><i class="fa fa-envelope-o text-red mr-2 " aria-hidden="true"></i>Sign up for our weekly email newsletter with the best money-saving coupons.</div>
+                <div class="search-btn my-3">
+                  <input type="text" class="form-control" placeholder="Email">
+                  <button class="btn btn-src btn-danger">Subscribe</button>
                 </div>
-               <?php } } ?>
-<!--                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/2.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/3.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/4.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/5.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/6.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/7.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/8.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/9.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/pic/10.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="img/pic/11.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 col-product">
-                    <a href="#">
-                        <figure class="mt-4">
-                        <div class="product-pic">
-                            <img src="img/pic/12.jpg" alt="">
-                        </div>
-                        <figcaption class="p-2">
-                            <h6>Category name</h6>
-                        </figcaption>
-                    </figure>
-                    </a>
-                </div>-->
+              <p class="font-14 pb-0">Sign up for our weekly email newsletter with the best money-saving coupons.</p>
             </div>
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-outline-secondary btn-lg btn-squard">Explore more</a>
-            </div>
+          </div>
         </div>
+      </div>
     </section>
-    
-    <!--   testimonials  -->
-    
-    <section class="testimonials py-5 text-center">
-        <div class="container">
-            <h2>Recent reviews from happy people</h2>
-            <div class="row">
-                 <?php if(!empty($recectreview)){ foreach($recectreview as $dt){?>
-                
-                <div class="col-lg-4 col-12 col-test">
-                    <figure class="p-3">
-                        <div class="client-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/testimonials/client/1.jpg" alt="" class="w-100 h-100">
-                        </div>
-                        <figcaption>
-                            <p class="mb-2"><?php echo $dt['User']['first_name']?> <span class="text-grey">wrote on <?php echo date('d M Y',strtotime($dt['Rating']['date_time']))?></span></p>
-                            <h6 class="text-orange">
-                                    <span class="stars"><?php echo $dt['Rating']['rating'] ?></span>
-                               </h6>
-                            
-                            <?php if($dt['Rating']['review']!=''){?><p><?php echo $dt['Rating']['review']?></p><?php } else{?><p>&nbsp;</p><?php } ?>
-                        </figcaption>
-                        <div class="test-pic">
-                            <img src="<?php echo($this->webroot);?>product_images/<?php echo $dt['Product']['ProductImage'][0]['name'] ?>" alt="">
-                        </div>
-                    </figure>
-                </div>
-                <?php } }else{ ?>
-                <div class="col-lg-4 col-12 col-test"></div>
-                <br><br><div class="col-lg-4 col-12 col-test">No recent reviews found.</div>
-                <div class="col-lg-4 col-12 col-test"></div>
-                <?php } ?>
-<!--                <div class="col-lg-4 col-12 col-test">
-                    <figure class="p-3">
-                        <div class="client-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/testimonials/client/2.jpg" alt="" class="w-100 h-100">
-                        </div>
-                        <figcaption>
-                            <p class="mb-2">JoAnn <span class="text-grey">wrote on 26 August</span></p>
-                            <h6 class="text-orange">
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                </h6>
-                            <p>So pretty! Can't wait to use this for multiple projects.</p>
-                        </figcaption>
-                        <div class="test-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/testimonials/2.jpg" alt="">
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-lg-4 col-12 col-test">
-                    <figure class="p-3">
-                        <div class="client-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/testimonials/client/3.jpg" alt="" class="w-100 h-100">
-                        </div>
-                        <figcaption>
-                            <p class="mb-2">JoAnn <span class="text-grey">wrote on 26 August</span></p>
-                            <h6 class="text-orange">
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                </h6>
-                            <p>So pretty! Can't wait to use this for multiple projects.</p>
-                        </figcaption>
-                        <div class="test-pic">
-                            <img src="<?php echo($this->webroot);?>html/img/testimonials/3.jpg" alt="">
-                        </div>
-                    </figure>
-                </div>-->
-            </div>
-        </div>
-    </section>
-    
-    <!--   footer   -->
-    
-    
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    
-<style>
-   .form-horizontal .control-label {
-	text-align: left;
-    }
-    
-    
-    span.stars, span.stars span {
-    display: block;
-    background: url(img/stars.png) 0 -16px repeat-x;
-    width: 80px;
-    height: 16px;
-}
-
-span.stars span {
-    background-position: 0 0;
-}
-    
-    
-</style>
-<script>
-$.fn.stars = function() {
-    return $(this).each(function() {
-        // Get the value
-        var val = parseFloat($(this).html());
-        // Make sure that the value is in 0 - 5 range, multiply to get width
-        var size = Math.max(0, (Math.min(5, val))) * 16;
-        // Create stars holder
-        var $span = $('<span />').width(size);
-        // Replace the numerical value with stars
-        $(this).html($span);
-    });
-}
-$(function() {
-    $('span.stars').stars();
-});
-
-</script>

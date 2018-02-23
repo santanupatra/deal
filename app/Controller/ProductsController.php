@@ -50,25 +50,18 @@ class ProductsController extends AppController {
         $this->set('products', $this->Paginator->paginate('Product'));
     }
 
-    public function list_product() {
-        //$this->loadModel('ProductImage');
+    public function list($cid) {
+        $this->loadModel('Category');
+        $cid = base64_decode($cid);
         $title_for_layout = 'Product List';
-        $this->loadModel('User');
 
-        $userid = $this->Session->read('Auth.User.id');
-        $utype = $this->Session->read('Auth.User.type');
-        if ((!isset($userid) && $userid == '') || $utype != 'C') {
-            $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
-            return $this->redirect(array('controller' => 'users', 'action' => 'login'));
-        }
-
-
-
-        $this->paginate = array('conditions' => array('Product.user_id' => $userid), 'limit' => 10, 'order' => array('Product.id' => 'desc'),
+        $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));   
+        $this->paginate = array('conditions' => array('category_id' => $cid), 'limit' => 10, 'order' => array('Product.id' => 'desc'),
         );
         $this->Paginator->settings = $this->paginate;
         //$this->Product->recursive = 1;
         $this->set('products', $this->Paginator->paginate('Product'));
+        $this->set(compact('category'));
     }
 
     public function admin_index() {
@@ -191,10 +184,7 @@ class ProductsController extends AppController {
      */
     public function add() {
         $this->loadModel('User');
-        $this->loadModel('ShippingDay');
         $this->loadModel('ProductImage');
-        $this->loadModel('ProductVariation');
-        $this->loadModel('Color');
         $title_for_layout = 'Add product';
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
@@ -209,65 +199,12 @@ class ProductsController extends AppController {
 
             if ($this->request->is('post')) {
 
-
-                //if(isset($this->request->data['Product']['user_id']) && !empty($this->request->data['Product']['user_id']))
-                //{
                 $this->Product->create();
                 $this->request->data['Product']['created_at'] = gmdate('Y-m-d H:i:s');
-                $this->request->data['Product']['shipping_time'] = implode(',', $this->request->data['Product']['shipping_time']);
-                //if($this->request->data['Product']['sale_on'] == 'Y'){
-                //$this->request->data['Product']['sales_price']=($this->request->data['Product']['price_lot']-($this->request->data['Product']['price_lot']*$this->request->data['Product']['discount'])/100);
-                //}
 
-                $this->request->data['Product']['size'] = implode(',', $this->request->data['Product']['size']);
-                $this->request->data['Product']['colour'] = $this->request->data['Product']['colour'];
                 $this->request->data['Product']['status'] = $this->request->data['Product']['status'];
                 //echo ($this->request->data['Product']['size']);exit;
                 if ($this->Product->save($this->request->data)) {
-
-
-                    //for variation insert
-                    $variation = $this->request->data['ProductVariation']['color_id'];
-                    $size = $this->request->data['ProductVariation']['size'];
-                    $price = $this->request->data['ProductVariation']['price'];
-
-                    if(!empty($variation) && empty($size)){
-                    for ($i = 0; $i < count($variation); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $this->Product->getInsertID();
-                        $this->request->data['ProductVariation']['color_id'] = $variation[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->ProductVariation->create();
-                        $this->ProductVariation->save($this->request->data);
-                    }
-                    }
-                    
-                    else if(empty($variation) && !empty($size)){
-                    for ($i = 0; $i < count($size); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $this->Product->getInsertID();
-                        $this->request->data['ProductVariation']['size'] = $size[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->ProductVariation->create();
-                        $this->ProductVariation->save($this->request->data);
-                    }
-                    }else{
-                        
-                      for ($i = 0; $i < count($size); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $this->Product->getInsertID();
-                        $this->request->data['ProductVariation']['color_id'] = $variation[$i];
-                        $this->request->data['ProductVariation']['size'] = $size[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->ProductVariation->create();
-                        $this->ProductVariation->save($this->request->data);
-                    }  
-                        
-                    }
-                    
-                    //variation insert end
-
-
 
                     $file_image_name = (explode(",", $this->request->data['Product']['product_image_name']));
                     //print_r($file_image_name);exit;
@@ -294,19 +231,11 @@ class ProductsController extends AppController {
                 }
             }
 
-            //$categories = $this->Product->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.parent_id'=>0)));
+            $categories = $this->Product->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.parent_id'=>0)));
 
-            $ships = $this->ShippingDay->find('all', array('conditions' => array('user_id' => $userid)));
             $status = array('A' => 'Active', 'P' => 'Pending', 'I' => 'Inactive');
-            $colors = $this->Color->find('all');
-            /* $unit_type = array('W'=>'WholeSale','S'=>'SinglePiece');
-              $shipping_time = array('1-3 Days'=>'1-3 Days','4-6 Days'=>'4-6 Days','7-10 Days'=>'7-10 Days','10+ Days'=>'10+ Days');
-              $processing_time = array('1-3 Days'=>'1-3 Days','4-6 Days'=>'4-6 Days','7-10 Days'=>'7-10 Days','10+ Days'=>'10+ Days');
-              $status = array('A'=>'Active','P'=>'Pending','I'=>'Inactive');
-             */
-
-            //$all_image = $this->ProductImage->find('all', array('conditions'=>array('product_id' => $id), 'order' => array('is_order' => 'asc')));
-            $this->set(compact('user', 'categories', 'colors', 'status', 'is_featured', 'ships', 'unit_type', 'sale_on', 'status', 'shipping_time', 'processing_time', 'title_for_layout'));
+           
+            $this->set(compact('user', 'categories',  'status', 'status', 'title_for_layout'));
         }
     }
 

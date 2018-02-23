@@ -161,7 +161,7 @@ class AppController extends Controller {
 
             $IsMailType='SMTP';   
             $MailFrom='mail@natitsolved.com';
-            $MailFromName='Widding Shop';
+            $MailFromName='Deal & Coupon';
             $MailToName='';
             $YourEamilPassword="Natit@2017"; //Your email password from which email you send.
 

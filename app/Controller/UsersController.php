@@ -26,154 +26,19 @@ class UsersController extends AppController {
  */
 	
    
-   public function index(){
-        	
-            $title_for_layout='Home';
-            
-            $this->loadModel('Category');
-            $this->loadModel('Banner');
-            $this->loadModel('OrderDetail');
-            $this->loadModel('Product');
-            $this->loadModel('Middle');
-            $this->loadModel('Rating');
-            
-	    $userid = $this->Session->read('Auth.User.id');
-	    if(isset($userid) && $userid!=''){
-		 $options = array('conditions' => array('User.' . $this->User->primaryKey => $userid));
-		 $this->set('user', $this->User->find('first', $options));
-            }
-            
-            
-           /* $options_adv = array('conditions' => array('Advertisement.end_date >=' => gmdate('Y-m-d H:i:s'),'Advertisement.start_date <=' => gmdate('Y-m-d H:i:s'),'Advertisement.is_paid'=>1,'Advertisement.is_active'=>1,'Advertisement.page_position'=>'top','OR'=>array(array('Advertisement.type'=>1), array('Advertisement.type'=>3))),'limit'=>1,'order'=>'rand()');
-            $this->set('adv_list', $this->Advertisement->find('all', $options_adv));
-            
-            $options_advbottom = array('conditions' => array('Advertisement.end_date >=' => gmdate('Y-m-d H:i:s'),'Advertisement.start_date <=' => gmdate('Y-m-d H:i:s'),'Advertisement.is_paid'=>1,'Advertisement.is_active'=>1,'Advertisement.page_position'=>'bottom','OR'=>array(array('Advertisement.type'=>1), array('Advertisement.type'=>3))),'limit'=>1,'order'=>'rand()');
-            $this->set('adv_listbottom', $this->Advertisement->find('all', $options_advbottom));
-            
-            $options = array('conditions' => array('FeaturedShop.end_date >=' => gmdate('Y-m-d H:i:s'),'Shop.is_active'=>1),'group' => '`FeaturedShop`.`shop_id`','limit'=>4,'order'=>'rand()');
-            $this->set('shop', $this->FeaturedShop->find('all', $options));*/
-            
-            
-	   
-	
-            
-           //spandan 06.10 start
-      $cat= array('conditions'=>array('is_active' => 1,'parent_id'=>0),'order'=>array('Category.id'=>'desc'),'limit'=>12);      
-      $incategories = $this->Category->find('all',$cat);
-     
-      $banners = $this->Banner->find('all');
-      
-      //for popular right now
-      
-      
-       $result=$this->OrderDetail->query("SELECT * FROM (SELECT count(*) as c,product_id from order_details group by product_id) as temp order by c desc limit 4");
-       //print_r($result);
-      //echo $res;
-      $ratingproduct=array();
-       foreach($result as $res){
-                  // $this->Product->recursive=2; 
-         // $con=array('condition'=>array('Product.id'=>$res['temp']['product_id']));
-         // pr($con);exit;
-        // $orders = $this->Product->find('first', array('conditions'=>array('Product.id'=>$res['temp']['product_id']),'fileds'=>array('avg(Rating.rating) as avgrate','count(Rating.product_id) as ratecount'),'groups'=>array('Rating.product_id'))); 
-         //echo $res['temp']['product_id'].'<br>';
-         $orders = $this->Product->query("SELECT p.id,p.name,p.price_lot,u.first_name,u.last_name,pi.name,avg(r.rating) as avgrate,count(r.product_id) as ratecount FROM `products` as p inner join product_images as pi on pi.product_id=p.id inner join ratings as r on r.product_id=p.id inner join users as u on u.id=p.user_id where p.id= '".$res['temp']['product_id']."' and p.quantity > 0 ");
-         
-         //pr($orders);
-         $ratingproduct[]=array(
-                                'id'=>$orders[0]['p']['id'],
-                                'name'=>$orders[0]['p']['name'],
-                                'price'=>$orders[0]['p']['price_lot'],
-                                'username'=>$orders[0]['u']['first_name'].' '.$orders[0]['u']['last_name'],
-                                'image'=>$orders[0]['pi']['name'],
-                                'avgrate'=>$orders[0][0]['avgrate'],
-                                'ratecount'=>$orders[0][0]['ratecount'],
-
-                            );
+   public function index(){        	
+          $title_for_layout='Home';
         
-         //pr($orders); 
-       }
-       
-      
-       
-            // $this->OrderDetail->recursive=2;
-             //$con= array('order'=>array('OrderDetail.id'=>'desc'),'limit'=>4,'group'=>'OrderDetail.product_id');      
-             //$orders = $this->OrderDetail->find('all',$con); 
+          $this->loadModel('Category');
+          $this->loadModel('Banner');
+           
+          $right_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
+          print_r($right_category);
              
-             //end
-      
-       //recent review
-             $this->Rating->recursive = 2;
-             $reviewcon= array('order'=>array('Rating.id'=>'desc'),'limit'=>3);      
-             $recectreview = $this->Rating->find('all',$reviewcon);
-           //pr($recectreview);
-
-            //end
-       
-       
-             $midcon= array('order'=>array('id'=>'asc'),'limit'=>3);      
-             $middlesections = $this->Middle->find('all',$midcon);
-             
-       $this->set(compact('title_for_layout','recectreview','middlesections','incategories','banners','ratingproduct'));
-      
-          
-            }
+       $this->set(compact('right_category'));
+                
+    }
    
-   
-   
-       /* public function index(){
-        	
-            $title_for_layout='Home';
-            
-            $this->loadModel('Category');
-            $this->loadModel('Banner');
-            $this->loadModel('OrderDetail');
-            $this->loadModel('Product');
-            $this->loadModel('Middle');
-            
-            
-	    $userid = $this->Session->read('Auth.User.id');
-	    if(isset($userid) && $userid!=''){
-		 $options = array('conditions' => array('User.' . $this->User->primaryKey => $userid));
-		 $this->set('user', $this->User->find('first', $options));
-            }
-            
-            
-           /* $options_adv = array('conditions' => array('Advertisement.end_date >=' => gmdate('Y-m-d H:i:s'),'Advertisement.start_date <=' => gmdate('Y-m-d H:i:s'),'Advertisement.is_paid'=>1,'Advertisement.is_active'=>1,'Advertisement.page_position'=>'top','OR'=>array(array('Advertisement.type'=>1), array('Advertisement.type'=>3))),'limit'=>1,'order'=>'rand()');
-            $this->set('adv_list', $this->Advertisement->find('all', $options_adv));
-            
-            $options_advbottom = array('conditions' => array('Advertisement.end_date >=' => gmdate('Y-m-d H:i:s'),'Advertisement.start_date <=' => gmdate('Y-m-d H:i:s'),'Advertisement.is_paid'=>1,'Advertisement.is_active'=>1,'Advertisement.page_position'=>'bottom','OR'=>array(array('Advertisement.type'=>1), array('Advertisement.type'=>3))),'limit'=>1,'order'=>'rand()');
-            $this->set('adv_listbottom', $this->Advertisement->find('all', $options_advbottom));
-            
-            $options = array('conditions' => array('FeaturedShop.end_date >=' => gmdate('Y-m-d H:i:s'),'Shop.is_active'=>1),'group' => '`FeaturedShop`.`shop_id`','limit'=>4,'order'=>'rand()');
-            $this->set('shop', $this->FeaturedShop->find('all', $options));*/
-            
-            
-	   
-	
-            
-           //spandan 06.10 start
-   /*   $cat= array('conditions'=>array('is_active' => 1,'parent_id'=>0),'order'=>array('Category.id'=>'desc'),'limit'=>12);      
-      $incategories = $this->Category->find('all',$cat);
-     
-      $banners = $this->Banner->find('all');
-      
-      //for popular right now
-      
-             $this->OrderDetail->recursive=2;
-             $con= array('order'=>array('OrderDetail.id'=>'desc'),'limit'=>4,'group'=>'OrderDetail.product_id');      
-             $orders = $this->OrderDetail->find('all',$con); 
-            // pr($orders);
-             //end
-      
-             $midcon= array('order'=>array('id'=>'asc'),'limit'=>3);      
-             $middlesections = $this->Middle->find('all',$midcon);
-             
-       $this->set(compact('title_for_layout','middlesections','incategories','banners','orders'));
-      
-          
-            }*/
-            
-
 	public function admin_index() {  
 			$userid = $this->Session->read('Auth.User.id');
 
@@ -362,6 +227,10 @@ class UsersController extends AppController {
           }
         }
         
+        public function contactus(){
+
+        }
+
         public function login(){
             
       $userid = $this->Session->read('Auth.User.id');
@@ -391,8 +260,8 @@ class UsersController extends AppController {
                                   
 			        }else if($is_admin!=1 && $is_active==1 && $utype=='V'){
                                     
-                                   return $this->redirect($this->Auth->redirect('home')); 
-                                }
+                   return $this->redirect($this->Auth->redirect('home')); 
+                }
 			        else
 			        {
 			          $this->Auth->logout();
@@ -414,10 +283,10 @@ class UsersController extends AppController {
        
     public function registration(){
         
-       $title_for_layout = 'User Registration';
+      $title_for_layout = 'Registration';
 	
-	$userid = $this->Session->read('Auth.User.id');
-        $checkid = $this->Session->read('Auth.User.is_admin');
+	    $userid = $this->Session->read('Auth.User.id');
+      $checkid = $this->Session->read('Auth.User.is_admin');
 	if(isset($userid) && $userid=='' && $checkid!=1)
 	{
 		return $this->redirect(array('action' => 'dashboard'));
@@ -427,20 +296,26 @@ class UsersController extends AppController {
 		$emailexists = $this->User->find('first', $options);
 		if(!$emailexists)
 		{
-                 
+
 		 $txtpass = $this->request->data['User']['password'];
                  $con_txtpass = $this->request->data['User']['con_password'];
                  if($txtpass==$con_txtpass){
-                $this->request->data['User']['type']= 'C';
-                
-	       $this->request->data['User']['first_name']=$this->request->data['User']['first_name'];
-                $this->request->data['User']['last_name']=$this->request->data['User']['last_name'];
-                $this->request->data['User']['email']=$this->request->data['User']['email'];
-                $this->request->data['User']['registration_date'] = date('Y-m-d');
-                $this->request->data['User']['is_admin'] = 0;
-                //$this->request->data['User']['is_active'] = 1;
-                $this->request->data['User']['password']=$this->request->data['User']['password'];
-                $this->User->create();
+                      $this->request->data['User']['type']= $this->request->data['User']['type'];                
+      	              $this->request->data['User']['first_name']=$this->request->data['User']['first_name'];
+                      $this->request->data['User']['last_name']=$this->request->data['User']['last_name'];
+                      $this->request->data['User']['email']=$this->request->data['User']['email'];
+                      $this->request->data['User']['address']=$this->request->data['User']['address'];
+                      $this->request->data['User']['city']=$this->request->data['User']['city'];
+                      $this->request->data['User']['state']=$this->request->data['User']['state'];
+                      $this->request->data['User']['country']=$this->request->data['User']['country'];
+                      $this->request->data['User']['registration_date'] = date('Y-m-d');
+                      $this->request->data['User']['is_admin'] = 0;
+                      //$this->request->data['User']['is_active'] = 1;
+                      $this->request->data['User']['pass_app']=md5($this->request->data['User']['password']);
+                      $this->request->data['User']['txt_password']=$this->request->data['User']['password'];
+                      $this->request->data['User']['verification_code']='';
+                      $this->request->data['User']['password']=$this->request->data['User']['password'];
+                      $this->User->create();
 		 if ($this->User->save($this->request->data)) 
 		  {
                        /*if($this->request->data['User']['type']=='V'){ 
@@ -778,7 +653,7 @@ class UsersController extends AppController {
         public function home() {
           
             $title_for_layout='Home';
-	$userid = $this->Session->read('Auth.User.id');
+	           $userid = $this->Session->read('Auth.User.id');
         
 	
          if(!isset($userid) && $userid=='')
@@ -807,14 +682,11 @@ class UsersController extends AppController {
             $con2 = array('conditions' => array('Product.user_id' => $userid));
             $totproduct = $this->Product->find('count', $con2); 
             
-            $this->loadModel('Wishlist'); 
-            //wishlist count
-            $con3 = array('conditions' => array('Wishlist.user_id' => $userid));
-            $totwishlist = $this->Wishlist->find('count', $con3); 
             
             
             
-            $this->set(compact('title_for_layout','latestpurchase','totpurchase','totorder','totproduct','totwishlist'));
+            
+            $this->set(compact('title_for_layout','latestpurchase','totpurchase','totorder','totproduct'));
          
             
         }
