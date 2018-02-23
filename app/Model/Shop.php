@@ -23,13 +23,7 @@ class Shop extends AppModel {
 		  'fields' => '',
 		  'order' => ''
 		),
-		'Percentage' => array(
-		  'className' => 'Percentage',
-		  'foreignKey' => 'percentage_id',
-		  'conditions' => '',
-		  'fields' => '',
-		  'order' => ''
-		)
+		
 	);
 	/*public $hasMany = array(
 		'Product' => array(

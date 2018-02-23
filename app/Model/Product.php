@@ -88,13 +88,7 @@ class Product extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-                'SubCategory' => array(
-			'className' => 'Category',
-			'foreignKey' => 'sub_category_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+                
             
             
 	);
@@ -104,30 +98,9 @@ class Product extends AppModel {
  *
  * @var array
  */
-	public $hasMany = array(
-		'ProductImage' => array(
-			'className' => 'ProductImage',
-			'foreignKey' => 'product_id'
-			
-			
-		),
+	
             
-            'ProductVariation' => array(
-			'className' => 'ProductVariation',
-			'foreignKey' => 'product_id'
-			
-			
-		)
-            
-//            'Rating' => array(
-//			'className' => 'Rating',
-//			'foreignKey' => 'product_id'
-//			
-//			
-//		),
-            
-            
-	);        
+         
         
 
 }

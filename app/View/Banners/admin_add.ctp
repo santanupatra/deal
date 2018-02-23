@@ -5,7 +5,7 @@
 		<!-- block -->
 		<div class="block">
 			<div class="navbar navbar-inner block-header">
-				<div class="muted pull-left"><?php echo __('Add Banner'); ?></div>
+				<div class="muted pull-left"><?php echo __('Add Banner Video'); ?></div>
 			</div>
 			<div class="shops form">
 			<?php echo $this->Form->create('Banner',array('enctype'=>'multipart/form-data')); ?>
@@ -15,21 +15,11 @@
 				<?php
                                 
 					
-	echo $this->Form->input('title',array('required'=>'required'));
+	echo $this->Form->input('title',array('required'=>'required','label'=> 'Youtube Link'));
 	
         
 					
 				?>
-				   
-				
-
-				<?php
-					
-				
-	echo $this->Form->input('image',array('type'=>'file'));
-					?>
-	<font color="red">Please uploade image of .jpg, .jpeg, .png or .gif format.</font><br>
-					
 					
 					
 				</fieldset>

@@ -30,11 +30,11 @@
 						<?php echo h($shop['User']['email']); ?>
 						&nbsp;
 					</dd>
-					<dt><?php echo __('Company Name'); ?></dt>
+<!--					<dt><?php echo __('Company Name'); ?></dt>
 					<dd>
 						<?php echo h($shop['User']['company_name']); ?>
 						&nbsp;
-					</dd>
+					</dd>-->
 					<dt><?php echo __('Business Email'); ?></dt>
 					<dd>
 						<?php if(isset($shop['User']['paypal_business_email']) && $shop['User']['paypal_business_email']!=''){echo $shop['User']['paypal_business_email'];}else{echo 'N/A';} ?>
@@ -47,11 +47,11 @@
 					</dd>
 					
 					
-					<dt><?php echo __('Percentage'); ?></dt>
+<!--					<dt><?php echo __('Percentage'); ?></dt>
 					<dd>
 						<?php if(isset($shop['User']['percentage_id']) && $shop['User']['percentage_id']!=''){echo $shop['Percentage']['name'].' / '.$shop['Percentage']['percent'];}else{echo 'N/A';} ?>
 						&nbsp;
-					</dd>
+					</dd>-->
 					
 					
 					

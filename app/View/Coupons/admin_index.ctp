@@ -12,8 +12,8 @@
                                     <thead>
 					<tr>
                                             <th><?php echo $this->Paginator->sort('id'); ?></th>
-                                            <th><?php echo $this->Paginator->sort('coupon_code'); ?></th>
-                                            <th><?php echo $this->Paginator->sort('type'); ?></th>
+                                            <th><?php echo $this->Paginator->sort('name'); ?></th>
+                                            <!--<th><?php echo $this->Paginator->sort('type'); ?></th>-->
                                             <th><?php echo $this->Paginator->sort('amount'); ?></th>
                                             <th><?php echo $this->Paginator->sort('from_date'); ?></th>
                                             <th><?php echo $this->Paginator->sort('to_date'); ?></th>
@@ -25,8 +25,9 @@
 					<?php foreach ($coupons as $val): ?>
 					<tr>
                                             <td><?php echo h($val['Coupon']['id']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['coupon_code']); ?>&nbsp;</td>
-                                            <td><?php echo ($val['Coupon']['type']==1)?'Amount':'Percentage'; ?>&nbsp;</td>
+                                            <td><?php echo h($val['Coupon']['name']); ?>&nbsp;</td>
+                                            
+<!--                                            <td><?php echo ($val['Coupon']['type']==1)?'Amount':'Percentage'; ?>&nbsp;</td>-->
                                             <td><?php echo h($val['Coupon']['amount']); ?>&nbsp;</td>
                                             <td><?php echo h($val['Coupon']['from_date']); ?>&nbsp;</td>
                                             <td><?php echo h($val['Coupon']['to_date']); ?>&nbsp;</td>

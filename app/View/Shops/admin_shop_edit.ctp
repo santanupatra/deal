@@ -5,48 +5,51 @@
 		<!-- block -->
 		<div class="block">
 			<div class="navbar navbar-inner block-header">
-				<div class="muted pull-left"><?php echo __('Edit Vendor'); ?></div>
+				<div class="muted pull-left"><?php echo __('Edit Shop'); ?></div>
 			</div>
 			<div class="shops form">
-			<?php echo $this->Form->create('User',array('enctype'=>'multipart/form-data')); ?>
+			<?php echo $this->Form->create('Shop',array('enctype'=>'multipart/form-data')); 
+                        echo $this->Form->input('id');
+                        ?>
+                            
 				<fieldset>
 				
-				<input type="hidden" id="ShopUserId" maxlength="255" required="required" name="data[User][id]" value="<?php echo $this->request->data['User']['id']?>">
+				 <div class="input select required">
+					<label for="ProductUserId">User Name</label>
+                                        <select name="data[Shop][user_id]" required="required">
+                                            <option value="">--select--</option>
+                                            <?php foreach($vendorlist as $dt){ ?>
+                                            
+                                            <option value="<?php echo $dt['User']['id'];?>" <?php if($this->request->data['Shop']['user_id']==$dt['User']['id']){ echo 'selected';}?>><?php echo $dt['User']['first_name'].' '.$dt['User']['last_name']?></option>
+                                            
+                                            <?php } ?>
+                                        </select>
+					
+					
+				</div>
 					<?php
 					
-					echo $this->Form->input('first_name',array('required'=>'required'));
-					echo $this->Form->input('last_name',array('required'=>'required'));
-					echo $this->Form->input('email',array('required'=>'required','type'=>'email'));
-                                         echo $this->Form->input('paypal_business_email',array('required'=>'required','type'=>'email','label'=>'Paypal business email'));
-					
-					//echo $this->Form->input('company_name',array('required'=>'required','label'=>'Legit Business Name'));
-					
-					echo $this->Form->input('mobile_number');
+					echo $this->Form->input('name',array('required'=>'required','label'=>'Shop Name'));
+					echo $this->Form->input('description',array('required'=>'required'));
+					echo $this->Form->input('hid_img',array('type'=>'hidden','value'=>$this->request->data['Shop']['logo']));
+                                       echo $this->Form->input('logo',array('type'=>'file')); 
 					
 				?>
 				   
 				
-
-					
-					
-
-
+				<font color="red">Please uploade image of .jpg, .jpeg, .png or .gif format.</font><br>  
 				<?php
-					echo $this->Form->input('id');
-					
-					
-				?>
-				
-				
-				
-					
-					
+				$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
+				$imageName = $this->request->data['Shop']['logo'];
+				if(file_exists($uploadPath . '/' . $imageName) && $imageName!=''){
+					echo($this->Html->image('/shop_images/'.$imageName, array('alt' => 'Shop Image', 'height' => '150', 'width' => '150')));
+				} 
+				else {
+						echo($this->Html->image('/shop_images/default.png', array('alt' => 'Shop Image')));
+					}
+				?>	
 					
 				<?php
-				//echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
-                                
-                                //echo $this->Form->input('dba',array('label'=>'DBA','value'=>$this->request->data['User']['dba']));
-                                //echo $this->Form->input('ein',array('label'=>'EIN','value'=>$this->request->data['User']['ein']));
 					
 					echo $this->Form->input('is_active');
                                        

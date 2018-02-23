@@ -5,51 +5,40 @@
 		<!-- block -->
 		<div class="block">
 			<div class="navbar navbar-inner block-header">
-				<div class="muted pull-left"><?php echo __('Edit Vendor'); ?></div>
+				<div class="muted pull-left"><?php echo __('Add Shop'); ?></div>
 			</div>
 			<div class="shops form">
-			<?php echo $this->Form->create('User',array('enctype'=>'multipart/form-data')); ?>
+			<?php echo $this->Form->create('Shop',array('enctype'=>'multipart/form-data')); ?>
+                            
 				<fieldset>
-				
-				<input type="hidden" id="ShopUserId" maxlength="255" required="required" name="data[User][id]" value="<?php echo $this->request->data['User']['id']?>">
-					<?php
+				 <div class="input select required">
+					<label for="ProductUserId">User Name</label>
+                                        <select name="data[Shop][user_id]" required="required">
+                                            <option value="">--select--</option>
+                                            <?php foreach($vendorlist as $dt){ ?>
+                                            
+                                            <option value="<?php echo $dt['User']['id'];?>"><?php echo $dt['User']['first_name'].' '.$dt['User']['last_name']?></option>
+                                            
+                                            <?php } ?>
+                                        </select>
 					
-					echo $this->Form->input('first_name',array('required'=>'required'));
-					echo $this->Form->input('last_name',array('required'=>'required'));
-					echo $this->Form->input('email',array('required'=>'required','type'=>'email'));
-                                         echo $this->Form->input('paypal_business_email',array('required'=>'required','type'=>'email','label'=>'Paypal business email'));
 					
-					//echo $this->Form->input('company_name',array('required'=>'required','label'=>'Legit Business Name'));
+				</div> 
+
+				<?php
 					
-					echo $this->Form->input('mobile_number');
+					echo $this->Form->input('name',array('required'=>'required','label'=>'Shop Name'));
+					echo $this->Form->input('description',array('required'=>'required'));
+					
+                                       echo $this->Form->input('logo',array('type'=>'file')); 
 					
 				?>
 				   
 				
-
-					
-					
-
-
-				<?php
-					echo $this->Form->input('id');
-					
-					
-				?>
-				
-				
-				
-					
-					
-					
-				<?php
-				//echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
-                                
-                                //echo $this->Form->input('dba',array('label'=>'DBA','value'=>$this->request->data['User']['dba']));
-                                //echo $this->Form->input('ein',array('label'=>'EIN','value'=>$this->request->data['User']['ein']));
-					
+				<font color="red">Please uploade image of .jpg, .jpeg, .png or .gif format.</font><br>  
+					<?php
 					echo $this->Form->input('is_active');
-                                       
+                                        
 				?>
 				</fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>
@@ -69,7 +58,6 @@
 
              google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		      var place = autocomplete.getPlace();
-		     // alert(JSON.stringify(place));
 		      var lat = place.geometry.location.lat();
 		      var lng = place.geometry.location.lng();
 		      $('#lat').val(lat);
@@ -100,9 +88,5 @@
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ9hl89w8uiMND1-cnmkTVnqGh37TDvvk&libraries=places&callback=initAutocomplete"
         async defer></script>
 
-  <?php echo $this->Html->script('ckeditor/ckeditor');?>
- <script type="text/javascript">
-      CKEDITOR.config.toolbar = 'Custom_medium';
-      CKEDITOR.config.height = '200';
-      CKEDITOR.replace('PagePDesc');
-  </script>       
+
+        

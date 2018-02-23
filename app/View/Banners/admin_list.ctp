@@ -6,7 +6,7 @@
 			<div class="navbar navbar-inner block-header">
 				<div class="muted pull-left"><?php echo __('Banners'); ?></div>
 				<div style="float:right;">
-				  <a href="<?php echo($this->webroot)?>admin/banners/add">Add New Banner</a>
+				  <a href="<?php echo($this->webroot)?>admin/banners/add">Add New Banner Video</a>
 				</div>
 			</div>
 			<div class="block-content collapse in">
@@ -17,7 +17,7 @@
 						<th>&nbsp;</th>
 						<th><?php echo $this->Paginator->sort('id'); ?></th>
 						<th><?php echo $this->Paginator->sort('title'); ?></th>
-                                                <th><?php echo $this->Paginator->sort('image'); ?></th>
+                                                
 						
 						
 						<th class="actions"><?php echo __('Actions'); ?></th>
@@ -31,7 +31,7 @@
 
                                         <td><?php echo h($ad['Banner']['title']); ?>&nbsp;</td>
                                         
-                                        <td><img src="<?php echo $this->webroot;?>banner_image/<?php echo h($ad['Banner']['image']); ?>" width="200px">&nbsp;</td>
+                                        
                                     
 						
 
