@@ -87,7 +87,7 @@ class Product extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+        ),
             
             
 	);
@@ -97,17 +97,9 @@ class Product extends AppModel {
  *
  * @var array
  */
-	public $hasMany = array(
-		'ProductImage' => array(
-			'className' => 'ProductImage',
-			'foreignKey' => 'product_id'
-			
-			
-		),
-           
+
             
-            
-	);        
+         
         
 
 }

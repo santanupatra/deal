@@ -21,7 +21,7 @@
 					echo $this->Form->input('password',array('value'=>''));
 					echo $this->Form->input('mobile_number');
                                         
-                                        echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
+                                        //echo $this->Form->input('percentage_id', array('type'=>'select', 'label'=>'Percentage ', 'options'=>$percentage_value,'required'=>'required'));
                                         
                                         
 					//echo $this->Form->input('bio',array('label'=>'Short Description'));

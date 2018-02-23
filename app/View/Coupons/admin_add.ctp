@@ -8,17 +8,50 @@
             <div class="users form">
             <?php echo $this->Form->create('Coupon',array('onsubmit'=>'check_validate();')); ?>
             <fieldset>
+                
+             <div class="input select required">
+                        <label for="ProductUserId">Seller Name</label>
+                        
+                        <select name="data[Coupon][user_id]" required="required" onclick="fetchshop(this.value)">
+                            <option value="">--select--</option>
+                            <?php foreach ($users as $user) { ?>
+
+                                        <option value="<?php echo $user['User']['id']; ?>"><?php echo $user['User']['first_name'].' '.$user['User']['last_name']; ?></option>
+                                            
+
+                                    <?php  } ?>
+                        </select>
+                        
+                    </div>
+                    
+                    
+                    <div class="input select required">
+                        <label for="ProductUserId">Shop</label>
+                        
+                        <select name="data[Coupon][shop_id]" id="shop" required="required">
+                            <option value="">--select--</option>
+                            
+                        </select>
+                        
+                    </div>   
+                
+                
+                
+                
+                
+                
+                
             <?php
-                echo $this->Form->input('coupon_code',array('required'=>'required'));
+                echo $this->Form->input('name',array('required'=>'required','label'=>'Coupon Name'));
             ?>
-                <div class="input text">
+<!--                <div class="input text">
                     <label for="CouponCouponType">Coupon Type</label>
                     <select name="data[Coupon][type]" id="CouponCouponType" required="required">
                         <option value="">Select Coupon Type</option>
                         <option value="1">Amount</option>
                         <option value="2">Percentage</option>
                     </select>
-                </div>
+                </div>-->
             <?php    
                 //echo $this->Form->input('type',array('required'=>'required'));
                 echo $this->Form->input('amount',array('required'=>'required'));
@@ -34,6 +67,50 @@
 </div>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
+
+<script>
+   
+    function fetchshop(id) {
+        
+        //alert(id);
+        
+            $.ajax({
+                url: '<?php echo $this->request->webroot; ?>admin/products/fetchshop', 
+                cache: false,
+                data: { seller_id: id},
+                type: 'post',
+                success: function (response) {
+                    console.log(response);
+                    var obj = jQuery.parseJSON(response);
+
+                    if (obj.Ack == 1) {
+                       
+                        html ="";
+                        for (var i = 0; i < obj.data.length; i++) {
+                          
+                           html= html+"<option value='"+obj.data[i].Shop['id']+"'>"+obj.data[i].Shop['name']+"</option>";
+                           
+                        }
+                        
+                      $('#shop').html(html); 
+                    }
+                },
+                error: function (response) {
+                    $('#msg').html(response); // display error response from the PHP script
+                }
+            });
+        }
+
+ 
+ 
+
+
+
+
+</script>
+
+
+
 
 <script type="text/javascript">
     function check_validate(){

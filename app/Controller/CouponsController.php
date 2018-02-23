@@ -64,6 +64,8 @@ class CouponsController extends AppController {
  * @return void
  */
 	public function admin_add() {
+            
+            $this->loadModel('User');
             $userid = $this->Session->read('Auth.User.id');
             if(!isset($userid) && $userid==''){
                 $this->redirect('/');
@@ -77,7 +79,15 @@ class CouponsController extends AppController {
                 } else {
                     $this->Session->setFlash(__('The Coupon could not be saved. Please, try again.'));
                 }
+                
             }
+            
+            $users = $this->User->find('all', array('conditions' => array('User.is_active' => 1, 'User.is_admin !=' => 1,'User.type'=>'V')));
+        
+        $this->set(compact('users'));
+            
+            
+            
         }
 
 /**
@@ -88,6 +98,7 @@ class CouponsController extends AppController {
  * @return void
  */
 	public function admin_edit($id = null) {
+            $this->loadModel('User');
             $userid = $this->Session->read('Auth.User.id');
             if(!isset($userid) && $userid==''){
                 $this->redirect('/');
@@ -97,8 +108,13 @@ class CouponsController extends AppController {
             }
             
             if ($this->request->is(array('post', 'put'))) {
+                
+                if($this->request->data['Coupon']['shop_id']==""){
+                    
+                    $this->request->data['Coupon']['shop_id']=$this->request->data['Coupon']['hid_shop_id'];
+                }
                 if ($this->Coupon->save($this->request->data)) {
-                    $this->Session->setFlash(__('The Coupon has been saved.'));
+                    $this->Session->setFlash('The Coupon has been saved.', 'default', array('class' => 'success'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('The Coupon could not be saved. Please, try again.'));
@@ -107,7 +123,12 @@ class CouponsController extends AppController {
                 $options = array('conditions' => array('Coupon.' . $this->Coupon->primaryKey => $id));
                 $this->request->data = $this->Coupon->find('first', $options);
             }
-            //$this->set(compact('users'));
+            
+            $users = $this->User->find('all', array('conditions' => array('User.is_active' => 1, 'User.is_admin !=' => 1,'User.type'=>'V')));
+        
+        $this->set(compact('users'));
+            
+           
 	}
 
 /**

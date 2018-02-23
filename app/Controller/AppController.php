@@ -99,17 +99,12 @@ class AppController extends Controller {
       
       
       
-      $subcatcon= array('conditions'=>array('parent_id !=' =>0));      
-      $subcategory = $this->Category->find('all',$subcatcon);
-      
      
-      
-      $categories = $this->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.parent_id'=>0)));
       
       //pr($categories);
       
       //end
-        $this->set(compact('sitesetting','SITE_URL','userid','homecategories','menus','subcategory','categories'));
+        $this->set(compact('sitesetting','SITE_URL','userid','homecategories','menus'));
 		
       
     }
