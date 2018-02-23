@@ -2,7 +2,11 @@
     <section class="pt-5 pb-5">
           <div class="container">
               <div class="row">
-                    <?php if($userdetails['User']['type']=='V'){ echo ($this->element('vendor_side_menu'));}else{echo ($this->element('user_side_menu'));};?>
+
+                    <?php if($userdetails['User']['type']=='V'){ 
+                    	echo $this->element('vendor_side_menu');
+                    }
+                    	else{echo ($this->element('user_side_menu'));};?>
                   <div class="col-lg-9 col-12">
                       <div class="right-side p-3">
                           <div class="row">

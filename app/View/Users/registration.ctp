@@ -1,61 +1,169 @@
+  <div class="clearfix"></div>
 
-    
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-5 col-sign-up">
-                    <h2>Sign Up</h2>
-                    <h5 class=" mt-4">Already have account? <a href="<?php echo($this->webroot);?>users/login" class="text-pink">Log In</a></h5>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <ol class="breadcrumb p-2 rounded-0">
+          <li class="breadcrumb-item"><a href="index.html">
+            <i class="fa fa-home"></i>
+          </a></li>          
+          <li class="breadcrumb-item"><a href="login.html">Log In</a></li>
+          <li class="breadcrumb-item active">Registration</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <section class="login-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-xs-12 col-sm-8 col-md-6">
+          <div class="login-form mt-sm-5 mb-sm-5">
             <form class="mt-4" method="post" action="<?php echo($this->webroot);?>users/registration" id="frmRegister" name="frmRegister">
-<!--                        <div class="form-group">
-                            <label>User Type</label>
-                            <span class="star">*</span>
-                            <select class="form-control" name="data[User][type]" >
-                                <option value="">select</option>
-                                <option value="V"> Vendor </option>
-                                <option value="C"> Buyer </option>
-                            </select>
-                        </div>-->
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <span class="star">*</span>
-                            <input type="text" class="form-control" name="data[User][first_name]" placeholder="First name here">
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <span class="star">*</span>
-                            <input type="text" class="form-control"  name="data[User][last_name]" placeholder="Last name here">
-                        </div>
-<!--                        <div class="form-group">
-                            <label>Phone No</label>
-                            <span class="star">*</span>
-                            <input type="text" class="form-control" name="data[User][mobile_number]" placeholder="Phone no here">
-                        </div>-->
-                        <div class="form-group">
-                            <label>Email Id</label>
-                            <span class="star">*</span>
-                            <input type="email" class="form-control" name="data[User][email]" placeholder="Email id here">
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <span class="star">*</span>
-                            <input type="password" class="form-control"  name="data[User][password]" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" class="form-control"  name="data[User][con_password]" placeholder="Re-type password">
-                        </div>
-                        <div class="form-group">
-                   <span class="star star-bottom">* fields are mandetory</span>
-                 </div>
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg text-uppercase">Sign up</button>
-                        </div>
-                    </form>
+              <fieldset>
+                <h2>Your Personal Details</h2>
+                <hr class="colorgraph">
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label for="n">First Name</label>
+                      <input type="text" name="data[User][first_name]" id="n" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter name . . .">
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="email">Last Name</label>
+                       <input type="text" class="form-control form-control-sm input-sm rounded-0"  name="data[User][last_name]" placeholder="Last name here">                          
+                    </div>
+                  </div>
                 </div>
-            </div>
+
+               <div class="form-group">
+                  <label for="t">Email</label>
+                  <input type="email" name="data[User][email]" id="email" class="form-control form-control-sm input-sm rounded-0" 
+                  placeholder="Type Contacts...">
+                </div>
+
+                <h2>Your Password</h2>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label for="pp">Password</label>
+                      <input type="password" name="data[User][password]" id="password" class="form-control form-control-sm input-sm rounded-0" 
+                      placeholder="Enter password . . .">
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="cp">Confirm</label>
+                        <input type="password" name="data[User][con_password]" id="con_password" class="form-control form-control-sm input-sm rounded-0" 
+                        placeholder="Confirm password . . .">                            
+                    </div>
+                  </div>
+                </div>
+                <p class="list-h1"></p>
+                <hr class="colorgraph">
+
+                <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                  <a href="<?php echo($this->webroot);?>users/login" class="btn btn-sm bg-dark text-white btn-block rounded-0">Log In</a>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <input type="submit" class="btn btn-sm bg-light btn-block rounded-0" value="Register">
+                  </div>
+                </div> 
+                                  
+              </fieldset>
+            
+          </div>
         </div>
-    </section>
+
+        <div class="col-lg-6 col-xs-12 col-sm-8 col-md-6">
+          <div class="login-form mt-sm-5 mb-sm-5">
+            <form>
+              <fieldset>
+                <h2>Your Address</h2>
+                <hr class="colorgraph">
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label for="ad">Address</label>
+                      <input type="text" name="data[User][address]" id="ad" class="form-control form-control-sm input-sm rounded-0" 
+                      placeholder="Enter address . . .">
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="ct">City</label>
+                        <input type="text" name="data[User][city]" id="ct" class="form-control form-control-sm input-sm rounded-0" 
+                        placeholder="Enter city . . .">                            
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label for="pc">State</label>
+                      <input type="text" name="data[User][state]" id="state" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter code . . .">
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label for="ct">Country</label>
+                        <input type="text" name="data[User][country]" id="country" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter code . . .">                           
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label for="ct">Post Code</label>
+                        <input type="text" name="data[User][zip_code]" id="zip_code" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter code . . .">                           
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-check">
+                <h2>User Type</h2>                    
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <h4 class="bg-light p-2"> Type </h4>  
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="pt-3">
+                        <input class="form-check-input" type="radio" value="V" name="data[User][type]" checked>
+                        <label class="form-check-label pl-1" for="rdo">Seller</label>   
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="pt-3">
+                        <input class="form-check-input" type="radio" value="U" name="data[User][type]">
+                        <label class="form-check-label pl-1" for="rdo1">User</label>   
+                      </div>                        
+                    </div>
+                    <div class="col-lg-2 d-md-none d-sm-none d-xl-none"></div>
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <div class="row">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-11">
+                      <input class="form-check-input" type="checkbox" id="chk">
+                      <label class="form-check-label pl-1" for="chk">
+                        I have read & agree to the Privacy policy
+                      </label>                          
+                    </div>
+                  </div>                    
+                </div>
+                <hr class="colorgraph mt-0">
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <div class="clearfix"></div>
     
     <!--   footer   -->
     <script type="text/javascript">

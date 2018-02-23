@@ -1,50 +1,79 @@
-  <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-4">
-                    <h2>Sign in</h2>
-                    <h5 class=" mt-4">Don’t have account? <a href="<?php echo($this->webroot);?>users/registration" class="text-pink">Register Now!</a></h5>
-                    <form class="mt-4" method="post" action="<?php echo $this->webroot; ?>users/login" id="frmLogin">
-                        <div class="form-group">
-                            <input type="text" name="data[User][email]" class="form-control" placeholder="Enter your email address">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="data[User][password]" class="form-control" placeholder="Enter your password">
-                        </div>
-                        <div class="form-group overflow-hidden">
-                            <label class="float-left">
-                                <input type="checkbox">
-                                Remember me
-                            </label>
-                            <a href="<?php echo($this->webroot);?>users/forgot_password" class="text-pink float-right">Forgot  password?</a>
-                        </div>
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">GET STARTED</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-1">
-                    <h5 class="font-weight-bold text-center">OR</h5>
-                </div>
-                <div class="col-lg-5 mt-4">
-                    <div class="p-5 social-box">
-                        <h5>Sign in with Social Media</h5>
-                        <p>Connect Wedshopping through your Social account</p>
-                        <div class="form-group">
-                            <a class="btn btn-block btn-fb flogin"><i class="fa fa-facebook-official"></i> Login with Facebook</a>
-                        </div>
-                        <div class="form-group">
-                            <a href="<?php echo $this->webroot ?>users/twitterlogin" class="btn btn-block btn-twiter"><i class="fa fa-twitter"></i> Login with Twitter</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+   <div class="clearfix"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <ol class="breadcrumb p-2 rounded-0">
+            <li class="breadcrumb-item"><a href="index.html">
+              <i class="fa fa-home"></i>
+            </a></li>          
+            <li class="breadcrumb-item active">Log In</li>
+            <li class="breadcrumb-item"><a href="res.html">Registration</a></li>
+          </ol>
         </div>
+      </div>
+    </div>
+
+    <section class="login-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-xs-12 col-sm-8 col-md-6">
+            <div class="login-form mt-sm-5 mb-sm-2">
+              <form class="mt-4" method="post" action="<?php echo $this->webroot; ?>users/login" id="frmLogin">
+                <fieldset>
+                  <h2>Please Sign In</h2>
+                  <hr class="colorgraph">
+                  <div class="form-group">
+                    <label for="email">Enter Email</label>
+                    <input type="text" name="data[User][email]" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter your email address">                   
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Enter Password</label>                    
+                     <input type="password" name="data[User][password]" class="form-control form-control-sm input-sm rounded-0" placeholder="Enter your password">
+                  </div>
+                  
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <a href="#">
+                          <div class="bg-primary text-white text-md-center text-capitalize p-md-2 w-100">
+                             <i class="fa fa-facebook fa-1x pr-2"></i> Also Login with Facebook
+                          </div>
+                        </a>
+                      </div>
+
+                      <div class="col-lg-6">
+                        <a href="#">
+                          <div class="bg-info text-white text-md-center text-capitalize p-md-2 w-100">
+                             <a href="<?php echo $this->webroot ?>users/twitterlogin"><i class="fa fa-twitter fa-1x pr-2"></i> Also Login with Twitter</a>
+                          </div>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <span class="button-checkbox">
+                    <button type="button" class="btn btn-sm rounded-0 bg-info text-white">
+                      <i class="fa fa-check-square-o"></i> Remember Me</button>
+                    <a href="<?php echo($this->webroot);?>users/forgot_password" class="btn btn-link btn-sm pull-right">Forgot Password?</a>
+                  </span>
+                  <hr class="colorgraph">
+                  <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <input type="submit" class="btn btn-sm bg-light btn-block rounded-0" value="Log In">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">                      
+                      <input type="button" class="btn btn-sm bg-dark text-white btn-block rounded-0" value="Register">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
-    
-    <!--   footer   -->
-    
-    
+    <div class="clearfix"></div>
 
     <!-- Optional JavaScript -->
     

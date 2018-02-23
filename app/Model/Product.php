@@ -87,13 +87,6 @@ class Product extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-                'SubCategory' => array(
-			'className' => 'Category',
-			'foreignKey' => 'sub_category_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
 		)
             
             
@@ -111,20 +104,7 @@ class Product extends AppModel {
 			
 			
 		),
-            
-            'ProductVariation' => array(
-			'className' => 'ProductVariation',
-			'foreignKey' => 'product_id'
-			
-			
-		)
-            
-//            'Rating' => array(
-//			'className' => 'Rating',
-//			'foreignKey' => 'product_id'
-//			
-//			
-//		),
+           
             
             
 	);        
