@@ -9,7 +9,7 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
  */
 class ActivitiesController extends AppController {
 
-/**
+/***
  * Components
  *
  * @var array
