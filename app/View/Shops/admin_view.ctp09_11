@@ -1,0 +1,123 @@
+<?php ?>
+<div class="span9" id="content">
+	<div class="row-fluid">
+		<!-- block -->
+		<div class="block">
+			<div class="navbar navbar-inner block-header">
+				<div class="muted pull-left"><?php echo __('View Shop'); ?></div>
+			</div>
+			<div class="users view">
+				<dl>
+					
+					<dt><?php echo __('Id'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['id']); ?>
+						&nbsp;
+					</dd>
+
+					<dt><?php echo __('Name'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['name']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Owner'); ?></dt>
+					<dd>
+						<?php echo h($shop['User']['first_name'].' '.$shop['User']['last_name']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Email'); ?></dt>
+					<dd>
+						<?php echo h($shop['User']['email']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Company Name'); ?></dt>
+					<dd>
+						<?php echo h($shop['User']['company_name']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Business Email'); ?></dt>
+					<dd>
+						<?php if(isset($shop['User']['paypal_business_email']) && $shop['User']['paypal_business_email']!=''){echo $shop['User']['paypal_business_email'];}else{echo 'N/A';} ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Phone'); ?></dt>
+					<dd>
+						<?php if(isset($shop['User']['mobile_number']) && $shop['User']['mobile_number']!=''){echo $shop['User']['mobile_number'];}else{echo 'N/A';} ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Address'); ?></dt>
+					<dd>
+						<?php if(isset($shop['User']['address']) && $shop['User']['address']!=''){echo $shop['User']['address'];}else{echo 'N/A';} ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('zip code'); ?></dt>
+					<dd>
+						<?php if(isset($shop['User']['zip_code']) && $shop['User']['zip_code']!=''){echo $shop['User']['zip_code'];}else{echo 'N/A';} ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Percentage'); ?></dt>
+					<dd>
+						<?php if(isset($shop['Shop']['percentage_id']) && $shop['Shop']['percentage_id']!=''){echo $shop['Percentage']['name'].' / '.$shop['Percentage']['percent'];}else{echo 'N/A';} ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Logo'); ?></dt>
+					<dd>
+						<?php
+						$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
+						$imageName = $shop['Shop']['logo'];
+						if(file_exists($uploadPath . '/' . $imageName) && $imageName!=''){
+							echo($this->Html->image('/shop_images/'.$imageName, array('alt' => $shop['Shop']['name'],'width'=>150,'height'=>150)));
+						} else {
+							echo($this->Html->image('/shop_images/default.png', array('alt' => $shop['Shop']['name'])));
+						}
+						?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Cover Photo'); ?></dt>
+					<dd>
+						<?php
+						$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
+						$imageName = $shop['Shop']['cover_photo'];
+						if(file_exists($uploadPath . '/' . $imageName) && $imageName!=''){
+							echo($this->Html->image('/shop_images/'.$imageName, array('alt' => $shop['Shop']['name'],'width'=>150,'height'=>150)));
+						} else {
+							echo($this->Html->image('/shop_images/default.png', array('alt' => $shop['Shop']['name'])));
+						}
+						?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Category'); ?></dt>
+					<dd>
+						<?php echo ($this->requestAction('/shops/getcatNames/'.$shop['Shop']['categories']));?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Facebook'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['facebook']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('Twitter'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['twitter']); ?>
+						&nbsp;
+					</dd>
+					<!--<dt><?php echo __('Instagram'); ?></dt>
+					 dd>
+						<?php echo h($shop['Shop']['instagram']); ?>
+						&nbsp;
+					</dd>
+					<dt><?php echo __('VK'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['vk']); ?>
+						&nbsp;
+					</dd> -->
+					<dt><?php echo __('Active'); ?></dt>
+					<dd>
+						<?php echo h($shop['Shop']['is_active']==1?'Yes':'No'); ?>
+						&nbsp;
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>

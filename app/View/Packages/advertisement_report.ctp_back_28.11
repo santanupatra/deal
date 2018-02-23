@@ -1,0 +1,196 @@
+<?php 
+
+$userid = $this->Session->read('Auth.User.id');
+?>
+<link href="<?php echo $this->webroot?>js/c3-chart/c3.css" rel="stylesheet"/>
+<style type="text/css">
+/** Paging **/
+.paging {
+	background:#fff;
+	color: #ccc;
+	margin-top: 1em;
+	clear:both;
+}
+.paging .current,
+.paging .disabled,
+.paging a {
+	text-decoration: none;
+	padding: 5px 8px;
+	display: inline-block
+}
+.paging > span {
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-left: 0;
+}
+.paging > span:hover {
+	background: #efefef;
+}
+.paging .prev {
+	border-left: 1px solid #ccc;
+	-moz-border-radius: 4px 0 0 4px;
+	-webkit-border-radius: 4px 0 0 4px;
+	border-radius: 4px 0 0 4px;
+}
+.paging .next {
+	-moz-border-radius: 0 4px 4px 0;
+	-webkit-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+}
+.paging .disabled {
+	color: #ddd;
+}
+.paging .disabled:hover {
+	background: transparent;
+}
+.paging .current {
+	background: #efefef;
+	color: #c73e14;
+}
+.name {
+	color:#009cdb;
+}
+.name a {
+	color:#009cdb;
+}
+.adv_report .nav-tabs li{width:33.3% !important;}
+.adv_report .nav > li > a {    margin-right: 2px !important; }
+.pro_about{height:auto;width:773px;padding:18px;background: white;border-radius:3px;box-shadow:0 0 2px #999;margin-top:20px;float:left;margin-left:20px;padding:20px;}
+.profile_btn{border:1px solid #dadbda;padding:5px 10px 5px 10px;color:#747674;border-radius: 3px;margin:10px 0px 0px 0px;}
+.pro_right_btn{float:right !important;margin-right:10px;border:0px !important;margin-top:13px;}
+</style>
+
+<section class="after_login">
+    <div class="container">
+        <div class="row">
+            <?php echo($this->element('user_leftbar'));?>
+            <div class="col-md-9">
+                  <div class="category_tab adv_report">
+			<ul class="nav nav-tabs" role="tablist">
+				<!-- <li role="presentation" id="homeupperli" class=""><a href="#" aria-controls="" role="tab" data-toggle="tab">Daily</a></li>
+				 <li role="presentation" id="homelowerli" class="" ><a href="#" aria-controls="" role="tab" data-toggle="tab">Monthly</a></li>
+				 <li role="presentation" class="" id="prodpgli" ><a href="#" aria-controls="" role="tab" data-toggle="tab">Yearly</a></li>-->
+			    <li class="active">
+                                <a href="#Daily" data-toggle="tab">Daily</a>
+                            </li>
+                            <!--<li>
+                                <a href="#Weekly" data-toggle="tab">Weekly</a>
+                            </li>-->
+                            <li class="">
+                                <a href="#Monthly" data-toggle="tab">Monthly</a>
+                            </li>
+			    <li class="">
+                                <a href="#Yearly" data-toggle="tab">Yearly</a>
+                            </li>
+		 	</ul>
+			<div class="tab-content">
+                            <div class="tab-pane active" id="Daily">
+                                <div id="daily_graph" style="width:100%;height:400px;border:0px solid blue;"></div>
+                            </div>
+                            <div class="tab-pane" id="Monthly">
+                                <div id="monthly_graph" style="width:100%;height:400px;border:0px solid blue;"></div>
+                            </div>
+                            <div class="tab-pane" id="Yearly">
+                                <div id="yearly_graph" style="width:100%;height:400px;border:0px solid blue;"></div>
+                            </div>
+                        </div>
+                     </div>   
+                 </div>   
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<script src="<?php echo $this->webroot?>js/anychart.min.js"></script>
+<script>
+    $(document).ready(function(){
+	/*var dataSet = anychart.data.set([
+            ['18 Nov,2016',0],
+            ['19 Nov,2016', 0],
+            ['20 Nov,2016', 0],
+            ['21 Nov,2016', 0],
+            ['22 Nov,2016', 0],
+            ['23 Nov,2016', 0],
+            ['24 Nov,2016', 0]
+          ]);*/
+	  
+	  var dataSet = anychart.data.set([
+            ['<?php echo date("d M", strtotime("-6 days")).",".date("Y", strtotime("-6 days"));?>',<?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-6 days")),date('Y-m-d', strtotime("-6 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-5 days")).",".date("Y", strtotime("-5 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-5 days")),date('Y-m-d', strtotime("-5 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-4 days")).",".date("Y", strtotime("-4 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-4 days")),date('Y-m-d', strtotime("-4 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-3 days")).",".date("Y", strtotime("-3 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-3 days")),date('Y-m-d', strtotime("-3 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-2 days")).",".date("Y", strtotime("-2 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-2 days")),date('Y-m-d', strtotime("-2 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-1 days")).",".date("Y", strtotime("-1 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-1 days")),date('Y-m-d', strtotime("-1 days")), 'admin'=>false, 'prefix' => ''));?>],
+            ['<?php echo date("d M", strtotime("-0 days")).",".date("Y", strtotime("-0 days"));?>', <?php echo $this->requestAction(array('controller' => 'packages', 'action' => 'total_sale_range', date('Y-m-d', strtotime("-0 days")),date('Y-m-d', strtotime("-0 days")), 'admin'=>false, 'prefix' => ''));?>]
+          ]);
+
+          // map data for the first series,take value from first column of data set
+          var seriesData_1 = dataSet.mapAs({x: [0], value: [1]});
+
+          // map data for the second series,take value from second column of data set
+          //var seriesData_2 = dataSet.mapAs({x: [0], value: [2]});
+
+          // map data for the third series, take x from the zero column and value from the third column of data set
+          //var seriesData_3 = dataSet.mapAs({x: [0], value: [3]});
+
+          // create line chart
+          chart = anychart.line();
+
+          // turn on chart animation
+          chart.animation(true);
+
+          // turn on the crosshair
+          chart.crosshair(true);
+
+          // disable one of the chart grids
+          chart.grid(0).enabled(false);
+
+          // set container id for the chart
+          chart.container('daily_graph');
+
+          // set chart title text settings
+          chart.title('Daily');
+          
+          
+
+          // set yAxis title
+          chart.yAxis().title('Total Click');
+          chart.yScale().minimum(0);
+          //chart.yScale().ticks().interval(10);
+
+          var seriesStrokeFunction = function(color, style) {
+                console.log(style);
+            return {color: color, dash: style};
+          };
+
+          // temp variable to store series instance
+          var series;
+
+          // we can use local variables to change series settings
+          series = chart.line(seriesData_1);
+          series.stroke(seriesStrokeFunction(series.color(), '5 5'));
+          series.name('click');
+          series.markers(true);
+          
+          
+
+          // or just use chaining calls
+          //series = chart.line(seriesData_2);
+          //series.stroke(seriesStrokeFunction(series.color(), '3 5 10 5'));
+         // series.name('Delivery Failure');
+          //series.markers(true);
+
+          // or access series by index from chart
+         //series = chart.line(seriesData_3);
+          //series.stroke(seriesStrokeFunction(series.color(), '2 5'));
+          //series.name('Order Cancellation');
+          //series.markers(true);
+
+          // turn the legend on
+          chart.legend().enabled(true).align('center').fontSize(10);
+
+          // initiate chart drawing
+          chart.draw();
+    });
+    </script>
