@@ -97,30 +97,13 @@
                           </h3>                          
                           <div class="flexslider carousel">
                             <ul class="slides">
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
-                              <li>
-                                <img src="img/img1.png" />
-                              </li>
+                              <?php
+                                foreach($popular_category as $pcat){
+                                  //print_r($pcat);
+                                  echo '<li><a href="'.$this->webroot.'products/product_list/'.base64_encode($pcat['Category']['id']).'"><img src="'.$this->webroot.'category_images/'.$pcat['Category']['image'].'" /></a></li>';
+                                }
+                              ?>                             
+                              
                             </ul>
                           </div>
                         </div>
@@ -138,8 +121,8 @@
                             <h5 class="mb-3 text-uppercase">Categories</h5>
                             <ul class="cat-list p-0 m-0 list-unstyled">
                               <?php
-                                foreach($right_category as $cat){
-                                  echo '<li class=""><a href="'.$this->webroot.'products/list/'.base64_encode($cat['Category']['id']).'">'.$cat['Category']['name'].'</a></li>';
+                                foreach($allcategory as $cat){
+                                  echo '<li class=""><a href="'.$this->webroot.'products/product_list/'.base64_encode($cat['Category']['id']).'">'.$cat['Category']['name'].'</a></li>';
                                 }
                               ?>
                                                              
