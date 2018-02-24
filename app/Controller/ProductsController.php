@@ -21,6 +21,7 @@ class ProductsController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->set('currency_value', $this->currency_value);
+
         $this->Auth->allow('ajax_add_to_cart','fetch_size' ,'filter_search', 'ajax_add_to_wishlist', 'product_details', 'search_result', 'search', 'search_option', 'appinventorylist', 'index', 'app_product_list', 'product_list', 'appProductDetails', 'category_related_product', 'subcategory_related_product', 'prodoct_related_rating', 'shop_related_rating', 'shop_related_positive_rating', 'get_product_img', 'get_product_main_image', 'getwishlistcount', 'getcatprd_cnt', 'admin_color_list', 'admin_color_add','admin_fetchshop','details');
     }
 

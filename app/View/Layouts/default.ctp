@@ -116,20 +116,161 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                         <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
                            deals
                         </a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
+                         <div class="dropdown-menu rounded-0 p-2">
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Locations</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Alabama                                             
+                                            </a>
+                                            </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Indaho                                               
+                                            </a>                                              
+                                          </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">ohino                                                
+                                            </a>                                               
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>
+
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Categories</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <?php
+                                            foreach ($dealcategory as $dcat) {
+                                            ?>
+                                              <li class="list-group-item rounded-0 p-1">
+                                                <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($dcat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $dcat['Category']['name'];?>                                             
+                                                </a>
+                                              </li>
+                                           <?php   
+                                            }
+                                          ?>                                        
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>
+                            
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Store</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Alabama
+                                                
+                                            </a>
+                                            </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Indaho
+                                               
+                                            </a>                                              
+                                          </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">ohino
+                                               
+                                            </a>                                               
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>               
                         </div>
                       </li>
                       <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
                             cupons
                         </a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
+                       <div class="dropdown-menu rounded-0 p-2">
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Locations</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Alabama
+                                               
+                                            </a>
+                                            </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Indaho
+                                               
+                                            </a>                                              
+                                          </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">ohino
+                                               
+                                            </a>                                               
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>
+
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Categories</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <?php
+                                            foreach ($couponcategory as $ccat) {
+                                            ?>
+                                              <li class="list-group-item rounded-0 p-1">
+                                                <a href="<?php echo $this->webroot.'coupons/coupon_list/'.base64_encode($ccat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $ccat['Category']['name'];?>                                             
+                                                </a>
+                                              </li>
+                                           <?php   
+                                            }
+                                          ?>   
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>
+                            
+                           <div class="new-innermenudiv d-inline-block float-left">
+                                <div class="card-group rounded-0">
+                                  <div class="card rounded-0">
+                                    <div class="card-body pl-0 pr-0 pb-0">
+                                      <h5 class="card-title text-center pt-1 pb-1"><strong>Store</strong></h5>
+                                      <ul class="list-unstyled list-group">
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Alabama
+                                               
+                                            </a>
+                                            </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">Indaho
+                                               
+                                            </a>                                              
+                                          </li>
+                                          <li class="list-group-item rounded-0 p-1">
+                                            <a href="#" class="text-capitalize text-dark">ohino
+                                                
+                                            </a>                                               
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>                                
+                                </div>
+                            </div>               
                         </div>
                       </li>
                       <li class="nav-item">
@@ -252,4 +393,4 @@ $cakeDescription = __d('cake_dev', 'DEAL');
 </script>
   </body>
 </html>
-
+<?php echo $this->element('sql_dump'); ?>

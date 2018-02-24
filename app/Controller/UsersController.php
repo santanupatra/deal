@@ -17,7 +17,7 @@ class UsersController extends AppController {
     public $components = array('Paginator','Session');
     public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration');
+	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus');
    }
 /**
  * index method
@@ -32,10 +32,14 @@ class UsersController extends AppController {
           $this->loadModel('Category');
           $this->loadModel('Banner');
            
-          $right_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
-          //print_r($right_category);
+
+          $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
+          $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1)));
+          $video = $this->Banner->find("first",array('conditions'=>array('is_active'=> 1)));
+
+          
              
-       $this->set(compact('right_category'));
+       	  $this->set(compact('allcategory', 'popular_category', 'video'));
                 
     }
    

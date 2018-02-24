@@ -278,4 +278,10 @@ class CouponsController extends AppController {
             }
             return $this->redirect(array('action' => 'index'));
 	}
+
+    public function coupon_list($id){
+
+            $id = json_decode($id);
+
+    }
 }

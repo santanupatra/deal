@@ -1,4 +1,4 @@
-<?php pr($products);?>
+
 <div class="clearfix"></div>
 
     <section class="page-title p-4">
@@ -42,7 +42,7 @@
             <div class="item col-xs-12 col-sm-12 col-md-4">
               <div class="img-thumbnail">
                 <div class="ll-imgdiv">
-                    <img class="group list-group-image img-responsive"  src="images/sv.jpg" alt="" />
+                    <img class="group list-group-image img-responsive"  src="<?php echo $this->webroot.'product_images/'.$product['Product']['product_image'];?>" alt="" />
                 </div>  
                 <div class="caption">
                   <h5 class="h6 m-0 p-0"><?php echo $product['Product']['name'];?></h5>
@@ -50,12 +50,12 @@
                   <h5 class="h6 m-0 p-0">
                     <span>
                      
-                      <span class="h6">Price: <?php echo $product['Product']['price'];?></span>
+                      <span class="h6">Price: <strike style="color: #dc3545">$ <?php echo $product['Product']['price_lot'];?></strike> &nbsp&nbsp&nbsp $ <?php echo $product['Product']['discount'];?></span>
                     </span>               
                   </h5>
 
                   <h5 class="m-0 p-0">
-                    <a href="deal.html" class="btn-sm btn"><i class="fa fa-hand-o-right"></i> View Deal</a>
+                    <a href="<?php echo $this->webroot.'products/details/'.base64_encode($product['Product']['id']);?>" class="btn-sm btn"><i class="fa fa-hand-o-right"></i> View Deal</a>
                   </h5>
                 </div>
               </div>

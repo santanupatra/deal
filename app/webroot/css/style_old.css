@@ -64,11 +64,8 @@ a:active {
 	font-size: 1rem;
 }
 
-.navbar-nav.ml-auto > .dropdown:hover > .dropdown-menu {
+.navbar-nav.ml-auto>.dropdown:hover>.dropdown-menu {
 	display: block !important;
-	min-width: 40rem;
-	top: 86%;
-	left: -430%;
 }
 
 .image-top {
@@ -986,39 +983,10 @@ footer {
 .cms-txtpart article{
 	line-height:20px;
 }
-
-.new-innermenudiv {
-	width: 32.9%;
-}
-.new-innermenudiv .card{
-	border: 0;
-}
-.loyality-section{}
-.loyality-leftdiv{}
-.loyality-rightdiv{}
-.loyality-mainpart{}
-.loyality-mainpart h5 {
-	font-weight: 400;
-	font-size: 16px;
-}
-.loyality-mainpart h5, .loyality-mainpart article {
-	font-size: 13px;
-	font-weight: 300;
-}
-.loyality-imgdiv{}
-.loyality-txtpart {}
-.loyality-txtpart h5 {
-	font-weight: 300;
-	font-size: 16px;
+.red_price{
+	text-decoration: line-through;
 	color: #c94838;
 }
-.loyality-txtpart h5, .loyality-txtpart article {
-	font-size: 13px;
-	font-weight: 300;
-}
-.loyality-txtpart article {
-	line-height: 20px;
-}
 
 
 
@@ -1027,12 +995,18 @@ footer {
 
 
 
-.side-bar-menu{ width: auto; margin: 0; padding: 0; }
-.side-bar-menu ul{ border: #d9d9d9 1px solid; }
-.side-bar-menu ul li{ list-style: none; padding: 10px; margin-bottom: 10px; color: #555;}
-.side-bar-menu ul li a{color: #555; font-weight: 500; padding: 10px; display: block; }
-.side-bar-menu ul li a:hover{ background: #dd407b; color: #fff; }
-.side-bar-menu ul li a.active{background: #dd407b; color: #fff;} 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
