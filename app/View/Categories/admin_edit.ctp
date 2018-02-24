@@ -13,7 +13,7 @@
 				echo $this->Form->input('id');
 				echo $this->Form->input('name',array('required'=>'required'));
                                 
-                                echo $this->Form->input('image',array('required'=>'required','type'=>'file'));
+                                echo $this->Form->input('image',array('type'=>'file'));
                              ?>   
 				<div>
                     <?php
@@ -34,8 +34,10 @@
                                 
                               <?php  
 				echo $this->Form->input('is_active');
+                                
 				echo $this->Form->input('parent_id',array('type' => 'hidden'));        
 			   ?>
+                            <input type="checkbox" name="data[Category][is_popular]" value='1' <?php if($this->request->data['Category']['is_popular']==1){echo 'checked';}?>> Popular
 			</fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>
 			</div>

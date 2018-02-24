@@ -45,19 +45,6 @@ if(count($pass_data)>0){
                                       </div>
                                       
                                       <div class="form-group">
-                                          <label>Legit Business Name</label>
-                                          <input type="text" class="form-control" name="data[User][company_name]" value="<?=$user['User']['company_name']?>" placeholder="Enter business name here">
-                                      </div>
-                                      <div class="form-group">
-                                          <label>DBA</label>
-                                          <input type="text" class="form-control" name="data[User][dba]" value="<?=$user['User']['dba']?>" placeholder="Enter DBA here">
-                                      </div>
-                                      <div class="form-group">
-                                          <label>EIN</label>
-                                          <input type="text" class="form-control" name="data[User][ein]" value="<?=$user['User']['ein']?>" placeholder="Enter tax id here">
-                                      </div>
-                                      
-                                      <div class="form-group">
                                           <label>Paypal Email</label>
                                           <input type="text" class="form-control" name="data[User][paypal_business_email]" value="<?=$user['User']['paypal_business_email']?>" placeholder="Enter paypal id here">
                                       </div>
