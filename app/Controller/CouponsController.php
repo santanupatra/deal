@@ -224,7 +224,12 @@ class CouponsController extends AppController {
             $this->loadModel('Category');
             $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
             
-            $this->set(compact('title_for_layout','user','shops','categories'));
+            $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+            
+            
+            
+            $this->set(compact('title_for_layout','user','shops','categories','cities'));
         }
         
         public function edit($edit_id = null) {
@@ -256,8 +261,10 @@ class CouponsController extends AppController {
             $this->loadModel('Category');
             $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
             
-            
-            $this->set(compact('title_for_layout','categories','shops'));
+            $this->loadModel('City');
+            $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+       
+            $this->set(compact('title_for_layout','categories','shops','cities'));
 	}
         
         public function delete($delid = null) {

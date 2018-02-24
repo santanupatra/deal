@@ -103,6 +103,7 @@
             <?php    
                 //echo $this->Form->input('type',array('required'=>'required'));
                 echo $this->Form->input('amount',array('required'=>'required'));
+                echo $this->Form->input('offer',array('required'=>'required','label'=>'Coupon Offer'));
                 echo $this->Form->input('from_date',array('required'=>'required','id'=>'fromDate','type'=>'text','label'=>'Start Date'));
                 echo $this->Form->input('to_date',array('required'=>'required','id'=>'toDate','type'=>'text','label'=>'Expiry Date'));
                 echo $this->Form->input('is_active');

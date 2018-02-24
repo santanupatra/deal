@@ -31,10 +31,7 @@
                                           <input type="text" class="form-control" name="data[User][mobile_number]" value="<?=$user['User']['mobile_number']?>" placeholder="">
                                       </div>
                                       
-                                      <div class="form-group">
-                                          <label>Paypal Email</label>
-                                          <input type="text" class="form-control" name="data[User][paypal_business_email]" value="<?=$user['User']['paypal_business_email']?>" placeholder="Enter paypal id here">
-                                      </div>
+                                      
                                       
 <!--                                      <div class="form-group">
                                           <label>Password</label>
