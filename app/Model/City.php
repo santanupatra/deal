@@ -31,32 +31,5 @@ class City extends AppModel {
 		  'order' => ''
 		)
 	);
-	public $hasMany = array(
-		'Area' => array(
-		    'className' => 'Area',
-		    'foreignKey' => 'city_id',
-		    'dependent' => false,
-		    'conditions' => '',
-		    'fields' => '',
-		    'order' => '',
-		    'limit' => '',
-		    'offset' => '',
-		    'exclusive' => '',
-		    'finderQuery' => '',
-		    'counterQuery' => ''
-		),
-            'SpaAddress' => array(
-		    'className' => 'SpaAddress',
-		    'foreignKey' => 'city_id',
-		    'dependent' => false,
-		    'conditions' => '',
-		    'fields' => '',
-		    'order' => '',
-		    'limit' => '',
-		    'offset' => '',
-		    'exclusive' => '',
-		    'finderQuery' => '',
-		    'counterQuery' => ''
-		)
-	);       
+	       
 }
