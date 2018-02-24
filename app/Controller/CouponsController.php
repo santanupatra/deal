@@ -280,8 +280,25 @@ class CouponsController extends AppController {
 	}
 
     public function coupon_list($id){
-
+            $this->loadModel('Coupon');
+            $this->loadModel('Category');
             $id = json_decode($id);
+
+            $category = $this->Category->find('first', array('conditions' => array('id' => $id)));
+
+            $data = date('Y-m-d');
+            $this->paginate = array(
+            'limit' =>25,
+            'conditions' => array('Coupon.is_active' => 1, 'Coupon.from_date >=' => $data),
+            'order' => array(
+                    'Coupon.id' => 'desc'
+                ) 
+            );
+            $this->Paginator->settings = $this->paginate;
+
+            $this->Coupon->recursive = 0;
+            $this->set('coupons', $this->Paginator->paginate());
+            $this->set(compact('category'));
 
     }
 }
