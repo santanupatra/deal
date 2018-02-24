@@ -17,7 +17,7 @@ if (count($pass_data) > 0) {
             <?php echo ($this->element('vendor_side_menu')); ?>
             <div class="col-lg-9 col-12">
                 <div class="right-side p-3">
-                    <h2 class="text-pink">Edit Product</h2>
+                    <h2 class="text-pink">Edit Deal</h2>
                     <div class="row">
                         <div class="col-lg-7 col-12">
                             <form class="form-area" method="post" action="<?php echo $this->webroot; ?>products/edit/<?= $this->request->data['Product']['id'] ?>" id="frmEdit">
@@ -27,270 +27,110 @@ if (count($pass_data) > 0) {
                                 <input type="hidden" name="data[Product][id]" value="<?php echo $this->request->data['Product']['id']; ?>">
 
                                 <div class="form-group">
-                                    <label>Product Name</label>
-                                    <input type="text" class="form-control" required="" name="data[Product][name]" value="<?php echo $this->request->data['Product']['name'] ?>"  placeholder="Product name here">
+                                    <label>Deal Name</label>
+                                    <input type="text" class="form-control" required="" name="data[Product][name]" value="<?php echo $this->request->data['Product']['name'] ?>"  placeholder="Deal name here">
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Product Code</label>
-                                    <input type="text" class="form-control" required="" name="data[Product][product_code]" value="<?php echo $this->request->data['Product']['product_code'] ?>"  placeholder="Product code here">
-                                </div>
+                     <div class="form-group">
+                        <label>Shop</label>
+                        
+                        <select name="data[Product][shop_id]" class="form-control" required="required">
+                            <option value="">--select--</option>
+                            <?php foreach($shops as $shop){ ?>
+                            <option value="<?php echo $shop['Shop']['id']?>" <?php if ($shop['Shop']['id'] == $this->request->data['Product']['shop_id']) { echo "selected";} ?>><?php echo $shop['Shop']['name']?></option>
+                            <?php } ?>
+                        </select>
+                        
+                    </div>
 
-                                <div class="form-group">
-                                    <label>Quantity</label>
-                                    <input type="number" class="form-control" required="" name="data[Product][quantity]" value="<?php echo $this->request->data['Product']['quantity'] ?>" placeholder="Product quantity here">
-                                </div> 
+                                
 
                                 <div class="form-group">
                                     <label>Categories</label>
                                     <select class="form-control" id="ShopCategories" required="required" name="data[Product][category_id]">
                                         <option value="">Select Category--</option>
-                                        <?php
-                                        if (isset($categories) && !empty($categories)) {
-                                            foreach ($categories as $c1 => $category) {
-                                                ?>
+                                        <?php foreach ($categories as $c1 => $category) {  ?>
 
-                                                <?php
-                                                $subcats = $this->requestAction(array('controller' => 'categories', 'action' => 'getsubcat/' . $category['Category']['id']));
-                                                if (!empty($subcats)) {
-                                                    ?>
-                                                    <optgroup label="<?php echo $category['Category']['name'] ?>">
-                                                    <?php
-                                                    foreach ($subcats as $c2 => $subcat) {
-                                                        ?>
-
-
-                                                            <?php
-                                                            $subsubcats = $this->requestAction(array('controller' => 'categories', 'action' => 'getsubcat/' . $subcat['Category']['id']));
-                                                            if (!empty($subsubcats)) {
-                                                                ?>
-                                                            <optgroup label="<?php echo $subcat['Category']['name'] ?>" style="margin-left: 12px;">
-                                                                <?php
-                                                                foreach ($subsubcats as $c3 => $subcat2) {
-                                                                    ?>
-                                                                    <option value="<?php echo $subcat2['Category']['id']; ?>" style="margin-left: 20px;" <?php if ($subcat2['Category']['id'] == $this->request->data['Product']['category_id']) {
-                                                echo "selected";
-                                            } ?>><?php echo $subcat2['Category']['name']; ?></value>
-
-                                                                <?php }
-                                                                ?>
-                                                            </optgroup>
-                    <?php
-                } else {
-                    ?>
-                                                            <option value="<?php echo $subcat['Category']['id']; ?>" <?php if ($subcat['Category']['id'] == $this->request->data['Product']['category_id']) {
-                                                    echo "selected";
-                                                } ?>><?php echo $subcat['Category']['name']; ?></value>
-                                                            <?php
-                                                        }
-                                                        ?>
-
-                                                        <?php }
-                                                        ?>
-                                                        </optgroup>
-                                                        <?php
-                                                    } else {
-                                                        ?>
-                                                    <option value="<?php echo $category['Category']['id']; ?>" <?php if ($category['Category']['id'] == $this->request->data['Product']['category_id']) {
-                                                echo "selected";
-                                            } ?>><?php echo $category['Category']['name']; ?></value>
-                                                        <?php
-                                                    }
-                                                    ?>
-
-                                                <?php
-                                                }
-                                            }
-                                            ?>
+                                                    <option value="<?php echo $category['Category']['id']; ?>" <?php if ($category['Category']['id'] == $this->request->data['Product']['category_id']) { echo "selected";} ?>><?php echo $category['Category']['name']; ?></option>
+                                                  
+                                                <?php }  ?>
                                     </select>
-                                </div> 
+                                </div>
+                                
+                                
+                                <div class="form-group">
+                        <label>City/Location</label>
+                        <select class="form-control" required="required" name="data[Product][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>" <?php if($city['City']['id'] == $this->request->data['Product']['city_id']){echo "selected";}?>><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div> 
 
 
                                 <div class="form-group">
                                     <label>Price</label>
-                                    <input type="text" class="form-control" required="" name="data[Product][price_lot]" value="<?php echo $this->request->data['Product']['price_lot'] ?>" placeholder="Product price here">
+                                    <input type="text" class="form-control" required="" name="data[Product][price_lot]" value="<?php echo $this->request->data['Product']['price_lot'] ?>" placeholder="Deal price here">
                                 </div>
-
-
-
-
-
-                                <!--variation start-->     
-
-                                <div id="phone">
-<?php foreach ($colorprice as $dt) { ?>     
-                                        <div class='row' id="variation_<?php echo $dt['ProductVariation']['id'] ?>"> 
-
-                                            <input type="hidden" name='data[ProductVariation][id][]' value='<?php echo $dt['ProductVariation']['id'] ?>'>
-                                            
-                                            <?php if($dt['ProductVariation']['color_id']!=''){?>
-                                            <div class="form-group col-sm-4" >
-                                                <label>Color</label>
-                                                <select name="data[ProductVariation][color_id][]"  class="form-control" required="required">
-                                                    <option value="">--select--</option>
-    <?php foreach ($colors as $c) { ?>
-
-                                                        <option value="<?php echo $c['Color']['id']; ?>" data-id="<?php echo $c['Color']['id']; ?>" <?php if ($c['Color']['id'] == $dt['ProductVariation']['color_id']) {
-            echo 'selected';
-        } ?>><?php echo $c['Color']['color_name']; ?></option>
-
-                                                    <?php } ?>
-
-                                                </select>
-                                            </div>
-                                            <?php } ?>
-                                            <?php if($dt['ProductVariation']['size']!=''){?>
-                                            <div class="form-group col-sm-4">
-                                                <label for="full_name">Size</label>
-                                                <input type="text" class="form-control" value='<?php echo $dt['ProductVariation']['size'] ?>'  name="data[ProductVariation][size][]" required="required" />
-                                            </div>
-                                            <?php } ?>
-                                            <div class="form-group col-sm-4">
-                                                <label for="full_name">Price</label>
-                                                <input type="text" class="form-control" value='<?php echo $dt['ProductVariation']['price'] ?>'  name="data[ProductVariation][price][]" required="required" />
-                                            </div>
-                                        
-                                        <div class="form-group col-sm-4">                     
-                                            <a  onclick="delete_variation(<?php echo $dt['ProductVariation']['id'] ?>)">Remove</a>
-                                        </div>
-                                            </div>
-                                    <?php } ?>
-                                </div>
-
-                                <div class="RegSpRight form-group">
-                                    <a data-target="#variation_add_modal" href="Javascript: void(0);" data-toggle="modal"><button class="pl btn btn-primary btnsearch">Add Variation</button></a>&nbsp;
-
-                                </div>
-
-
-                                <!--variation end-->        
-
-
 
                                 <div class="form-group">
-                                    <label>Material(optional)</label>
-                                    <input type="text" class="form-control" name="data[Product][material]" value='<?php echo $this->request->data['Product']['material'] ?>' placeholder="Product material here">
+                                    <label>Discount</label>
+                                    <input type="text" class="form-control" required="" name="data[Product][discount]" value="<?php echo $this->request->data['Product']['discount'] ?>" placeholder="Deal here">
                                 </div>
 
+                                 <?php
+                  echo $this->Form->input('hid_img',array('type'=>'hidden','value'=>$this->request->data['Product']['product_image']));
+                  echo $this->Form->input('product_image',array('type'=>'file','class'=>"form-control"));
+                  
+                        if(isset( $this->request->data['Product']['product_image']) and !empty( $this->request->data['Product']['product_image']))
+                    {
+                    ?>
+                    <img alt="" src="<?php echo $this->webroot;?>product_images/<?php echo $this->request->data['Product']['product_image'];?>" style=" height:80px; width:80px;">
+                    <?php
+                    }
+                    else{
+                    ?>
+                   <img alt="" src="<?php echo $this->webroot;?>product_images/default.png" style=" height:80px; width:80px;">
 
-
-
-<?php $ship_id = explode(',', $this->request->data['Product']['shipping_time']);
-?>                
-
-
-                                <div class="form-group">
-                                    <label>Shipping Time</label>
-                                    <div class="shippingTable">
-                                        <div class="form-check">
-
-<?php foreach ($ships as $ship) { ?>                  
-                                                <div class="form-check-label inputTypeRadio">
-                                                    <input type="checkbox" id="test<?php echo $ship['ShippingDay']['id']; ?>" name="data[Product][shipping_time][]" value="<?php echo $ship['ShippingDay']['id'] ?>" <?php if (in_array($ship['ShippingDay']['id'], $ship_id)) {
-        echo 'checked';
-    } ?>>
-                                                    <label for="test<?php echo $ship['ShippingDay']['id']; ?>">USPS $<?php echo $ship['ShippingDay']['ship_charge'] ?> <small class="fixedCosts"><?php echo $ship['ShippingDay']['ship_name'] ?></small> </label>				
-                                                    <p><?php echo $ship['ShippingDay']['ship_day'] ?> business day processing time, from United States</p>
-                                                </div>
-                                            <?php } ?>                
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div>
-                                    <div class="company-images">
-                                      <!--<img src="<?php echo $this->webroot; ?>images/company-images-blank.png" alt="">--> 
-
-                                        <input type="hidden" name="data[Product][product_image_name]" id="product_image_id">
-                                        <div class="fileUpload btn btn-primary">
-                                            <span>Add Image</span>
-                                            <input type="file" id="multiFiles" name="files[]" multiple="multiple" class="upload"/>
-                                        </div>
-
-                                        <span id="status" ></span> 
-                                    </div>
-                                    <div class="manage-photo" id="product_images" style="overflow:scroll; height:450px;width:500px;">
-                                        <ul id="sortable" class="uisortable">
-                                            <?php
-                                            // print_r($all_image);exit;
-
-                                            foreach ($all_image as $image) {
-                                                ?>
-                                                <li id="<?php echo $image['ProductImage']['id']; ?>">
-                                                    <div class="media" id="image_<?php echo $image['ProductImage']['id']; ?>">
-                                                        <div class="media-left">
-                                                            <a href="#">
-                                                                <img style="width: 100px; height: 100px" src="<?php echo $this->webroot; ?>product_images/<?php echo $image['ProductImage']['name']; ?>" alt="" />
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body media-middle">
-                                                            <h4><?php echo $image['ProductImage']['name']; ?></h4>
-                                                        </div>
-                                                        <div class="media-body media-middle">
-                                                            <a class="btn btn-blank" onclick="javascript: delete_image(<?php echo $image['ProductImage']['id']; ?>)"><button>Delete</button></a>                         
-                                                        </div>
-                                                    </div>
-                                                </li>
-    <?php
-}
-?>
-                                        </ul>
-
-
-
-
-                                    </div>
-                                </div>
-
-
-
-                                <div class="form-group">
-                                    <label>Item Weight</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="data[Product][package_weight]" value="<?php echo $this->request->data['Product']['package_weight'] ?>"  placeholder="item weight here">	
-                                        <span class="input-group-addon">Lbs</span>  
-                                    </div>
-                                </div>    
-
-
-
-                                <!--                                     <div class="form-group">
-                                                                          <label>Item Size (When packed)</label>
-                                                                          <div class="row">
-                                                                          <div class="form-group col-sm-4">
-                                                                          <label>Length</label>
-                                                                          <div class="input-group">
-                                                                          <input type="text" class="form-control" name="data[Product][package_size1]" value="<?php echo $this->request->data['Product']['package_size1'] ?>"   placeholder="Length">
-                                                                         <span class="input-group-addon">In</span> 
-                                                                         </div>
-                                                                      </div>
-                                                                        <div class="form-group col-sm-4">
-                                                                          <label>Width</label>
-                                                                          <div class="input-group">
-                                                                          <input type="text" class="form-control" name="data[Product][package_size2]" value="<?php echo $this->request->data['Product']['package_size2'] ?>"  placeholder="Width">           
-                                                                          <span class="input-group-addon">In</span>
-                                                                          </div>
-                                                                      </div>
-                                                                          <div class="form-group col-sm-4">
-                                                                          <label>Height</label>
-                                                                          <div class="input-group">
-                                                                          <input type="text" class="form-control" name="data[Product][package_size3]" value="<?php echo $this->request->data['Product']['package_size3'] ?>"  placeholder="Height">		  <span class="input-group-addon">In</span>
-                                                                          
-                                                                          </div>
-                                                                      </div>
-                                                                          </div>
-                                                                      </div>-->
-
-
-
+                    <?php } ?>
 
                                 <div class="form-group">
                                     <label>Item Description</label>
                                     <textarea class="form-control ckeditor" name="data[Product][item_description]"  placeholder="Description here"><?php echo $this->request->data['Product']['item_description'] ?></textarea>
                                 </div>
+                                
+                                
+                                 <div class="form-group">
+                                          <label>Start Date:</label>
+                                          <div>
+
+                                              <?php echo $this->Form->input('start_date', array('required' => 'required', 'label' => false, 'class' => 'form-control', 'id' => 'fromDate', 'type' => 'text')); ?>
+                                          </div>
+                                          
+                                          
+                                      </div>
+                                      <div class="form-group">
+                                          <label>Expiry Date:</label>
+                                          <div>
+
+                                              <?php echo $this->Form->input('end_date', array('required' => 'required', 'id' => 'toDate', 'type' => 'text', 'label' => false, 'class' => 'form-control')); ?>
+                                          </div>
+                                      </div>
+                                
+                                
+                                
+                                
 
                                 <div class="form-group">
                                     <label>Status</label>

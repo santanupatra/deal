@@ -5,7 +5,7 @@
         <!-- block -->
         <div class="block">
             <div class="navbar navbar-inner block-header">
-                <div class="muted pull-left"><?php echo __('Add Product'); ?></div>
+                <div class="muted pull-left"><?php echo __('Add Deal'); ?></div>
             </div>
             
 
@@ -68,7 +68,25 @@
                     </div>
 
 
-                                       
+                     <div class="input select">
+                        <label>City/Location</label>
+                        <select  required="required" name="data[Product][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>"><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div>                  
 
                     
 

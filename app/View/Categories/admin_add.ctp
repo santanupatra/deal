@@ -21,7 +21,10 @@
               
                   
 		<?php  echo $this->Form->input('is_active');
+                
 	    ?>
+              
+              <input type="checkbox" name="data[Category][is_popular]" value='1'> Popular
 	 </fieldset>
     <?php echo $this->Form->end(__('Submit')); ?>
   </div>

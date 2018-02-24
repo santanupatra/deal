@@ -67,6 +67,30 @@ echo $this->Form->input('name', array('required' => 'required','label'=>'Deal Na
                         </select>
 
                     </div>
+                    
+                    
+                    <div class="input select">
+                        <label>City/Location</label>
+                        <select  required="required" name="data[Product][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>" <?php if($city['City']['id'] == $this->request->data['Product']['city_id']){echo "selected";}?>><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div> 
+                    
+                    
+                    
 
 
                   <?php

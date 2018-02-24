@@ -38,21 +38,68 @@
                         
                     </div>
                 
+                
                 <?php echo $this->Form->input('hid_shop_id',array('type'=>'hidden','value'=>$this->request->data['Coupon']['shop_id'])); ?>
+                
+                
+                
+                
+                <div class="input select required">
+                                          <label>Categories</label>
+                                          <select class="form-control" id="ShopCategories" required="required" name="data[Coupon][category_id]">
+                                              <option value="">Select Category--</option>
+                                              <?php
+                                             
+                                                  foreach ($categories as $category) {
+                                                      ?>
+
+                            <option value="<?php echo $category['Category']['id'] ?>" <?php if($this->request->data['Coupon']['category_id']==$category['Category']['id']){echo "selected";}?>><?php echo $category['Category']['name'] ?></option>
+                                                     <?php
+                                                        }
+                                                    
+                                                    ?>
+                                          </select>
+                                      </div>
+                
+                
+                
+                
+                
+              <div class="input select">
+                        <label>City/Location</label>
+                        <select  required="required" name="data[Coupon][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>" <?php if($city['City']['id'] == $this->request->data['Coupon']['city_id']){echo "selected";}?>><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div>   
+                
+                
                 
                 
             <?php
                 echo $this->Form->input('id');
                 echo $this->Form->input('name',array('required'=>'required','label'=>'Coupon Name'));
             ?>
-<!--                <div class="input text">
-                    <label for="CouponCouponType">Coupon Type</label>
+                <div class="input text">
+                    <label for="CouponCouponType">Type of Uses</label>
                     <select name="data[Coupon][type]" id="CouponCouponType" required="required">
-                        <option value="">Select Coupon Type</option>
-                        <option value="1" <?php if($this->request->data['Coupon']['type']==1){ echo 'selected="selected"';}?>>Amount</option>
-                        <option value="2" <?php if($this->request->data['Coupon']['type']==2){ echo 'selected="selected"';}?>>Percentage</option>
+                        <option value="">Select Type</option>
+                        <option value="O" <?php if($this->request->data['Coupon']['type']=='O'){ echo 'selected="selected"';}?>>Online Use</option>
+                        <option value="S" <?php if($this->request->data['Coupon']['type']=='S'){ echo 'selected="selected"';}?>>Store Use</option>
                     </select>
-                </div>-->
+                </div>
             <?php    
                 //echo $this->Form->input('type',array('required'=>'required'));
                 echo $this->Form->input('amount',array('required'=>'required'));

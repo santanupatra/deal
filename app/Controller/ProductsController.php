@@ -16,7 +16,7 @@ class ProductsController extends AppController {
      * @var array
      */
     var $currency_value = array('USD', 'INR');
-    public $components = array('Paginator');
+    public $components = array('Paginator','Imagethumb');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -194,8 +194,8 @@ class ProductsController extends AppController {
      */
     public function add() {
         $this->loadModel('User');
-        $this->loadModel('ProductImage');
-        $title_for_layout = 'Add product';
+        
+        $title_for_layout = 'Add Deal';
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
 
@@ -209,43 +209,58 @@ class ProductsController extends AppController {
 
             if ($this->request->is('post')) {
 
-                $this->Product->create();
-                $this->request->data['Product']['created_at'] = gmdate('Y-m-d H:i:s');
+              $this->Product->create();
+              $this->request->data['Product']['created_at'] = gmdate('Y-m-d H:i:s');
 
-                $this->request->data['Product']['status'] = $this->request->data['Product']['status'];
-                //echo ($this->request->data['Product']['size']);exit;
+              $this->request->data['Product']['status'] = $this->request->data['Product']['status'];
+               
+       if(!empty($this->request->data['Product']['product_image']['name'])){
+      $pathpart=pathinfo($this->request->data['Product']['product_image']['name']);
+      $ext=$pathpart['extension'];
+      $extensionValid = array('jpg','jpeg','png','gif');
+      if(in_array(strtolower($ext),$extensionValid)){
+      $uploadFolder = "product_images/";
+      $uploadPath = WWW_ROOT . $uploadFolder;
+      $filename =uniqid().'.'.$ext;
+      $full_flg_path = $uploadPath . '/' . $filename;
+      move_uploaded_file($this->request->data['Product']['product_image']['tmp_name'],$full_flg_path);
+      $this->Imagethumb->generateThumb(WWW_ROOT .'product_images/', WWW_ROOT."product_images/thumbs/",$thumb_img_width='350', $filename);
+      
+      //echo WWW_ROOT;exit;
+      }
+      
+      else{
+       $this->Session->setFlash(__('Invalid image type.'));
+      }
+     }
+     else{
+      $filename='';
+     }
+        $this->request->data['Product']['product_image']= $filename;
+                
+       // print_r($this->request->data);exit;      
                 if ($this->Product->save($this->request->data)) {
 
-                    $file_image_name = (explode(",", $this->request->data['Product']['product_image_name']));
-                    //print_r($file_image_name);exit;
-                    foreach ($file_image_name as $img) {
-                        $this->request->data['ProductImage']['product_id'] = $this->Product->getInsertID();
-                        $this->request->data['ProductImage']['name'] = $img;
-                        $this->ProductImage->create();
-                        if ($this->ProductImage->save($this->request->data)) {
-                            // $last_id = $this->ProductImage->getInsertID();
-                            //$file = array('filename' => $filename, 'last_id' => $last_id);
-                        }
-                    }
-
-
-
-                    $user_id = $this->request->data['Product']['user_id'];
-                    $description = 'Added a new product ' . $this->request->data['Product']['name'];
-                    $this->save_activity($user_id, $description);
-
-                    $this->Session->setFlash('The product has been saved.', 'default', array('class' => 'success'));
+                    $this->Session->setFlash('The Deal has been saved.', 'default', array('class' => 'success'));
                     //return $this->redirect(array('action' => 'index'));
                 } else {
-                    $this->Session->setFlash(__('The product could not be saved. Please, try again.'));
+                    $this->Session->setFlash(__('The Deal could not be saved. Please, try again.'));
                 }
             }
 
-            $categories = $this->Product->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.parent_id'=>0)));
+            $categories = $this->Product->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.type'=> 'D')));
+            
+            $this->loadModel('Shop'); 
+            $shops = $this->Shop->find('all', array('conditions' => array('Shop.is_active' => 1, 'Shop.user_id'=> $userid)));
 
             $status = array('A' => 'Active', 'P' => 'Pending', 'I' => 'Inactive');
+            
+            
+        $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+            
            
-            $this->set(compact('user', 'categories',  'status', 'status', 'title_for_layout'));
+            $this->set(compact('user', 'categories',  'status', 'title_for_layout','shops','cities'));
         }
     }
 
@@ -299,6 +314,7 @@ class ProductsController extends AppController {
       $filename =uniqid().'.'.$ext;
       $full_flg_path = $uploadPath . '/' . $filename;
       move_uploaded_file($this->request->data['Product']['product_image']['tmp_name'],$full_flg_path);
+      $this->Imagethumb->generateThumb(WWW_ROOT .'product_images/', WWW_ROOT."product_images/thumbs/",$thumb_img_width='350', $filename);
       }
       else{
        $this->Session->setFlash(__('Invalid image type.'));
@@ -331,12 +347,16 @@ class ProductsController extends AppController {
         $categories = $this->Product->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type'=>'D')));
         
        
+       $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+       
+       //pr($cities);
        
         $status = array('A' => 'Active', 'P' => 'Pending', 'I' => 'Inactive');
 
        
 
-        $this->set(compact('users', 'categories', 'status'));
+        $this->set(compact('users', 'categories', 'status','cities'));
     }
     
     
@@ -370,10 +390,8 @@ class ProductsController extends AppController {
     public function edit($id = null) {
 
         $this->loadModel('User');
-        $this->loadModel('ShippingDay');
-        $this->loadModel('ProductImage');
-        $this->loadModel('ProductVariation');
-        $title_for_layout = 'Edit product';
+       
+        $title_for_layout = 'Edit Deal';
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
         if ((!isset($userid) && $userid == '') || $utype != 'V') {
@@ -389,79 +407,15 @@ class ProductsController extends AppController {
         }
         if ($this->request->is(array('post', 'put'))) {
             if (isset($this->request->data['Product']['user_id']) && !empty($this->request->data['Product']['user_id'])) {
-                //if($this->request->data['Product']['sale_on'] == 'Y'){
-                // $this->request->data['Product']['sales_price']=($this->request->data['Product']['price_lot']-($this->request->data['Product']['price_lot']*$this->request->data['Product']['discount'])/100);
-                //}
-                $this->request->data['Product']['shipping_time'] = implode(',', $this->request->data['Product']['shipping_time']);
-
-                $this->request->data['Product']['size'] = implode(',', $this->request->data['Product']['size']);
-                $this->request->data['Product']['colour'] = $this->request->data['Product']['colour'];
-                $this->request->data['Product']['status'] = $this->request->data['Product']['status'];
-
+                
+               
                 if ($this->Product->save($this->request->data)) {
 
 
-
-                    //variation start
-                   $variation = $this->request->data['ProductVariation']['color_id'];
-                $price = $this->request->data['ProductVariation']['price'];
-                $size = $this->request->data['ProductVariation']['size'];
-                $vid = $this->request->data['ProductVariation']['id'];
-                if (!empty($variation) && !empty($price) && empty($size)) {
-                    for ($i = 0; $i < count($variation); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $id;
-                        $this->request->data['ProductVariation']['color_id'] = $variation[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->request->data['ProductVariation']['id'] = $vid[$i];
-                        $this->ProductVariation->save($this->request->data);
-                    }
-                }else if (!empty($size) && !empty($price) && empty($variation)) {
-                    for ($i = 0; $i < count($size); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $id;
-                        $this->request->data['ProductVariation']['size'] = $size[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->request->data['ProductVariation']['id'] = $vid[$i];
-                        $this->ProductVariation->save($this->request->data);
-                    }
-                }else {
-                    for ($i = 0; $i < count($size); $i++) {
-
-                        $this->request->data['ProductVariation']['product_id'] = $id;
-                        $this->request->data['ProductVariation']['color_id'] = $variation[$i];
-                        $this->request->data['ProductVariation']['size'] = $size[$i];
-                        $this->request->data['ProductVariation']['price'] = $price[$i];
-                        $this->request->data['ProductVariation']['id'] = $vid[$i];
-                        $this->ProductVariation->save($this->request->data);
-                    }
-                }
-                //variation end
-
-
-
-
-
-                    if ($this->request->data['Product']['product_image_name'] != '') {
-                        $file_image_name = (explode(",", $this->request->data['Product']['product_image_name']));
-
-
-                        //print_r($file_image_name);exit;
-                        foreach ($file_image_name as $img) {
-                            $this->request->data['ProductImage']['product_id'] = $id;
-                            $this->request->data['ProductImage']['name'] = $img;
-
-                            $this->ProductImage->create();
-                            if ($this->ProductImage->save($this->request->data)) {
-                                // $last_id = $this->ProductImage->getInsertID();
-                                //$file = array('filename' => $filename, 'last_id' => $last_id);
-                            }
-                        }
-                    }
-                    $this->Session->setFlash('The product has been updated.', 'default', array('class' => 'success'));
+                    $this->Session->setFlash('The Deal has been updated.', 'default', array('class' => 'success'));
                     return $this->redirect(array('action' => 'edit/' . $id));
                 } else {
-                    $this->Session->setFlash(__('The product could not be updated. Please, try again.'));
+                    $this->Session->setFlash(__('The Deal could not be updated. Please, try again.'));
                     return $this->redirect(array('action' => 'edit/' . $id));
                 }
             } else {
@@ -473,26 +427,21 @@ class ProductsController extends AppController {
             $this->request->data = $this->Product->find('first', $options);
         }
 
-        //$users = $this->Product->User->find('list',array('fields'=>array('User.id','User.first_name'), 'conditions'=>array('User.is_active'=>1, 'User.is_admin !='=>1)));
-        $categories = $this->Product->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.parent_id' => 0)));
-        if ($this->request->data['Product']['category_id'] != '') {
-            $sub_categories = $this->Product->Category->find('list', array('conditions' => array('Category.is_active' => 1, 'Category.parent_id' => $this->request->data['Product']['category_id'])));
-        } else {
-            $sub_categories = '';
-        }
+        
+        $categories = $this->Product->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'D')));
+        
+         $this->loadModel('Shop'); 
+         $shops = $this->Shop->find('all', array('conditions' => array('Shop.is_active' => 1, 'Shop.user_id'=> $userid)));
+         
         $status = array('A' => 'Active', 'P' => 'Pending', 'I' => 'Inactive');
-        $this->ProductImage->recursive = 0;
-        $all_image = $this->ProductImage->find('all', array('conditions' => array('ProductImage.product_id' => $id), 'order' => array('is_order' => 'asc')));
-        $ships = $this->ShippingDay->find('all', array('conditions' => array('user_id' => $userid)));
-
-        $this->loadModel('ProductVariation');
-        $colorprice = $this->ProductVariation->find('all', array('conditions' => array('ProductVariation.product_id' => $id)));
-
-        $this->loadModel('Color');
-        $colors = $this->Color->find('all');
-
-
-        $this->set(compact('user', 'colorprice', 'colors', 'status', 'categories', 'all_image', 'status', 'ships', 'sub_categories'));
+        
+        
+        $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+        
+        
+        
+        $this->set(compact('user', 'categories', 'status','shops','cities'));
     }
 
     public function edit_product($id = null) {
@@ -665,11 +614,12 @@ class ProductsController extends AppController {
 
         $puserid = $this->Product->find('first', array('conditions' => array('Product.id' => $id)));
        
-
+        $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
         
         
         
-        $this->set(compact('users', 'categories', 'status'));
+        $this->set(compact('users', 'categories', 'status','cities'));
     }
 
     public function admin_color_edit($id = null) {

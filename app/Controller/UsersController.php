@@ -32,9 +32,12 @@ class UsersController extends AppController {
           $this->loadModel('Category');
           $this->loadModel('Banner');
            
+
           $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
           $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1)));
           $video = $this->Banner->find("first",array('conditions'=>array('is_active'=> 1)));
+
+          
              
        	  $this->set(compact('allcategory', 'popular_category', 'video'));
                 
@@ -256,12 +259,12 @@ class UsersController extends AppController {
 			        if($is_admin!=1 && $is_active==1 && $utype=='C')
 			        {
                                   				
-			          return $this->redirect($this->Auth->redirect('home'));
+			          return $this->redirect($this->Auth->redirect('dashboard'));
                                   
                                   
 			        }else if($is_admin!=1 && $is_active==1 && $utype=='V'){
                                     
-                   return $this->redirect($this->Auth->redirect('home')); 
+                   return $this->redirect($this->Auth->redirect('vendor_dashboard')); 
                 }
 			        else
 			        {

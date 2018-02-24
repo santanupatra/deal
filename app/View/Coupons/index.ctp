@@ -11,11 +11,11 @@
                           <table class="seller_table table table-bordered  mt-0">
                                         <thead class="table-dark"><tr>
                                             <th><?php echo $this->Paginator->sort('name','Coupon Name'); ?></th>
-                                            <th><?php echo $this->Paginator->sort('coupon_code'); ?></th>
+                                            <!--<th><?php echo $this->Paginator->sort('coupon_code'); ?></th>-->
                                             <!--<th><?php echo $this->Paginator->sort('type'); ?></th>-->
                                             <th><?php echo $this->Paginator->sort('from_date', 'Start Date'); ?></th>
                                             <th><?php echo $this->Paginator->sort('to_date','Expiry Date'); ?></th>
-                                            <th><?php echo $this->Paginator->sort('amount','Off %age'); ?></th>
+                                            <th><?php echo $this->Paginator->sort('amount','Amount Off'); ?></th>
                                             <th><?php echo $this->Paginator->sort('is_active'); ?></th>
                                             <th class="actions"><?php echo __('Actions'); ?></th>
                                         </tr></thead>
@@ -26,10 +26,10 @@
 
                                         <tr>
                                             <td><?php echo h($val['Coupon']['name']); ?></td>
-                                            <td><?php echo h($val['Coupon']['coupon_code']); ?></td>
+                                            <!--<td><?php echo h($val['Coupon']['coupon_code']); ?></td>-->
                                             <td><?php echo h($val['Coupon']['from_date']); ?>&nbsp;</td>
                                             <td><?php echo h($val['Coupon']['to_date']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['amount']); ?>% &nbsp;</td>
+                                            <td><?php echo h($val['Coupon']['amount']); ?> &nbsp;</td>
                                             <td><?php echo h($val['Coupon']['is_active']==1?'Yes':'No'); ?>&nbsp;</td>
                                             <td>
                                                 <a href="<?php echo $this->webroot;?>coupons/edit/<?php echo base64_encode($val['Coupon']['id']);?>" class="fa fa-pencil text-success mr-2"></a>

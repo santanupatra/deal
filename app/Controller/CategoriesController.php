@@ -362,6 +362,11 @@ class CategoriesController extends AppController {
         $filename=$this->request->data['Category']['hid_img'];
        }
        $this->request->data['Category']['image'] = $filename;
+       
+       if($this->request->data['Category']['is_popular']==""){
+           
+           $this->request->data['Category']['is_popular']=0;
+       }
 				$options3=array('conditions' => array('Category.'. $this->Category->primaryKey => $id));
 				$cat=$this->Category->find('first', $options3);
                 if($cat['Category']['parent_id']!=0)

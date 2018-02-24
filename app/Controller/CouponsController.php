@@ -83,8 +83,15 @@ class CouponsController extends AppController {
             }
             
             $users = $this->User->find('all', array('conditions' => array('User.is_active' => 1, 'User.is_admin !=' => 1,'User.type'=>'V')));
+            
+            $this->loadModel('Category');
+            $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
+            
+            
+       $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
         
-        $this->set(compact('users'));
+        $this->set(compact('users','categories','cities'));
             
             
             
@@ -126,7 +133,15 @@ class CouponsController extends AppController {
             
             $users = $this->User->find('all', array('conditions' => array('User.is_active' => 1, 'User.is_admin !=' => 1,'User.type'=>'V')));
         
-        $this->set(compact('users'));
+            
+             $this->loadModel('Category');
+            $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
+            
+            $this->loadModel('City');
+       $cities = $this->City->find('all', array('conditions' => array('City.is_active' => 1)));
+            
+            
+        $this->set(compact('users','categories','cities'));
             
            
 	}
@@ -183,17 +198,16 @@ class CouponsController extends AppController {
                 $this->redirect('/');
             }
             $this->loadModel('Product');
+           
             
             if ($this->request->is('post','put')) {
-                $CouponName=trim($this->request->data['Coupon']['coupon_code']);
-                $options = array('conditions' => array('Coupon.coupon_code' => $CouponName));
-                $CouponExist=$this->Coupon->find('first', $options);
-                if(count($CouponExist)>0){
-                    $this->Session->setFlash(__('The Coupon code already exist. Please, try another.'));
-                }else{
+                //$CouponName=trim($this->request->data['Coupon']['coupon_code']);
+                //$options = array('conditions' => array('Coupon.coupon_code' => $CouponName));
+                //$CouponExist=$this->Coupon->find('first', $options);
+                
                     $this->request->data['Coupon']['user_id']=$userid;
                     $this->request->data['Coupon']['post_date']=gmdate('Y-m-d');
-                    $this->request->data['Coupon']['type']=2;
+                    //$this->request->data['Coupon']['type']=2;
                     $this->request->data['Coupon']['is_active']=1;
                     $this->Coupon->create();
                     if ($this->Coupon->save($this->request->data)) {
@@ -202,11 +216,15 @@ class CouponsController extends AppController {
                     } else {
                         $this->Session->setFlash(__('The Coupon could not be saved. Please, try again.', 'default', array('class' => 'error')));
                     }
-                }
+                
             }
-            $options_prd = array('conditions' => array('Product.user_id' => $userid));
-            $PrdList=$this->Product->find('list', $options_prd);
-            $this->set(compact('title_for_layout','PrdList'));
+            
+             $this->loadModel('Shop'); 
+            $shops = $this->Shop->find('all', array('conditions' => array('Shop.is_active' => 1, 'Shop.user_id'=> $userid)));
+            $this->loadModel('Category');
+            $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
+            
+            $this->set(compact('title_for_layout','user','shops','categories'));
         }
         
         public function edit($edit_id = null) {
@@ -232,9 +250,14 @@ class CouponsController extends AppController {
                 $options = array('conditions' => array('Coupon.' . $this->Coupon->primaryKey => $id));
                 $this->request->data = $this->Coupon->find('first', $options);
             }
-            $options_prd = array('conditions' => array('Product.user_id' => $userid));
-            $PrdList=$this->Product->find('list', $options_prd);
-            $this->set(compact('title_for_layout','PrdList'));
+            
+            $this->loadModel('Shop');
+            $shops = $this->Shop->find('all', array('conditions' => array('Shop.is_active' => 1, 'Shop.user_id'=> $userid)));
+            $this->loadModel('Category');
+            $categories = $this->Category->find('all', array('conditions' => array('Category.is_active' => 1, 'Category.type' => 'C')));
+            
+            
+            $this->set(compact('title_for_layout','categories','shops'));
 	}
         
         public function delete($delid = null) {

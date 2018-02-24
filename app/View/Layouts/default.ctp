@@ -16,7 +16,7 @@
 $userid = $this->Session->read('Auth.User.id');
 $admin_checkid = $this->Session->read('Auth.User.is_admin');
 $utype = $this->Session->read('Auth.User.type');
-$cakeDescription = __d('cake_dev', 'WEDSHOPPING');
+$cakeDescription = __d('cake_dev', 'DEAL');
 ?>
 <!doctype html>
 <html lang="en">
@@ -69,10 +69,32 @@ $cakeDescription = __d('cake_dev', 'WEDSHOPPING');
                             info@support.com
                         </a>
                     </div>
+                    
+                    
+                    <?php if(isset($userid) && $admin_checkid!=1){?>
+                    
+                    
+                    <div class="col-lg-6 text-lg-right">
+                        <a href="<?php echo($this->webroot);?>users/logout" class="btn btn-theme btn-sm rounded-0 btn-login font-14"><b><i class="fa fa-sign-in" aria-hidden="true"></i></b> Logout</a>                        <?php if(isset($utype) && $utype=='V'){?>
+                        <a href="<?php echo $this->webroot;?>users/vendor_dashboard" class="btn btn-theme btn-sm rounded-0 font-14"><b><i class="fa fa-user-plus" aria-hidden="true"></i></b>My Dashboard</a>                        <?php }else{ ?>
+                        
+                        <a href="<?php echo $this->webroot;?>users/dashboard" class="btn btn-theme btn-sm rounded-0 font-14"><b><i class="fa fa-user-plus" aria-hidden="true"></i></b> My Dashboard</a> 
+                        
+                        
+                        <?php } ?>
+                    </div>
+                    
+                    
+                    <?php }else{ ?>
+                    
+                    
                     <div class="col-lg-6 text-lg-right">
                         <a href="<?php echo $this->webroot;?>users/login" class="btn btn-theme btn-sm rounded-0 btn-login font-14"><b><i class="fa fa-sign-in" aria-hidden="true"></i></b> Login</a>                        
                         <a href="<?php echo $this->webroot;?>users/registration" class="btn btn-theme btn-sm rounded-0 font-14"><b><i class="fa fa-user-plus" aria-hidden="true"></i></b> Register</a>                        
                     </div>
+                    
+                    
+                    <?php } ?>
                 </div>
             </div>
         </section>
@@ -293,9 +315,34 @@ $cakeDescription = __d('cake_dev', 'WEDSHOPPING');
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.flexslider'); ?> 
-    <?php echo $this->Html->script('jquery.validate'); ?>  
+    <?php echo $this->Html->script('jquery.validate'); ?> 
+  
+   <script>
+  $( function() {
+    $( "#toDate" ).datepicker({ 
+            dateFormat: 'yy-mm-dd',
+            yearRange: "-150:+1"
+        });
+  } );
+  </script>
+  
+  <script>
+  $( function() {
+    $( "#fromDate" ).datepicker({ 
+            dateFormat: 'yy-mm-dd',
+            yearRange: "-150:+1"
+        });
+  } );
+  </script>
+  
+  
+  
     <script>
       (function() {
         // store the slider in a local variable
@@ -332,6 +379,18 @@ $cakeDescription = __d('cake_dev', 'WEDSHOPPING');
         });
       }());
     </script>
+    
+    <script>
+	
+	$(document).ready(function(){ 
+	   setTimeout(function() {
+		$('.message').fadeOut('slow');
+	   }, 2000);
+	   setTimeout(function() {
+		$('.success').fadeOut('slow');
+	   }, 2000);
+	});
+</script>
   </body>
 </html>
 <?php echo $this->element('sql_dump'); ?>

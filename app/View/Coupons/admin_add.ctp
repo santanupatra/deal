@@ -36,6 +36,47 @@
                     </div>   
                 
                 
+                            <div class="input select required">
+                                          <label>Categories</label>
+                                          <select class="form-control" id="ShopCategories" required="required" name="data[Coupon][category_id]">
+                                              <option value="">Select Category--</option>
+                                              <?php
+                                             
+                                                  foreach ($categories as $category) {
+                                                      ?>
+
+                            <option value="<?php echo $category['Category']['id'] ?>"><?php echo $category['Category']['name'] ?></option>
+
+
+                                                        <?php
+                                                        }
+                                                    
+                                                    ?>
+                                          </select>
+                                      </div>
+                
+                
+                <div class="input select">
+                        <label>City/Location</label>
+                        <select  required="required" name="data[Coupon][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>"><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div>
+                
+                
                 
                 
                 
@@ -44,14 +85,14 @@
             <?php
                 echo $this->Form->input('name',array('required'=>'required','label'=>'Coupon Name'));
             ?>
-<!--                <div class="input text">
-                    <label for="CouponCouponType">Coupon Type</label>
-                    <select name="data[Coupon][type]" id="CouponCouponType" required="required">
-                        <option value="">Select Coupon Type</option>
-                        <option value="1">Amount</option>
-                        <option value="2">Percentage</option>
+                <div class="input text">
+                    <label for="CouponCouponType">Type of Uses</label>
+                    <select name="data[Coupon][type]"  required="required">
+                        <option value="">Select Type</option>
+                        <option value="O" selected="">Online Use</option>
+                        <option value="S">Store Use</option>
                     </select>
-                </div>-->
+                </div>
             <?php    
                 //echo $this->Form->input('type',array('required'=>'required'));
                 echo $this->Form->input('amount',array('required'=>'required'));
