@@ -2830,17 +2830,16 @@ class ProductsController extends AppController {
 
         $title_for_layout = 'My Order';
         $this->loadModel('User');
-
+        $this->loadModel('Order');
 
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
         if (isset($userid) && $userid != '') {
-            $this->loadModel('OrderDetail');
-            $this->OrderDetail->recursive = 2;
-            $con = array('conditions' => array('OrderDetail.owner_id' => $userid), 'order' => array('OrderDetail.id' => 'desc'));
-            $orders = $this->OrderDetail->find('all', $con);
+            
+            $con = array('conditions' => array('Order.coupon_owner_id' => $userid), 'order' => array('Order.id' => 'desc'));
+            $orders = $this->Order->find('all', $con);
 
-
+           // pr($orders);
             $this->set(compact('title_for_layout', 'orders'));
         } else {
 
@@ -2853,36 +2852,17 @@ class ProductsController extends AppController {
 
         $title_for_layout = 'Order Details';
         $this->loadModel('User');
-        $this->loadModel('ShippingAddress');
-        $this->loadModel('BillingAddress');
+        
         $userid = $this->Session->read('Auth.User.id');
         //$utype = $this->Session->read('Auth.User.type');
         if (isset($userid) && $userid != '') {
-            $this->loadModel('OrderDetail');
-            $this->OrderDetail->recursive = 2;
-            $con = array('conditions' => array('OrderDetail.id' => $id));
-            $order_details = $this->OrderDetail->find('first', $con);
-
-            if ($this->request->is(array('post', 'put'))) {
-
-                $this->request->data['OrderDetail']['order_status'] = $this->request->data['OrderDetail']['order_status'];
-                if ($this->OrderDetail->save($this->request->data)) {
-                    $this->Session->setFlash('The order status has been updated.', 'default', array('class' => 'success'));
-                    return $this->redirect(array('action' => 'view_order_details/' . $id));
-                } else {
-                    $this->Session->setFlash(__('The order status could not be updated. Please, try again.'));
-                    return $this->redirect(array('action' => 'view_order_details/' . $id));
-                }
-            }
-            $conship = array('conditions' => array('user_id' => $order_details['OrderDetail']['user_id'], 'is_primary' => 1));
-            $shipaddress = $this->ShippingAddress->find('first', $conship);
-
-            //pr($shipaddress);
-            $conbill = array('conditions' => array('user_id' => $order_details['OrderDetail']['user_id'], 'is_primary' => 1));
-            $billaddress = $this->BillingAddress->find('first', $conbill);
+            $this->loadModel('Order');
+            //$this->OrderDetail->recursive = 2;
+            $con = array('conditions' => array('Order.id' => $id));
+            $order_details = $this->Order->find('first', $con);
 
 
-            $this->set(compact('title_for_layout', 'order_details', 'shipaddress', 'billaddress'));
+            $this->set(compact('title_for_layout', 'order_details'));
         } else {
 
             $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
@@ -2895,14 +2875,13 @@ class ProductsController extends AppController {
         $title_for_layout = 'Purchase History';
         $this->loadModel('User');
 
-
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
         if (isset($userid) && $userid != '') {
-            $this->loadModel('OrderDetail');
-            $this->OrderDetail->recursive = 2;
-            $con = array('conditions' => array('OrderDetail.user_id' => $userid), 'order' => array('OrderDetail.id' => 'desc'));
-            $orders = $this->OrderDetail->find('all', $con);
+            $this->loadModel('Order');
+            //$this->OrderDetail->recursive = 2;
+            $con = array('conditions' => array('Order.user_id' => $userid), 'order' => array('Order.id' => 'desc'));
+            $orders = $this->Order->find('all', $con);
 
 
             $this->set(compact('title_for_layout', 'orders'));
@@ -2917,47 +2896,17 @@ class ProductsController extends AppController {
 
         $title_for_layout = 'Purchase Details';
         $this->loadModel('User');
-        $this->loadModel('ShippingAddress');
-        $this->loadModel('BillingAddress');
-        $this->loadModel('Rating');
+        
         $userid = $this->Session->read('Auth.User.id');
         $utype = $this->Session->read('Auth.User.type');
         if (isset($userid) && $userid != '') {
-            $this->loadModel('OrderDetail');
-            $this->OrderDetail->recursive = 2;
-            $con = array('conditions' => array('OrderDetail.id' => $id));
-            $purchase_details = $this->OrderDetail->find('first', $con);
-
-            $con1 = array('conditions' => array('Rating.order_details_id' => $id));
-            $rating_details = $this->Rating->find('first', $con1);
-
-            //pr($purchase_details);
-            $conship = array('conditions' => array('user_id' => $userid, 'is_primary' => 1));
-            $shipaddress = $this->ShippingAddress->find('first', $conship);
-
-            $conbill = array('conditions' => array('user_id' => $userid, 'is_primary' => 1));
-            $billaddress = $this->BillingAddress->find('first', $conbill);
-            $this->loadModel('Rating');
-            if ($this->request->is('post')) {
-                if (isset($this->request->data['Rating']['user_id']) && !empty($this->request->data['Rating']['user_id'])) {
-                    $this->Rating->create();
-                    $this->request->data['Rating']['date_time'] = gmdate('Y-m-d H:i:s');
-
-                    if ($this->Rating->save($this->request->data)) {
+            $this->loadModel('Order');
+            //$this->OrderDetail->recursive = 2;
+            $con = array('conditions' => array('Order.id' => $id));
+            $purchase_details = $this->Order->find('first', $con);
 
 
-
-                        $this->Session->setFlash('The review has been saved.', 'default', array('class' => 'success'));
-                        //return $this->redirect(array('action' => 'index'));
-                    } else {
-                        $this->Session->setFlash(__('The review could not be saved. Please, try again.'));
-                    }
-                }
-            }
-
-
-
-            $this->set(compact('title_for_layout', 'rating_details', 'purchase_details', 'shipaddress', 'billaddress'));
+            $this->set(compact('title_for_layout', 'rating_details', 'purchase_details'));
         } else {
 
             $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));

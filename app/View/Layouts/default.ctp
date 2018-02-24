@@ -132,9 +132,8 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                           <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                       </li>
-                      <li class="nav-item">
-                        <a class="nav-link text-uppercase" href="#"> faq</a>
-                      </li>
+                      
+                      
                       <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
                            all

@@ -50,7 +50,7 @@
               <textarea class="form-control textarea-contact form-control-sm" rows="5" name="FB" placeholder="Type Your Message/Feedback here..."
                 required="required"></textarea>
               <br>
-              <button class="btn btn-theme">
+              <button class="btn btn-theme" type="submit">
                 <i class="fa fa-paper-plane"></i> Send </button>
             </div>
           </form>

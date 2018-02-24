@@ -228,8 +228,33 @@ class UsersController extends AppController {
         }
         
         public function contactus(){
+            
+          
+	  
+	  if ($this->request->is(array('post'))) 
+	  {
+	     
+                     $name = $this->request->data['User']['name'];
+		     $email = $this->request->data['User']['email'];
+                     $phone = $this->request->data['User']['phone'];
+                     $message = $this->request->data['User']['message'];
+		     
+			   //$key = Configure::read('CONTACT_EMAIL');
+			   $this->loadModel('EmailTemplate');
+			   $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>20)));
 
-        }
+			   $mail_body =str_replace(array('[NAME]','[EMAIL]','[PHONE]','[MESSAGE]'),$name,$email,$phone,$message,$EmailTemplate['EmailTemplate']['content']);
+
+			   $this->send_smtpmail($this->request->data['User']['forgotemail'],'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+
+			   $this->Session->setFlash('A new password has been sent to your mail. Please check mail.', 'default', array('class' => 'success'));
+			   return $this->redirect(array('action'=> 'login'));
+		     }		    
+	           
+          } 
+            
+
+        
 
         public function login(){
             

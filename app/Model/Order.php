@@ -30,13 +30,22 @@ class Order extends AppModel {
                     'fields' => '',
                     'order' => ''
             ),
-            'Shop' => array(
-                    'className' => 'Shop',
-                    'foreignKey' => 'store_id',
+            'Seller' => array(
+                    'className' => 'User',
+                    'foreignKey' => 'coupon_owner_id',
+                    'conditions' => '',
+                    'fields' => '',
+                    'order' => ''
+            ),
+            
+            'Coupon' => array(
+                    'className' => 'Coupon',
+                    'foreignKey' => 'coupon_id',
                     'conditions' => '',
                     'fields' => '',
                     'order' => ''
             )
+            
 	);
 
 }

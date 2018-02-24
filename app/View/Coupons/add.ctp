@@ -52,6 +52,26 @@
                                           </select>
                                       </div>
                             
+                            <div class="form-group">
+                        <label>City/Location</label>
+                        <select class="form-control" required="required" name="data[Coupon][city_id]">
+                            <option value="">Select--</option>
+                                <?php
+                                    
+                                        foreach ($cities as $city) {
+                                ?>
+
+                                        <option value="<?php echo $city['City']['id']; ?>"><?php echo $city['City']['name']; ?></option>
+                                            
+
+                                    <?php
+                                    }
+                                
+                                ?>
+                        </select>
+
+                    </div>
+                            
                             
                             
 
@@ -65,12 +85,23 @@
 
 
                             <div class="form-group">
-                                <label>Amount off:</label>
+                                <label>Coupon Price:</label>
                                 <div>
 
 <?php echo $this->Form->input('amount', array('required' => 'required', 'label' => false, 'class' => 'form-control')); ?>
                                 </div>
                             </div>
+                            
+                            
+                            
+                            <div class="form-group">
+                                <label>Coupon Offer:</label>
+                                <div>
+
+<?php echo $this->Form->input('offer', array('required' => 'required', 'label' => false, 'class' => 'form-control')); ?>
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
                                 <label>Start Date:</label>
                                 <div>
