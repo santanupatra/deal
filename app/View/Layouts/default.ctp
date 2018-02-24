@@ -211,7 +211,7 @@ $cakeDescription = __d('cake_dev', 'WEDSHOPPING');
                                             foreach ($couponcategory as $ccat) {
                                             ?>
                                               <li class="list-group-item rounded-0 p-1">
-                                                <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($ccat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $ccat['Category']['name'];?>                                             
+                                                <a href="<?php echo $this->webroot.'coupons/coupon_list/'.base64_encode($ccat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $ccat['Category']['name'];?>                                             
                                                 </a>
                                               </li>
                                            <?php   
