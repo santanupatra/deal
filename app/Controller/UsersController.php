@@ -252,17 +252,17 @@ class UsersController extends AppController {
 			   //$key = Configure::read('CONTACT_EMAIL');
 			   $this->loadModel('EmailTemplate');
 			   $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>20)));
+                           $this->loadModel('SiteSetting');
+                           $contactemail=$this->SiteSetting->find('first',array('conditions'=>array('SiteSetting.id'=>1)));
 
-			   $mail_body =str_replace(array('[NAME]','[EMAIL]','[PHONE]','[MESSAGE]'),$name,$email,$phone,$message,$EmailTemplate['EmailTemplate']['content']);
+			   $mail_body =str_replace(array('[NAME]','[EMAIL]','[PHONE]','[MESSAGE]'),array($name,$email,$phone,$message),$EmailTemplate['EmailTemplate']['content']);
 
-			  $res= $this->send_smtpmail($email,'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+			  $res= $this->send_smtpmail($contactemail['SiteSetting']['contact_email'],'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
                            
-                           if($res){
+                           
 
 			   $this->Session->setFlash('Your query successfully send.', 'default', array('class' => 'success'));
-                           }else{
-                              $this->Session->setFlash('Internal error. Please try after sometimes.', 'default', array('class' => 'error')); 
-                           }
+                           
 			   //return $this->redirect(array('action'=> 'login'));
 		     }		    
 	           
