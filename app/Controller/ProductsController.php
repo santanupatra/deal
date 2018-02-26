@@ -22,7 +22,7 @@ class ProductsController extends AppController {
         parent::beforeFilter();
         $this->set('currency_value', $this->currency_value);
 
-        $this->Auth->allow('ajax_add_to_cart','fetch_size' ,'filter_search', 'ajax_add_to_wishlist', 'product_details', 'search_result', 'search', 'search_option', 'appinventorylist', 'index', 'app_product_list', 'product_list', 'appProductDetails', 'category_related_product', 'subcategory_related_product', 'prodoct_related_rating', 'shop_related_rating', 'shop_related_positive_rating', 'get_product_img', 'get_product_main_image', 'getwishlistcount', 'getcatprd_cnt', 'admin_color_list', 'admin_color_add','admin_fetchshop','details');
+        $this->Auth->allow('ajax_add_to_cart','fetch_size' ,'filter_search', 'ajax_add_to_wishlist', 'product_details', 'search_result', 'search', 'search_option', 'appinventorylist', 'index', 'app_product_list', 'product_list', 'appProductDetails', 'category_related_product', 'subcategory_related_product', 'prodoct_related_rating', 'shop_related_rating', 'shop_related_positive_rating', 'get_product_img', 'get_product_main_image', 'getwishlistcount', 'getcatprd_cnt', 'admin_color_list', 'admin_color_add','admin_fetchshop','details','success','cancel');
     }
 
     /**
@@ -1592,266 +1592,186 @@ class ProductsController extends AppController {
         exit;
     }
 
-    public function cart() {
-        $this->loadModel('TempCart');
-        $this->loadModel('ShippingDay');
+    public function cart($id) {
+        $this->loadModel('Coupon');
+        $id = base64_decode($id);
+        
+       
         $title_for_layout = 'Shopping Cart';
         $userid = $this->Session->read('Auth.User.id');
         if (!isset($userid) && $userid == '') {
             $this->redirect('/');
         }
-        $options_cart = array('conditions' => array('TempCart.user_id' => $userid));
-        $cart = $this->TempCart->find('all', $options_cart);
+        $options_cart = array('conditions' => array('Coupon.id' => $id));
+        $coupon_details = $this->Coupon->find('first', $options_cart);
 
-        //pr($cart);
-
-
-        $this->set(compact('cart', 'title_for_layout'));
+       
+        $this->set(compact('coupon_details', 'title_for_layout'));
     }
-
-    public function empty_cart() {
-        $this->loadModel('TempCart');
-        $userid = $this->Session->read('Auth.User.id');
-        if (!isset($userid) && $userid == '') {
-            $this->redirect('/');
-        }
-        $this->TempCart->deleteAll(array('TempCart.user_id' => $userid), false);
-        $this->redirect(array('controller' => 'products', 'action' => 'cart'));
-    }
-
-    public function add_to_cart($id = null) {
-
-        //echo "dfgdf";exit;
-
-        $this->loadModel('TempCart');
-        //$this->loadModel('TempCart');
-        //$productsInCart = array();
-        $this->Product->id = $id;
-        if (!$this->Product->exists()) {
-            throw new NotFoundException(__('Invalid Product'));
-        }
-        $userid = $this->Session->read('Auth.User.id');
-        if (!isset($userid) && $userid == '') {
-            $this->redirect('/');
-        }
-
-        $this->Product->recursive = 1;
-        $options = array('conditions' => array('Product.' . $this->Product->primaryKey => $id));
-        $product = $this->Product->find('first', $options);
-        $Current_woner_id = $product['Product']['user_id'];
-        $previous_prd_qty = $product['Product']['quantity'];
-
-        $options_cart = array('conditions' => array('TempCart.user_id' => $userid));
-        $productsInCart = $this->TempCart->find('all', $options_cart);
-
-        if ($this->request->is('post')) {
-            $product_woner_id = '';
-            //$productsInCart = $this->Session->read('Cart');
-            $Prd_quantity = $this->request->data['TempCart']['quantity'];
-            $alreadyIn = false;
-            $woner_check = false;
-            if (count($productsInCart) > 0) {
-                foreach ($productsInCart as $productInCart) {
-                    $product_woner_id = $productInCart['TempCart']['product_woner_id'];
-                    if ($productInCart['TempCart']['prd_id'] == $id) {
-                        $alreadyIn = true;
-                    }
-                }
+    
+    
+    
+    public function payment($id)
+        {
+        
+       
+            //echo 'sp';exit;
+            $title_for_layout = 'Payment';
+            
+            $this->loadModel('Order');
+            $this->loadModel('Coupon');
+            $id = base64_decode($id);
+            
+            
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid)){
+                $this->redirect('/');
             }
-
-            /* if($product_woner_id!='' && $product_woner_id!=$Current_woner_id){
-              $woner_check = true;
-              } */
-
-            if ($Prd_quantity > $previous_prd_qty) {
-                $this->Session->setFlash(__('You must enter quantity less than available pieces.'));
-                $this->redirect(array('controller' => 'products', 'action' => 'view', base64_encode($id)));
-            } elseif (!$alreadyIn && !$woner_check && $userid != $Current_woner_id) {
-                $this->TempCart->create();
-                $this->request->data['TempCart']['user_id'] = $userid;
-                $this->request->data['TempCart']['pay_amt'] = $this->request->data['TempCart']['price'];
-                $this->request->data['TempCart']['cdate'] = gmdate('Y-m-d H:i:s');
-                if ($this->TempCart->save($this->request->data)) {
-                    $this->Session->setFlash('Product added to cart.', 'default', array('class' => 'success'));
-                    $this->redirect(array('controller' => 'products', 'action' => 'cart'));
-                } else {
-                    $this->Session->setFlash(__('The product could not be saved into the cart. Please, try again.'));
-                    $this->redirect(array('controller' => 'products', 'action' => 'view', base64_encode($id)));
-                }
-                /* $this->Session->write('Cart.' . $amount, $this->request->data);				
-                  if ($this->Session->check('Cart')) {
-                  $cart = $this->Session->read('Cart');
-                  }
-                  $this->Session->write('Counter', $amount + 1); */
-                //$this->Session->setFlash(__('Product added to cart'));
-            } elseif ($woner_check == true) {
-                $this->Session->setFlash(__('You cannot add different store woner product.'));
-                $this->redirect(array('controller' => 'products', 'action' => 'view', base64_encode($id)));
-            } elseif ($userid == $Current_woner_id) {
-                $this->Session->setFlash(__('You cannot add your own product.'));
-                $this->redirect(array('controller' => 'products', 'action' => 'view', base64_encode($id)));
-            } else {
-                $this->Session->setFlash(__('Product already in cart'));
-                $this->redirect(array('controller' => 'products', 'action' => 'view', base64_encode($id)));
-            }
-        }
-    }
-
-    public function ajax_add_to_cart($id = null) {
-        $this->autoRender = false;
-        $this->layout = false;
-        $this->loadModel('TempCart');
-        $id = base64_decode($id);
-
-        $this->Product->id = $id;
-        if (!$this->Product->exists()) {
-            $Msg = 'Invalid Product';
-        }
-        $userid = $this->Session->read('Auth.User.id');
-        if (!isset($userid) && $userid == '') {
-            $Msg = 'Error:Please Login First.';
-        } else {
-            $this->Product->recursive = 1;
-            $options = array('conditions' => array('Product.' . $this->Product->primaryKey => $id));
-            $product = $this->Product->find('first', $options);
-            //print_r($product);exit;
-            $Current_woner_id = $product['Product']['user_id'];
-            $previous_prd_qty = $product['Product']['quantity'];
-
-            $options_cart = array('conditions' => array('TempCart.user_id' => $userid));
-            $productsInCart = $this->TempCart->find('all', $options_cart);
-
-            if ($this->request->is('post')) {
-                $product_woner_id = '';
-                $Prd_quantity = $this->request->data['TempCart']['quantity'];
-                $alreadyIn = false;
-                $woner_check = false;
-                if (count($productsInCart) > 0) {
-                    foreach ($productsInCart as $productInCart) {
-                        $product_woner_id = $productInCart['TempCart']['product_woner_id'];
-                        if ($productInCart['TempCart']['prd_id'] == $id) {
-                            $alreadyIn = true;
-                        }
-                    }
-                }
-
-                /* if($product_woner_id!='' && $product_woner_id!=$Current_woner_id){
-                  $woner_check = true;
-                  } */
-
-                if ($Prd_quantity > $previous_prd_qty) {
-                    $Msg = 'You must enter quantity less than available pieces.';
-                } elseif (!$alreadyIn && !$woner_check && $userid != $Current_woner_id) {
-
-                    $this->TempCart->create();
-                    $this->request->data['TempCart']['prd_id'] = $id;
-                    $this->request->data['TempCart']['user_id'] = $userid;
-
-                   /* if ($this->request->data['TempCart']['price_lot'] == 0) {
-                        $pprice = explode('_', $this->request->data['TempCart']['price']);
-                        $this->request->data['TempCart']['p_color'] = $pprice[0];
-                        $this->request->data['TempCart']['pay_amt'] = $pprice[1];
-                        $this->request->data['TempCart']['price'] = $pprice[1];
-                    }
-                    
-                    else {
-                        $this->request->data['TempCart']['pay_amt'] = $this->request->data['TempCart']['price_lot'];
-                        $this->request->data['TempCart']['price'] = $this->request->data['TempCart']['price_lot'];
-                    }*/
-                    
-                    
-                    //spandan 24/11
-                    if ($this->request->data['TempCart']['price_lot'] != 0) {
-                    $this->request->data['TempCart']['pay_amt'] = $this->request->data['TempCart']['price_lot'];
-                    $this->request->data['TempCart']['price'] = $this->request->data['TempCart']['price_lot'];
-                    
-                    }elseif ($this->request->data['TempCart']['price']!='') {
-                        
-                        $pprice = explode('_', $this->request->data['TempCart']['price']);
-                        $this->request->data['TempCart']['p_color'] = $pprice[0];
-                        $this->request->data['TempCart']['pay_amt'] = $pprice[1];
-                        $this->request->data['TempCart']['price'] = $pprice[1];  
-                        
-                    }elseif ($this->request->data['TempCart']['size_price']!=''){
-                        
-                        $sprice = explode('_', $this->request->data['TempCart']['size_price']);
-                        $this->request->data['TempCart']['p_size'] = $sprice[0];
-                        $this->request->data['TempCart']['pay_amt'] = $sprice[1];
-                        $this->request->data['TempCart']['price'] = $sprice[1]; 
-                    }elseif ($this->request->data['TempCart']['color_with_size']!=''){
+            
+            
+            
+            if($this->request->is('post')) {
+                
+                 if($this->request->data['Product']['payment']=='paypal'){
                        
-                        $this->request->data['TempCart']['p_color'] = $this->request->data['TempCart']['color_with_size'];
-                        $swprice = explode('_', $this->request->data['TempCart']['size_with_price']);
-                        $this->request->data['TempCart']['p_size'] = $swprice[0];
-                        $this->request->data['TempCart']['pay_amt'] = $swprice[1];
-                        $this->request->data['TempCart']['price'] = $swprice[1]; 
-                    }
-                    
-                    
-                    //end 24/11
-                    
-                    $this->request->data['TempCart']['cdate'] = gmdate('Y-m-d H:i:s');
-                    //print_r($this->request->data);exit;
-                    if ($this->TempCart->save($this->request->data)) {
-                        $Msg = 'Success:Product added to cart.';
-                    } else {
-                        $Msg = 'Error:The product could not be saved into the cart. Please, try again.';
-                    }
-                    echo $Msg;
-                    exit;
-                } elseif ($woner_check == true) {
-                    $Msg = 'Error:You cannot add different store woner product.';
-                } elseif ($userid == $Current_woner_id) {
-                    $Msg = 'Error:You cannot add your own product.';
-                } else {
-                    $Msg = 'Error:Product already in cart.';
-                }
+                       return $this->redirect(array('action' => 'payment_process/'.$id));
+                       
+                       
+                   } 
+                   
+                   else{
+                       $this->Session->setFlash('Order not placed successfully.','default', array('class' => 'error'));
+                       
+                   }
+                   
+                                    
+            } 
+            
+            
+        $options_cart = array('conditions' => array('Coupon.id' => $id));
+        $coupon_details = $this->Coupon->find('first', $options_cart);
+            
+            
+            
+          
+            $this->set(compact('cart','title_for_layout','coupon_details'));
+        }
+        
+        
+        
+     public function payment_process($id){
+      $this->layout = false;
+      
+      $this->loadModel('SiteSetting');
+      $this->loadModel('Coupon');
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+        $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+        return $this->redirect(array('action' => 'login'));
+      }
+
+
+  $product = $this->Coupon->find('first', array('conditions' => array('Coupon.id' => $id),'fields'=>array('Coupon.amount','Coupon.id')));
+  //pr($product);exit;
+  $paypalid = $this->SiteSetting->find('first');
+    
+  //nits.bikash@gmail.com
+    //pr($paypalid);exit();
+    $this->set(compact('product','userid','paypalid'));
+  }
+  
+  
+   public function purchase_payment(){
+    $this->autoRender = false;
+    $this->layout = false;
+    $this->loadModel('Order');
+    $this->loadModel('Coupon');
+    $post = array();
+        foreach ($_POST as $field => $value) {
+            array_push($post,urlencode($field)."=".urlencode($value));
+        }
+
+        $id = $_POST["txn_id"];
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://www.sandbox.paypal.com/cgi-bin/webscr");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&",$post)."&cmd=_notify-validate");
+        $post = curl_exec($ch);
+
+        curl_close($ch);
+        
+           
+
+    if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed')
+      {
+           $custom = explode('_',$_POST["custom"]); 
+           //print_r($custom);exit;
+         $userid= $custom[0];
+         $couponid =$custom[1];
+         
+           $options_cart = array('conditions' => array('Coupon.id' => $couponid));
+           $cart = $this->Coupon->find('all', $options_cart);
+            
+          
+            foreach($cart as $tempid){
+                //pr($cart);exit;
+                
+                $this->request->data['Order']['user_id']= $userid;
+                $this->request->data['Order']['coupon_id']=$couponid;
+                $this->request->data['Order']['coupon_code']=1234;
+                $this->request->data['Order']['coupon_owner_id']=$tempid['Coupon']['user_id'];
+                $this->request->data['Order']['payment_type']='Paypal';
+                $this->request->data['Order']['total_amount']=$tempid['Coupon']['amount'];
+                $this->request->data['Order']['payment_type']='paypal';
+                $this->request->data['Order']['transaction_id']=$id;
+                $this->request->data['Order']['payment_date']=date('Y-m-d');
+                
+                $this->Order->create(); 
+               $this->Order->save($this->request->data);
             }
-        }
-        return $Msg;
-    }
+              
+            
+      }
 
-    public function edit_quantity() {
-        $this->loadModel('TempCart');
-        if ($this->request->is(array('post', 'put'))) {
-            $cart_prd_id = $this->request->data['cart_prd_id'];
-            $options = array('conditions' => array('Product.id' => $cart_prd_id));
-            $product = $this->Product->find('first', $options);
-            //$Current_woner_id=$product['Product']['user_id'];
-            $previous_prd_qty = $product['Product']['quantity'];
-            $give_prd_quantity = $this->request->data['TempCart']['quantity'];
-            if ($give_prd_quantity > $previous_prd_qty) {
-                $this->Session->setFlash(__('Product quantity could not be saved.Product quantity could not be available.Please, try again.'));
-            } else {
-                if ($this->TempCart->save($this->request->data)) {
-                    $this->Session->setFlash('Product quantity updated successfully.', 'default', array('class' => 'success'));
-                } else {
-                    $this->Session->setFlash(__('Product quantity could not be saved. Please, try again.'));
-                }
-            }
-        }
-        $this->redirect(array('controller' => 'products', 'action' => 'cart'));
-    }
 
-    public function delete_cart($id = null) {
-        $this->loadModel('TempCart');
-        $this->TempCart->id = $id;
-        if (!$this->TempCart->exists()) {
-            throw new NotFoundException(__('Invalid Request'));
-        }
-        $userid = $this->Session->read('Auth.User.id');
-        if (!isset($userid) && $userid == '') {
-            $this->redirect('/');
-        }
+  }
+    
+   public function success_payment(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
 
-        if ($this->TempCart->delete()) {
-            $this->Session->setFlash('Product has been deleted', 'default', array('class' => 'success'));
-        } else {
-            $this->Session->setFlash(__('Product could not be deleted. Please, try again.'));
-        }
+  }
+        
+    public function cancel(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+     
+  }  
 
-        return $this->redirect(array('action' => 'cart'));
-    }
+
+   
+   
+
+    
+
+   
 
     public function get_product_details($id = null) {
         $options = array('conditions' => array('Product.id' => $id));

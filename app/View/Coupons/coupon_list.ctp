@@ -64,6 +64,7 @@
         <div class="item col-xs-12 col-sm-12 col-md-9">
           <div class="coupon-list-right">            
             <?php
+           //pr($coupons);
               foreach($coupons as $coupon){
             ?>
             <div class="coupon-list-area">
@@ -83,7 +84,16 @@
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <button type="button" class="btn btn-success get-coupon" data-toggle="modal" data-target="#myModal">Get Coupon Code</button>
+                      
+                      <?php if($coupon['Coupon']['type']=="O"){?>
+                      
+                    <button type="button" class="btn btn-success get-coupon" data-toggle="modal" data-target="#myModal_online_<?php echo $coupon['Coupon']['id']?>">Get Coupon Code</button>
+                    
+                      <?php }else{ ?>
+                    
+                    <button type="button" class="btn btn-success get-coupon" data-toggle="modal" data-target="#myModal_store">Get Coupon Code</button>
+                    
+                      <?php } ?>
                   </div>
                 </div>
               </div>
@@ -109,8 +119,13 @@
 <div class="clearfix"></div>
 
 
-<!-- Modal -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Modal for online purchase-->
+
+            <?php
+              foreach($coupons as $coupon){
+            ?>
+
+                    <div class="modal fade" id="myModal_online_<?php echo $coupon['Coupon']['id']?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -118,17 +133,48 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                           </div>
                           <div class="modal-body get-coupon-modal">
-                            <button type="button" class="btn btn-success get-coupon">Get Coupon Code</button>
+                              <a href="<?php echo $this->webroot.'products/payment/'.base64_encode($coupon['Coupon']['id']);?>" class="btn btn-success get-coupon">Purchase Coupon Code</a>
                             <h5>Amazon: Up To 75% Off | Amazon Promo Codes & Coupons February 2018</h5>
                             <p> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                           </div>
-                          <div class="modal-body get-coupon-modal gray-bg-modal">
+<!--                          <div class="modal-body get-coupon-modal gray-bg-modal">
                             <h5>Never miss a great Amazon coupon and get our best coupons every week!</h5>
                             <div class="search-btn my-3">
                               <input type="text" placeholder="Email" class="form-control">
                               <button class="btn btn-src btn-danger">Subscribe</button>
                             </div>
+                          </div>-->
+                          <div class="modal-footer">
+                            <ul class="w-100 list-unstyled m-0 text-center">
+                              <li class="d-inline p-1"> <a href="#"> <i aria-hidden="true" class="fa fa-facebook"></i> </a> </li>
+                              <li class="d-inline p-1"> <a href="#"> <i aria-hidden="true" class="fa fa-twitter"></i> </a> </li>
+                              <li class="d-inline p-1"> <a href="#"> <i aria-hidden="true" class="fa fa-google-plus"></i> </a> </li>
+                            </ul>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+              <?php } ?>
+
+
+
+
+
+<!-- Modal for store redirect-->
+                    <div class="modal fade" id="myModal_store" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Click below to get your coupon code</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                          </div>
+                          <div class="modal-body get-coupon-modal">
+                            <button type="button" class="btn btn-success get-coupon">Redeem Coupon Code</button>
+                            <h5>Amazon: Up To 75% Off | Amazon Promo Codes & Coupons February 2018</h5>
+                            <p> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                          </div>
+
                           <div class="modal-footer">
                             <ul class="w-100 list-unstyled m-0 text-center">
                               <li class="d-inline p-1"> <a href="#"> <i aria-hidden="true" class="fa fa-facebook"></i> </a> </li>
