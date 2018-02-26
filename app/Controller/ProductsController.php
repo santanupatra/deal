@@ -51,19 +51,38 @@ class ProductsController extends AppController {
         $this->set('products', $this->Paginator->paginate('Product'));
     }
 
-    public function product_list($cid) {
+    public function product_list($cid = null) {
         $this->loadModel('Category');
-        $cid = base64_decode($cid);
+        $this->loadModel('Shop');
+        $condition = array();
+        if(isset($cid) && $cid != ""){
+          $cid = base64_decode($cid);
+          $condition[] = array('category_id' => $cid);
+        }
+        if(isset($this->request->data['Product']['category_id']) && $this->request->data['Product']['category_id'] !=""){
+          $condition[] = array('category_id' => $this->request->data['Product']['category_id']);
+          $cid = $this->request->data['Product']['category_id'];
+        }
+
+        if(isset($this->request->data['Product']['shop_id']) && $this->request->data['Product']['shop_id'] !=""){
+          $condition[] = array('shop_id' => $this->request->data['Product']['shop_id']);
+        }
+        
         $title_for_layout = 'Product List';
 
         $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));
 
-        $this->paginate = array('conditions' => array('category_id' => $cid), 'limit' => 10, 'order' => array('Product.id' => 'desc'),
+        $this->paginate = array('conditions' => $condition, 'limit' => 10, 'order' => array('Product.id' => 'desc'),
         );
         $this->Paginator->settings = $this->paginate;
         //$this->Product->recursive = 1;
         $this->set('products', $this->Paginator->paginate('Product'));
-        $this->set(compact('category'));
+
+        $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));       
+
+        $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+
+        $this->set(compact('category', 'allcategory', 'shops'));
     }
 
     public function details($id){

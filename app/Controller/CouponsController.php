@@ -16,7 +16,7 @@ class CouponsController extends AppController {
 	public $components = array('Paginator');
         public function beforeFilter() {
             parent::beforeFilter();
-            //$this->Auth->allow('details','sliderframe','sliderframe2');
+            $this->Auth->allow('coupon_list');
         }
 
 /**
@@ -289,6 +289,7 @@ class CouponsController extends AppController {
     public function coupon_list($id){
             $this->loadModel('Coupon');
             $this->loadModel('Category');
+            $this->loadModel('Shop');
             $id = json_decode($id);
 
             $category = $this->Category->find('first', array('conditions' => array('id' => $id)));
@@ -305,7 +306,12 @@ class CouponsController extends AppController {
 
             $this->Coupon->recursive = 0;
             $this->set('coupons', $this->Paginator->paginate());
-            $this->set(compact('category'));
+
+
+            $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));  
+            $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+
+            $this->set(compact('category', 'allcategory', 'shops'));
 
     }
 }
