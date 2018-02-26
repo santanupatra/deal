@@ -31,15 +31,18 @@ class UsersController extends AppController {
         
           $this->loadModel('Category');
           $this->loadModel('Banner');
+          $this->loadModel('Advertise');
            
 
           $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
           $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1)));
           $video = $this->Banner->find("first",array('conditions'=>array('is_active'=> 1)));
 
+          $advertise = $this->Advertise->find("first",array('conditions'=>array('status'=> 1)));
+
           
              
-       	  $this->set(compact('allcategory', 'popular_category', 'video'));
+       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise'));
                 
     }
    

@@ -9,16 +9,17 @@
 			<?php echo $this->Form->create('Package',array('enctype'=>'multipart/form-data')); ?>
                             <fieldset>
 				<?php
-                                    echo $this->Form->input('id');
-                                    echo $this->Form->input('name',array('required'=>'required'));
-                                    echo $this->Form->input('duration',array('required'=>'required','label'=>'Duration (months)','placeholder'=>'Enter no of month.'));
-                                    echo $this->Form->input('price',array('required'=>'required','type'=>'number'));
+	                echo $this->Form->input('id');
+	                echo $this->Form->input('name',array('required'=>'required'));
+	                echo $this->Form->input('no_deal',array('required'=>'required','label'=>'No of deals','placeholder'=>'Enter no of deals.'));
+	                echo $this->Form->input('no_coupon',array('required'=>'required','label'=>'No of coupons','placeholder'=>'Enter no of coupon.'));
+	                echo $this->Form->input('price',array('required'=>'required','type'=>'number'));
 				?>
 				<div class="input checkbox">
-                                    <input id="UserIsActive_" type="hidden" value="0" name="data[Package][status]">
-                                    <input id="UserIsActive" type="checkbox" value="1" name="data[Package][status]" <?php if(isset($this->request->data['Package']['status']) && $this->request->data['Package']['status']==1){echo 'checked';}?>>
-                                    <label for="UserIsActive">Is Active</label>
-                                </div>
+                    <input id="UserIsActive_" type="hidden" value="0" name="data[Package][status]">
+                    <input id="UserIsActive" type="checkbox" value="1" name="data[Package][status]" <?php if(isset($this->request->data['Package']['status']) && $this->request->data['Package']['status']==1){echo 'checked';}?>>
+                    <label for="UserIsActive">Is Active</label>
+                </div>
                             </fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>
 			</div>

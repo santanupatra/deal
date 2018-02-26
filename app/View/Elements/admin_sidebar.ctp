@@ -143,11 +143,11 @@ if(count($pass_data)>0){
         {?><i class="icon-chevron-right"></i><?php } ?> Content Management</a>
 	</li>
         <!--spandan 4/10-->
-        <!-- <li <?php if($this->params['controller']=='advertises')
+    <li <?php if($this->params['controller']=='advertises')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/advertises/list">
             <?php if($this->params['controller']=='advertises')
         {?><i class="icon-chevron-right"></i><?php } ?> Advertise Management</a>
-	</li> -->
+	</li>
         <!--end-->
         
 	<li>
