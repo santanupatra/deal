@@ -61,15 +61,57 @@
             </div>
           </div>
         </div>
+
         <div class="item col-xs-12 col-sm-12 col-md-9">
-          <div class="coupon-list-right">            
+          <div class="coupon-list-right">  
+            <form method="post" action="<?php echo $this->webroot; ?>products/product_list" id="frmLogin">
+                <div class="row">
+                
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
+                            <option selected>Select Category . . . . . . .</option>
+                            <?php
+                              foreach($allcategory as $cat){
+                                echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
+                              }
+                            ?>                            
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select name="data[Product][shop_id]" class="form-control rounded-0 bg-transparent">
+                            <option value="" selected>Select Shop . . . . . . .</option>
+                            <?php
+                              foreach ($shops as $shop) {
+                                echo '<option value="'.$shop['Shop']['id'].'">'.$shop['Shop']['name'].'</option>';
+                              }
+                            ?>                            
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="search-btn">
+                            <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
+                                <option value="" selected>Location. . . . . . .</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                          <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
+                        </div>
+                    </div>
+                </div>
+                </form>           
             <?php
            //pr($coupons);
               foreach($coupons as $coupon){
             ?>
             <div class="coupon-list-area">
               <div class="row">
-                <div class="get-coupon-rt-area">
+                <div class="get-coupon-rt-area w-100 float-left">
                   <div class="col-md-3">
                     <div class="off-part">
                       <h3><?php echo $coupon['Coupon']['offer'];?>%</h3>

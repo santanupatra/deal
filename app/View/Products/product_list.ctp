@@ -16,7 +16,7 @@
     <section class="list-section">
       <div class="container">      
         <div class="list-updiv bg-light mt-3 mb-3 w-100 pt-3 pl-3 pr-3">
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-lg-6">
               <h6 class="text-dark text-uppercase d-inline-block m-0"><?php echo $category['Category']['name'];?></h6>         
             </div>
@@ -32,7 +32,48 @@
                 </div>
               </form>
             </div>
-          </div>
+          </div> -->
+          <form method="post" action="<?php echo $this->webroot; ?>products/product_list" id="frmLogin">
+                <div class="row">
+                
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
+                            <option selected>Select Category . . . . . . .</option>
+                            <?php
+                              foreach($allcategory as $cat){
+                                echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
+                              }
+                            ?>                            
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <select name="data[Product][shop_id]" class="form-control rounded-0 bg-transparent">
+                            <option value="" selected>Select Shop . . . . . . .</option>
+                            <?php
+                              foreach ($shops as $shop) {
+                                echo '<option value="'.$shop['Shop']['id'].'">'.$shop['Shop']['name'].'</option>';
+                              }
+                            ?>                            
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="search-btn">
+                            <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
+                                <option value="" selected>Location. . . . . . .</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                          <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
+                        </div>
+                    </div>
+                </div>
+                </form>
         </div>
           
 
@@ -64,7 +105,14 @@
                 }
              ?> 
                                                
-          </div>          
+          </div>  
+           <div class="paging text-center paging-span-cont">
+            <?php
+                echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+                echo $this->Paginator->numbers(array('separator' => ''));
+                echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+            ?>
+        </div>        
         </div>
       </div> <!-- container -->
     </section>

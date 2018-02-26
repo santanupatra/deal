@@ -68,6 +68,7 @@ class AppController extends Controller {
         $this->loadModel('Content');
         $this->loadModel('SiteSetting');
         $this->loadModel('Category');
+        $this->loadModel('Shop');
 
         $SITE_URL = Configure::read('SITE_URL');
 
@@ -95,10 +96,10 @@ class AppController extends Controller {
         $options1 = array('conditions' => array('Category.parent_id' => 0,'Category.is_active'=>1, 'Category.type' => 'C'),'order' => array('Category.ordering' => 'asc'));
         $couponcategory = $this->Category->find('all', $options1);
        
-        
+        $allshops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
       
       //end
-        $this->set(compact('sitesetting','SITE_URL','userid','dealcategory','couponcategory'));
+        $this->set(compact('sitesetting','SITE_URL','userid','dealcategory','couponcategory', 'allshops'));
 		
       
     }

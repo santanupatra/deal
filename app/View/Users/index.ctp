@@ -2,42 +2,47 @@
         <section class="filter-home py-5 mb-5">
             <div class="container">
                 <h3 class="text-white mb-4 text-uppercase">You will not miss any great discount never ever again!</h3>
+                <form method="post" action="<?php echo $this->webroot; ?>products/product_list" id="frmLogin">
                 <div class="row">
+                
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <select class="form-control rounded-0 bg-transparent">
+                            <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
                             <option selected>Select Category . . . . . . .</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <?php
+                              foreach($allcategory as $cat){
+                                echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
+                              }
+                            ?>                            
                             </select>
                          </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <select class="form-control rounded-0 bg-transparent">
-                            <option selected>Select Shop . . . . . . .</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <select name="data[Product][shop_id]" class="form-control rounded-0 bg-transparent">
+                            <option value="" selected>Select Shop . . . . . . .</option>
+                            <?php
+                              foreach ($shops as $shop) {
+                                echo '<option value="'.$shop['Shop']['id'].'">'.$shop['Shop']['name'].'</option>';
+                              }
+                            ?>                            
                             </select>
                          </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="search-btn">
-                            <select class="form-control rounded-0 bg-transparent">
-                                <option selected>Location. . . . . . .</option>
+                            <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
+                                <option value="" selected>Location. . . . . . .</option>
                                 <option>2</option>
                                 <option>3</option>
                                 <option>4</option>
                                 <option>5</option>
                             </select>
-                          <button class="btn btn-src btn-danger rounded-0">Search</button>
+                          <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
         </section>
         <section>
