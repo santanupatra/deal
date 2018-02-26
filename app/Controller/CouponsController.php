@@ -296,7 +296,7 @@ class CouponsController extends AppController {
             $data = date('Y-m-d');
             $this->paginate = array(
             'limit' =>25,
-            'conditions' => array('Coupon.is_active' => 1, 'Coupon.from_date >=' => $data),
+            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data),
             'order' => array(
                     'Coupon.id' => 'desc'
                 ) 
