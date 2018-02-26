@@ -16,7 +16,9 @@ class CouponsController extends AppController {
 	public $components = array('Paginator');
         public function beforeFilter() {
             parent::beforeFilter();
+
             $this->Auth->allow('coupon_list');
+
         }
 
 /**
@@ -290,14 +292,15 @@ class CouponsController extends AppController {
             $this->loadModel('Coupon');
             $this->loadModel('Category');
             $this->loadModel('Shop');
-            $id = json_decode($id);
+
+            $id = base64_decode($id);
 
             $category = $this->Category->find('first', array('conditions' => array('id' => $id)));
 
             $data = date('Y-m-d');
             $this->paginate = array(
             'limit' =>25,
-            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data),
+            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data,'Coupon.category_id >=' => $id),
             'order' => array(
                     'Coupon.id' => 'desc'
                 ) 

@@ -15,7 +15,7 @@
                                             <th>&nbsp;</th>
                                             <th><?php echo $this->Paginator->sort('id'); ?></th>
                                             <th><?php echo $this->Paginator->sort('name'); ?></th>
-                                            <th><?php echo $this->Paginator->sort('duration'); ?></th>
+                                            
                                             <th><?php echo $this->Paginator->sort('price'); ?></th>
                                             <th><?php echo $this->Paginator->sort('status','Active'); ?></th>
                                             <th class="actions"><?php echo __('Actions'); ?></th>
@@ -27,7 +27,7 @@
                                             <td>&nbsp;</td>
                                             <td><?php echo h($p_list['Package']['id']); ?>&nbsp;</td>
                                             <td><?php echo h($p_list['Package']['name']); ?>&nbsp;</td>
-                                            <td><?php echo h($p_list['Package']['duration']); ?> months&nbsp;</td>
+                                            
                                             <td><?php echo h($p_list['Package']['price']); ?>&nbsp;</td>
                                             <td><?php if(isset($p_list['Package']['status']) && $p_list['Package']['status']==1){echo 'Yes';}else{echo 'No';} ?>&nbsp;</td>
                                             <td class="actions">
