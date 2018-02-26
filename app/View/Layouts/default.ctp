@@ -169,21 +169,18 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                     <div class="card-body pl-0 pr-0 pb-0">
                                       <h5 class="card-title text-center pt-1 pb-1"><strong>Store</strong></h5>
                                       <ul class="list-unstyled list-group">
+                                        <?php
+                                          foreach ($allshops as $shop) {
+                                         ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Alabama
-                                                
+                                            <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
+                                                <?php echo $shop['Shop']['name'];?>
                                             </a>
                                             </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Indaho
-                                               
-                                            </a>                                              
-                                          </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">ohino
-                                               
-                                            </a>                                               
-                                        </li>
+                                          <?php
+                                            }
+                                            ?>                                     
+                                          
                                       </ul>
                                     </div>
                                   </div>                                
@@ -251,21 +248,17 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                     <div class="card-body pl-0 pr-0 pb-0">
                                       <h5 class="card-title text-center pt-1 pb-1"><strong>Store</strong></h5>
                                       <ul class="list-unstyled list-group">
+                                          <?php
+                                          foreach ($allshops as $shop) {
+                                         ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Alabama
-                                               
+                                            <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
+                                                <?php echo $shop['Shop']['name'];?>
                                             </a>
                                             </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Indaho
-                                               
-                                            </a>                                              
-                                          </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">ohino
-                                                
-                                            </a>                                               
-                                        </li>
+                                          <?php
+                                            }
+                                            ?>  
                                       </ul>
                                     </div>
                                   </div>                                

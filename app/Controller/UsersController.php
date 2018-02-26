@@ -32,6 +32,8 @@ class UsersController extends AppController {
           $this->loadModel('Category');
           $this->loadModel('Banner');
           $this->loadModel('Advertise');
+          $this->loadModel('Shop');
+          $this->loadModel('City');
            
 
           $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
@@ -40,9 +42,10 @@ class UsersController extends AppController {
 
           $advertise = $this->Advertise->find("first",array('conditions'=>array('status'=> 1)));
 
+          $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+
           
-             
-       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise'));
+       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops'));
                 
     }
    
