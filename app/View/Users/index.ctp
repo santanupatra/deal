@@ -44,49 +44,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
-                        <div class="bg-white mb-4">
-                            <div>
-                                <img src="img/img3.png" class="w-100" alt="">
-                            </div>
-                            <div class="right-img-btm p-3">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div>
-                                            <span>
-                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
-                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
-                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
-                                                <i class="fa fa-star star-color" aria-hidden="true"></i>
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </span>
-                                            <span class="mr-2">(250) rates</span>
-                                            <span class="font-12">Expires in: <span class="text-red"> 22 days</span></span>
-                                        </div>
-                                        <h3 class="mt-2">Great Dinner For Two - 10% off</h3>
-                                        <ul class="list-unstyled facility">
-                                            <li class="font-12">
-                                                <img src="img/dinner.png" alt="">
-                                                <span>FOOD & DRINK</span>
-                                            </li>
-                                            <li class="font-12">
-                                                <img src="img/dinner.png" alt="">
-                                                <span>FOOD & DRINK</span>
-                                            </li>
-                                            <li class="font-12">
-                                                <img src="img/dinner.png" alt="">
-                                                <span>FOOD & DRINK</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-4 text-md-right">
-                                        <div class="price">
-                                            <span class="current"> $ 55.55 </span>
-                                            <span class="old">$65.00</span>
-                                        </div>
-                                        <button type="button" name="button" class="btn btn-theme rounded-0">VIEW DEALS</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="bg-white mb-4">                          
+                           <iframe width="100%" height="400" src="<?php echo $video['Banner']['title']?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
                         <img src="img/sdo.png" alt="" class="img-fluid w-100 image-top">
 
@@ -114,7 +73,7 @@
                                 <span></span>
                             </div>
                             <h5 class="mb-3">ADVERTISE</h5>
-                            <img src="img/img1.png" class="w-100" alt="">
+                            <a href="<?php echo $advertise['Advertise']['link'];?>" target="_blank"><img src="<?php echo $this->webroot.'advertise_logos/'.$advertise['Advertise']['logo'];?>" class="w-100" alt=""></a>
                             <div class="half-mark-header mt-5">
                                 <span></span>
                             </div>
