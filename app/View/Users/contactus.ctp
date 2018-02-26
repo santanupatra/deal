@@ -33,21 +33,21 @@
           <h4 class="p-2 text-danger">
             Fill up Here
           </h4>
-          <form action="#" class="contact-form" method="post">
+          <form action="<?php echo $this->webroot?>users/contactus" class="contact-form" method="post">
             <div class="form-group">
-              <input type="text" class="form-control form-control-sm" name="nm" placeholder="Name" required="required" autofocus="off">
+              <input type="text" class="form-control form-control-sm" name="data[User][name]" placeholder="Name" required="required" autofocus="off">
             </div>
 
             <div class="form-group form_left">
-              <input type="email" class="form-control form-control-sm" name="em" placeholder="Email" required="required">
+              <input type="email" class="form-control form-control-sm" name="data[User][email]" placeholder="Email" required="required">
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
+                <input type="text" class="form-control form-control-sm" name="data[User][phone]" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
                 placeholder="Mobile No." required="required">
             </div>
             <div class="form-group">
-              <textarea class="form-control textarea-contact form-control-sm" rows="5" name="FB" placeholder="Type Your Message/Feedback here..."
+              <textarea class="form-control textarea-contact form-control-sm" rows="5" name="data[User][message]" placeholder="Type Your Message/Feedback here..."
                 required="required"></textarea>
               <br>
               <button class="btn btn-theme" type="submit">

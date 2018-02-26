@@ -16,7 +16,7 @@ class PackagesController extends AppController {
 	public $components = array('Paginator');
         public function beforeFilter() {
 	    parent::beforeFilter();
-	    $this->Auth->allow('getsubcat','advertisement_viewcount','total_sale_range','total_sale_range_monthly','total_sale_range_yearly');
+	    $this->Auth->allow('getsubcat','advertisement_viewcount','total_sale_range','total_sale_range_monthly','total_sale_range_yearly','payment_process','purchase_payment');
 	}
         
 
@@ -800,118 +800,7 @@ class PackagesController extends AppController {
             $this->set(compact('title_for_layout','advertisementscount','advertisements','advertisement_lists','advertisementlist_year','advertisementlist_month'));
 	}
 	
-	/*
-	public function admin_report() {
-            $userid = $this->Session->read('adminuserid');
-            $is_admin = $this->Session->read('is_admin');
-            if(!isset($is_admin) && $is_admin==''){
-               $this->redirect('/admin');
-            }
-            $this->loadModel('Proposal');
-            $this->loadModel('PaymentHistory');
-            $this->loadModel('Task');
-            if(isset($userid) && !empty($userid)){
-                
-                //$this->PaymentHistory->recursive = -1;
-                if (isset($_REQUEST['search']) && $_REQUEST['search']=='Search' ) {
-                    $from_date=isset($_REQUEST['from_date'])?$_REQUEST['from_date']:'';
-                    $to_date=isset($_REQUEST['to_date'])?$_REQUEST['to_date']:'';
-                    //$TransacionsType=$_REQUEST['TransacionsType'];
-                    $activity=isset($_REQUEST['activity'])?$_REQUEST['activity']:'';
-                    //$end_date=date('Y-m-d', strtotime("-14 days"));
-                    
-                    $QueryStr="(PaymentHistory.type !='refund amount')";
-                    if($activity!=''){
-                        if($activity==1){
-                            $activityToDate=date('Y-m-d', strtotime("-7 days"));
-                            $activityFromDate=date('Y-m-d', strtotime("-14 days"));
-                            $QueryStr.=" AND (PaymentHistory.pay_date >= '".$activityFromDate." 00:00:00' AND PaymentHistory.pay_date <= '".$activityToDate." 23:59:59')";
-                        }elseif($activity==2){
-                            $activityToDate=date('Y-m-d', strtotime("-7 days"));
-                            $activityFromDate=date('Y-m-d', strtotime("-21 days"));
-                            $QueryStr.=" AND (PaymentHistory.pay_date >= '".$activityFromDate." 00:00:00' AND PaymentHistory.pay_date <= '".$activityToDate." 23:59:59')";
-                        }elseif($activity==3){
-                            $ToDateCal=date('Y-m-d', strtotime("-30 days"));
-                            $ToDateCalExp=explode('-',$ToDateCal);
-                            $number = cal_days_in_month(CAL_GREGORIAN, $ToDateCalExp[1], $ToDateCalExp[0]);
-                            $activityToDate=$ToDateCalExp[0].'-'.$ToDateCalExp[1].'-'.$number;
-                            $activityFromDate=$ToDateCalExp[0].'-'.$ToDateCalExp[1].'-01';
-                            $QueryStr.=" AND (PaymentHistory.pay_date >= '".$activityFromDate." 00:00:00' AND PaymentHistory.pay_date <= '".$activityToDate." 23:59:59')";
-                        }
-                    }else{
-                        //echo $TransacionsType;
-                        //exit;
-                        /////if($TransacionsType!=''){
-                            if($TransacionsType=='pay amount'){
-                                $QueryStr.=" AND (PaymentHistory.type LIKE '%".$TransacionsType."%')";
-                            }else{
-                                $QueryStr.=" AND (PaymentHistory.type LIKE '%release fund%' OR PaymentHistory.type LIKE '%refund amount%')";
-                            }
-                        }//////
-                        if($from_date!='' && $to_date==''){
-                            $QueryStr.=" AND (PaymentHistory.pay_date >= '".$from_date." 00:00:00')";
-                        }
-                        if($from_date=='' && $to_date!=''){
-                            $QueryStr.=" AND (PaymentHistory.pay_date <= '".$to_date." 23:59:59')";
-                        }
-                        if($from_date!='' && $to_date!='' ){
-                            $QueryStr.=" AND (PaymentHistory.pay_date >= '".$from_date." 00:00:00' AND PaymentHistory.pay_date <= '".$to_date." 23:59:59')";
-                        }
-                    }
-                    $options = array('conditions' => array($QueryStr), 'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.job_id'), 'limit'=>10);
-                    $options_task = array('conditions' => array($QueryStr),'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.task_id'));
-                    $total_task=$this->PaymentHistory->find("all",$options_task);
-                }else{
-                    $options = array('conditions' => array('PaymentHistory.type !='=>'refund amount'),'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.job_id'), 'limit'=>10);
-                    $from_date='';
-                    $to_date='';
-                    //$TransacionsType='';
-                    $activity='';
-                    $options_task = array('conditions' => array('PaymentHistory.type !='=>'refund amount'),'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.task_id'));
-                    $total_task=$this->PaymentHistory->find("all",$options_task);
-                }
-                $options_payment = array('conditions' => array('PaymentHistory.type !='=>'refund amount'),'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.job_id'));
-                $all_history = $this->PaymentHistory->find('all',$options_payment);
-                $this->Paginator->settings = $options;
-                $payment_notifications=$this->Paginator->paginate('PaymentHistory');
-                $options_refund = array('conditions' => array('PaymentHistory.type'=>'refund amount'),'order' => array('PaymentHistory.id' => 'desc'), 'group' => array('PaymentHistory.job_id'));
-                $all_refund_history = $this->PaymentHistory->find('all',$options_refund);
-                
-                //$options_task_exp = array('conditions' => array('Task.due_date >'=>date('Y-m-d'), 'Task.task_status'=>'O'));
-                //$options_task_exp = array('conditions' => array('Task.due_date <'=>date('Y-m-d'), 'Task.task_status'=>'O', 'Task.status'=>2));
-                $options_task_exp = array('conditions' => array('Task.task_status'=>'CL', 'Task.status'=>2));
-                $total_task_exp = $this->Task->find('count',$options_task_exp);
-                
-                $sql_not_offer_task = $this->Task->query("SELECT count(Task.`id`) as total_cnt FROM `proposals` as Proposal, `tasks` as Task WHERE Task.`id` Not IN (SELECT `task_id` from `proposals` group by `task_id`) and Task.`due_date` > '".date('Y-m-d')."' and Task.`task_status`='O' group by Task.`id`");
-                if(count($sql_not_offer_task)>0){
-                    $total_not_offer_task=$sql_not_offer_task[0][0]['total_cnt'];
-                }else{
-                    $total_not_offer_task=0;
-                }
-                $total_user=$this->User->find("all",array('conditions'=>array('User.is_active'=>1,'User.id !='=>2,'User.is_admin'=>0)));
-                $total_inactive_user=$this->User->find("count",array('conditions'=>array('User.is_active'=>0,'User.id !='=>2,'User.is_admin'=>0)));    
-                $options_task_tot = array('conditions' => array('Task.status'=>2));
-                $total_task_cnt= $this->Task->find('count',$options_task_tot);
-                
-                $options_open = array('conditions' => array('Task.status' => 2, 'Task.task_status' => 'O', 'Task.due_date >=' => date('Y-m-d')));
-                $total_open_task_cnt= $this->Task->find('count',$options_open);
-                
-                $$this->Task->recursive = 2; 
-                $TaskActiveCurMonth= $this->Task->find('count', array('conditions' => array('Task.status'=>2,'Task.task_status' => 'O','Task.due_date >=' => date('Y-m-d'),'Task.post_date >='=>date('Y-m-').'01', 'Task.post_date <='=>date('Y-m-').'31')));
-                $FromLastMonth=date("Y-n-j", strtotime("first day of previous month"));
-                $ToLastMonth=date("Y-n-j", strtotime("last day of previous month"));
-		
-                $TaskActiveLastMonth= $this->Task->find('count', array('conditions' => array('Task.status'=>2,'Task.post_date >='=>$FromLastMonth, 'Task.post_date <='=>$ToLastMonth)));
-		
-                $TaskActiveLastSixMonth= $this->Task->find('count', array('conditions' => array('Task.status'=>2,'Task.post_date >='=>date("Y-m-d", strtotime("-6 months", strtotime(date('Y-m-d')))), 'Task.post_date <='=>date('Y-m-d'))));
-                $LastYear=date("Y", strtotime("-12 months", strtotime(date('Y-m-d'))));
-                $TaskActiveLastYear= $this->Task->find('count', array('conditions' => array('Task.status'=>2,'Task.post_date >='=>$LastYear.'-01-01', 'Task.post_date <='=>$LastYear.'-12-31')));
-                //$notifications = $this->PaymentHistory->find('all',$options);
-                $this->set(compact('payment_notifications','TransacionsType','to_date','from_date','activity','all_history','total_task','all_refund_history','total_task_exp','total_not_offer_task','total_user','total_task_cnt','TaskActiveCurMonth','TaskActiveLastMonth','TaskActiveLastSixMonth','TaskActiveLastYear','total_open_task_cnt','total_inactive_user'));
-            }
-	}
 	
-	*/
 	
 	public function total_sale_range($from, $to,$adv_id) {
             $this->autoRender = false;
@@ -962,5 +851,230 @@ class PackagesController extends AppController {
             return $TotAmt;
             
 	}
+        
+        
+        public function wallet_details() {
+            
+        $title_for_layout = 'My Wallet';
+        $this->loadModel('User');
+        $this->loadModel('Package');
+
+        $userid = $this->Session->read('Auth.User.id');
+        $utype = $this->Session->read('Auth.User.type');
+        if ((!isset($userid) && $userid == '') || $utype != 'V') {
+            $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+            return $this->redirect(array('controller' => 'users', 'action' => 'login'));
+        }
+
+
+
+        $option = array('conditions' => array('Package.status' => 1));
+        $package = $this->Package->find('all',$option);
+        
+        
+        $option_wallet = array('conditions' => array('User.id' => $userid));
+        $Wallet_details = $this->User->find('first',$option_wallet);
+        
+        
+        //pr($package);
+        $this->set(compact('package','Wallet_details'));
+    
+            
+            
+            
+        }
+        
+        
+        public function package_details()
+        {
+        
+            $title_for_layout = 'Payment';
+            $this->loadModel('Package');
+            
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid)){
+                $this->redirect('/');
+            }
+            
+            if($this->request->is('post')) {
+                
+                 $pid = $this->request->data['Subscriber']['package_id'];
+                    
+                       
+                   } 
+                 
+            
+        $options = array('conditions' => array('Package.id' => $pid));
+        $package_details = $this->Package->find('first', $options);
+            
+         $this->set(compact('title_for_layout','package_details'));
+        }
+        
+        
+        
+        
+        
+        public function payment($id)
+        {
+        
+            $title_for_layout = 'Payment';
+            $this->loadModel('Package');
+            
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid)){
+                $this->redirect('/');
+            }
+            
+            if($this->request->is('post')) {
+                
+                 if($this->request->data['Package']['payment']=='paypal'){
+                       
+                       return $this->redirect(array('action' => 'payment_process/'.$id));
+                       
+                       
+                   } 
+                   
+                   else{
+                       $this->Session->setFlash('Order not placed successfully.','default', array('class' => 'error'));
+                       
+                   }
+                   
+                                    
+            } 
+           
+          
+            $this->set(compact('title_for_layout','coupon_details'));
+        }
+        
+        
+        
+        public function payment_process($id){
+            
+      $this->layout = false;
+      
+      $this->loadModel('SiteSetting');
+      $this->loadModel('Package');
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+        $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+        return $this->redirect(array('action' => 'login'));
+      }
+
+
+  $product = $this->Package->find('first', array('conditions' => array('Package.id' => $id),'fields'=>array('Package.price','Package.id')));
+  //pr($product);exit;
+  $paypalid = $this->SiteSetting->find('first');
+    
+  //nits.bikash@gmail.com
+    //pr($paypalid);exit();
+    $this->set(compact('product','userid','paypalid'));
+  }
+  
+  
+  public function purchase_payment(){
+       
+       
+    $this->autoRender = false;
+    $this->layout = false;
+    $this->loadModel('Subscriber');
+    $this->loadModel('User');
+    $this->loadModel('Package');
+    
+    $post = array();
+        foreach ($_POST as $field => $value) {
+            array_push($post,urlencode($field)."=".urlencode($value));
+        }
+
+        $id = $_POST["txn_id"];
+        
+        
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://www.sandbox.paypal.com/cgi-bin/webscr");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&",$post)."&cmd=_notify-validate");
+        $post = curl_exec($ch);
+
+        curl_close($ch);
+        
+        //$this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$_POST["payment_status"]);           
+
+    if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed')
+      {
+        
+        
+          $custom = explode('_',$_POST["custom"]); 
+          
+         $userid= $custom[0];
+         $couponid =$custom[1];
+         
+           $options_cart = array('conditions' => array('Package.id' => $couponid));
+           $tempid = $this->Package->find('first', $options_cart);
+           
+                //pr($cart);exit;
+                
+                $this->request->data['Subscriber']['user_id']= $userid;
+                $this->request->data['Subscriber']['package_id']=$couponid;
+                $this->request->data['Subscriber']['payment_type']='Paypal';
+                $this->request->data['Subscriber']['price']=$tempid['Package']['price'];
+                $this->request->data['Subscriber']['payment_type']='paypal';
+                $this->request->data['Subscriber']['transaction_id']=$id;
+                $this->request->data['Subscriber']['subscription_date']=date('Y-m-d');
+                
+                $this->Subscriber->create(); 
+               if($this->Subscriber->save($this->request->data)){
+                   
+                 
+               $options = array('conditions' => array('User.id' => $userid));
+               $user_deal_coupon = $this->User->find('first', $options);    
+                   
+                   
+                $this->request->data['User']['id']= $userid;
+                $this->request->data['User']['total_deal']=$user_deal_coupon['User']['total_deal'] + $tempid['Package']['no_deal'];
+                $this->request->data['User']['total_coupon']= $user_deal_coupon['User']['total_coupon'] +$tempid['Package']['no_coupon']; 
+                   
+                  $this->User->save($this->request->data); 
+                  
+               }
+               
+               
+      }
+
+
+  }
+    
+   public function success_payment(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+
+  }
+        
+    public function cancel(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+     
+  }
+        
+        
+        
+        
+        
+        
 
 }

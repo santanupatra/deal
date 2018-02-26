@@ -31,6 +31,13 @@
                             <a <?php if($this->params['controller']=='products' && $this->params['action']=='order_list'){?> class="active" <?php } ?> href="<?php echo($this->webroot);?>products/order_list"><i class="fa fa-fw fa-cube"></i> My Order</a>
                         </li> 
                         
+                        
+                        <li>
+                            <a <?php if($this->params['controller']=='packages' && $this->params['action']=='wallet_details'){?> class="active" <?php } ?> href="<?php echo($this->webroot);?>packages/wallet_details"><i class="fa fa-fw fa-cube"></i> My Wallet</a>
+                        </li>
+                        
+                        
+                        
         </ul>
     </div>
 </div>

@@ -236,7 +236,7 @@ class UsersController extends AppController {
         
         public function contactus(){
             
-          
+            $this->loadModel('User');
 	  
 	  if ($this->request->is(array('post'))) 
 	  {
@@ -252,10 +252,15 @@ class UsersController extends AppController {
 
 			   $mail_body =str_replace(array('[NAME]','[EMAIL]','[PHONE]','[MESSAGE]'),$name,$email,$phone,$message,$EmailTemplate['EmailTemplate']['content']);
 
-			   $this->send_smtpmail($this->request->data['User']['forgotemail'],'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+			  $res= $this->send_smtpmail($email,'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+                           
+                           if($res){
 
-			   $this->Session->setFlash('A new password has been sent to your mail. Please check mail.', 'default', array('class' => 'success'));
-			   return $this->redirect(array('action'=> 'login'));
+			   $this->Session->setFlash('Your query successfully send.', 'default', array('class' => 'success'));
+                           }else{
+                              $this->Session->setFlash('Internal error. Please try after sometimes.', 'default', array('class' => 'error')); 
+                           }
+			   //return $this->redirect(array('action'=> 'login'));
 		     }		    
 	           
           } 

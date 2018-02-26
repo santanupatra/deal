@@ -22,7 +22,7 @@ class ProductsController extends AppController {
         parent::beforeFilter();
         $this->set('currency_value', $this->currency_value);
 
-        $this->Auth->allow('ajax_add_to_cart','fetch_size' ,'filter_search', 'ajax_add_to_wishlist', 'product_details', 'search_result', 'search', 'search_option', 'appinventorylist', 'index', 'app_product_list', 'product_list', 'appProductDetails', 'category_related_product', 'subcategory_related_product', 'prodoct_related_rating', 'shop_related_rating', 'shop_related_positive_rating', 'get_product_img', 'get_product_main_image', 'getwishlistcount', 'getcatprd_cnt', 'admin_color_list', 'admin_color_add','admin_fetchshop','details','success','cancel');
+        $this->Auth->allow('ajax_add_to_cart','fetch_size' ,'filter_search', 'ajax_add_to_wishlist', 'product_details', 'search_result', 'search', 'search_option', 'appinventorylist', 'index', 'app_product_list', 'product_list', 'appProductDetails', 'category_related_product', 'subcategory_related_product', 'prodoct_related_rating', 'shop_related_rating', 'shop_related_positive_rating', 'get_product_img', 'get_product_main_image', 'getwishlistcount', 'getcatprd_cnt', 'admin_color_list', 'admin_color_add','admin_fetchshop','details','purchase_payment','success','cancel');
     }
 
     /**
@@ -1683,6 +1683,8 @@ class ProductsController extends AppController {
   
   
    public function purchase_payment(){
+       
+       
     $this->autoRender = false;
     $this->layout = false;
     $this->loadModel('Order');
@@ -1693,6 +1695,8 @@ class ProductsController extends AppController {
         }
 
         $id = $_POST["txn_id"];
+        
+        
     
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://www.sandbox.paypal.com/cgi-bin/webscr");
@@ -1709,25 +1713,57 @@ class ProductsController extends AppController {
 
         curl_close($ch);
         
-           
+                  
 
     if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed')
       {
+        
+        
            $custom = explode('_',$_POST["custom"]); 
-           //print_r($custom);exit;
+          //$this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$custom); 
          $userid= $custom[0];
          $couponid =$custom[1];
          
            $options_cart = array('conditions' => array('Coupon.id' => $couponid));
-           $cart = $this->Coupon->find('all', $options_cart);
+           $tempid = $this->Coupon->find('first', $options_cart);
             
-          
-            foreach($cart as $tempid){
+           
+           $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+           $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+           $codeAlphabet.= "0123456789";
+           $max = strlen($codeAlphabet); // edited
+
+
+            for ($i=0; $i < 6; $i++) {
+                    $couponcode .= $codeAlphabet[random_int(0, $max-1)];
+                   
+                }
+           
+           $options = array('conditions' => array('Order.coupon_code' => $couponcode));
+           $code_ex = $this->Order->find('all', $options);
+           
+           if(count($code_ex) > 0){
+               
+              $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+           $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+           $codeAlphabet.= "0123456789";
+           $max = strlen($codeAlphabet); // edited
+
+
+            for ($i=0; $i < 6; $i++) {
+                    $couponcode .= $codeAlphabet[random_int(0, $max-1)];
+                   
+                } 
+               
+           }
+           
+          else{
+            
                 //pr($cart);exit;
                 
                 $this->request->data['Order']['user_id']= $userid;
                 $this->request->data['Order']['coupon_id']=$couponid;
-                $this->request->data['Order']['coupon_code']=1234;
+                $this->request->data['Order']['coupon_code']=$couponcode;
                 $this->request->data['Order']['coupon_owner_id']=$tempid['Coupon']['user_id'];
                 $this->request->data['Order']['payment_type']='Paypal';
                 $this->request->data['Order']['total_amount']=$tempid['Coupon']['amount'];
@@ -1737,8 +1773,8 @@ class ProductsController extends AppController {
                 
                 $this->Order->create(); 
                $this->Order->save($this->request->data);
-            }
-              
+            
+           }  
             
       }
 

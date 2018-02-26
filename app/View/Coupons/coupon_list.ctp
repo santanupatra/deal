@@ -40,8 +40,9 @@
       <div class="row">
         <div class="item col-xs-12 col-sm-12 col-md-3">
           <div class="coupon-list-left">
-            <div class="coupon-list-left-logo"> <img alt="" src="img/logo.png" class="img-responsive" >
-              <p> <a href="#"> Category Name </a> </p>
+              
+              <div class="coupon-list-left-logo"> <img alt="" src="<?php echo $this->webroot.'category_images/'.$category['Category']['image'];?>" class="img-responsive" width="50px" height="50px">
+              <p> <a href="#"> <?php echo $category['Category']['name'];?> </a> </p>
               <div class="coupon-ava">
                 <h1>221</h1>
                 <p>Coupons Available</p>
