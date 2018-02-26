@@ -51,14 +51,19 @@ class ProductsController extends AppController {
         $this->set('products', $this->Paginator->paginate('Product'));
     }
 
-    public function product_list($cid = null) {
+    public function product_list($type = null,$id = null) {
         $this->loadModel('Category');
         $this->loadModel('Shop');
         $condition = array();
-        if(isset($cid) && $cid != ""){
-          $cid = base64_decode($cid);
+        if($type ='c' && isset($id) && $id != ""){
+          $cid = base64_decode($id);
           $condition[] = array('category_id' => $cid);
         }
+        elseif($type ='s' && isset($id) && $id != ""){
+          $sid = base64_decode($id);
+          $condition[] = array('shop_id' => $sid);
+        }
+
         if(isset($this->request->data['Product']['category_id']) && $this->request->data['Product']['category_id'] !=""){
           $condition[] = array('category_id' => $this->request->data['Product']['category_id']);
           $cid = $this->request->data['Product']['category_id'];

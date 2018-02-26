@@ -65,7 +65,7 @@
 
         <div class="item col-xs-12 col-sm-12 col-md-9">
           <div class="coupon-list-right">  
-            <form method="post" action="<?php echo $this->webroot; ?>products/product_list" id="frmLogin">
+            <form method="post" action="<?php echo $this->webroot; ?>coupons/coupon_list" id="frmLogin">
                 <div class="row">
                 
                     <div class="col-lg-4">

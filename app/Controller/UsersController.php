@@ -17,7 +17,7 @@ class UsersController extends AppController {
     public $components = array('Paginator','Session');
     public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus');
+	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus', 'loyalty');
    }
 /**
  * index method
@@ -47,6 +47,10 @@ class UsersController extends AppController {
           
        	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops'));
                 
+    }
+
+    public function loyalty(){
+
     }
    
 	public function admin_index() {  

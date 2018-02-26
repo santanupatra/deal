@@ -151,7 +151,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                             foreach ($dealcategory as $dcat) {
                                             ?>
                                               <li class="list-group-item rounded-0 p-1">
-                                                <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($dcat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $dcat['Category']['name'];?>                                             
+                                                <a href="<?php echo $this->webroot.'products/product_list/c/'.base64_encode($dcat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $dcat['Category']['name'];?>                                             
                                                 </a>
                                               </li>
                                            <?php   
@@ -173,7 +173,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                           foreach ($allshops as $shop) {
                                          ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
+                                            <a href="<?php echo $this->webroot.'products/product_list/s/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
                                                 <?php echo $shop['Shop']['name'];?>
                                             </a>
                                             </li>
@@ -230,7 +230,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                             foreach ($couponcategory as $ccat) {
                                             ?>
                                               <li class="list-group-item rounded-0 p-1">
-                                                <a href="<?php echo $this->webroot.'coupons/coupon_list/'.base64_encode($ccat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $ccat['Category']['name'];?>                                             
+                                                <a href="<?php echo $this->webroot.'coupons/coupon_list/c/'.base64_encode($ccat['Category']['id']);?>" class="text-capitalize text-dark"><?php echo $ccat['Category']['name'];?>                                             
                                                 </a>
                                               </li>
                                            <?php   
@@ -252,7 +252,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                           foreach ($allshops as $shop) {
                                          ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="<?php echo $this->webroot.'products/product_list/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
+                                            <a href="<?php echo $this->webroot.'products/coupon_list/s/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
                                                 <?php echo $shop['Shop']['name'];?>
                                             </a>
                                             </li>
@@ -269,14 +269,8 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                       
                       
                       <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
-                           all
-                        </a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
+                        <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>users/loyalty">Loyalty</a>
+                        
                       </li>
                       <li class="nav-item">
                         <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>users/contactus"> contacts</a>
