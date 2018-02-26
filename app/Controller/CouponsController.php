@@ -288,7 +288,7 @@ class CouponsController extends AppController {
             return $this->redirect(array('action' => 'index'));
 	}
 
-    public function coupon_list($id){
+    public function coupon_list($type= null, $id=null){
             $this->loadModel('Coupon');
             $this->loadModel('Category');
             $this->loadModel('Shop');
@@ -300,7 +300,7 @@ class CouponsController extends AppController {
             $data = date('Y-m-d');
             $this->paginate = array(
             'limit' =>25,
-            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data,'Coupon.category_id >=' => $id),
+            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data,'Coupon.category_id' => $id),
             'order' => array(
                     'Coupon.id' => 'desc'
                 ) 
