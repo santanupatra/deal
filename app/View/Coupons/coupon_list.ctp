@@ -134,7 +134,7 @@
                     
                       <?php }else{ ?>
                     
-                    <button type="button" class="btn btn-success get-coupon" data-toggle="modal" data-target="#myModal_store">Get Coupon Code</button>
+                    <button type="button" class="btn btn-success get-coupon" data-toggle="modal" data-target="#myModal_store_<?php echo $coupon['Coupon']['id']?>">Get Coupon Code</button>
                     
                       <?php } ?>
                   </div>
@@ -202,10 +202,12 @@
 
 
 
-
+            <?php
+              foreach($coupons as $coupon){
+            ?>
 
 <!-- Modal for store redirect-->
-                    <div class="modal fade" id="myModal_store" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="myModal_store_<?php echo $coupon['Coupon']['id']?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -213,7 +215,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                           </div>
                           <div class="modal-body get-coupon-modal">
-                            <button type="button" class="btn btn-success get-coupon">Redeem Coupon Code</button>
+                              <a href="<?php echo $coupon['Coupon']['link']?>" class="btn btn-success get-coupon">Redeem Coupon Code</a>
                             <h5>Amazon: Up To 75% Off | Amazon Promo Codes & Coupons February 2018</h5>
                             <p> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                           </div>
@@ -228,3 +230,5 @@
                         </div>
                       </div>
                     </div>
+
+              <?php }?>
