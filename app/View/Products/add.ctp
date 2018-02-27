@@ -1,4 +1,8 @@
-
+<style>
+        .timepicker .title {
+         dispaly: none;   
+        }
+        </style>
 
     
     <!--  my account  -->
@@ -119,7 +123,11 @@
 
                                               <?php echo $this->Form->input('end_date', array('required' => 'required', 'id' => 'toDate', 'type' => 'text', 'label' => false, 'class' => 'form-control')); ?>
                                           </div>
+                                          
+                                          
+                                          
                                       </div>
+                                      
                                       
                                       
                                       <?php 
@@ -140,7 +148,12 @@
           </div>
       </section>
     
-   
+    
+    
+    
+  
+    
+    
    
      <?php echo $this->Html->script('ckeditor/ckeditor');?>
  <script type="text/javascript">

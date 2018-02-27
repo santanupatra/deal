@@ -1,4 +1,6 @@
-  <div class="clearfix"></div>
+ 
+
+<div class="clearfix"></div>
 
   <div class="container">
     <div class="row">
@@ -16,10 +18,12 @@
 
   <section class="login-section">
     <div class="container">
+        <form class="mt-4" method="post" action="<?php echo($this->webroot);?>users/registration" id="frmRegister" name="frmRegister">
       <div class="row">
+          
         <div class="col-lg-6 col-xs-12 col-sm-8 col-md-6">
           <div class="login-form mt-sm-5 mb-sm-5">
-            <form class="mt-4" method="post" action="<?php echo($this->webroot);?>users/registration" id="frmRegister" name="frmRegister">
+            
               <fieldset>
                 <h2>Your Personal Details</h2>
                 <hr class="colorgraph">
@@ -66,11 +70,12 @@
                 <hr class="colorgraph">
 
                 <div class="row">
+                  
                   <div class="col-xs-6 col-sm-6 col-md-6">
-                  <a href="<?php echo($this->webroot);?>users/login" class="btn btn-sm bg-dark text-white btn-block rounded-0">Log In</a>
+                    <input type="submit" class="btn btn-sm bg-dark text-white btn-block rounded-0" value="Register">
                   </div>
-                  <div class="col-xs-6 col-sm-6 col-md-6">
-                    <input type="submit" class="btn btn-sm bg-light btn-block rounded-0" value="Register">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+
                   </div>
                 </div> 
                                   
@@ -81,7 +86,7 @@
 
         <div class="col-lg-6 col-xs-12 col-sm-8 col-md-6">
           <div class="login-form mt-sm-5 mb-sm-5">
-            <form>
+            
               <fieldset>
                 <h2>Your Address</h2>
                 <hr class="colorgraph">
@@ -156,15 +161,16 @@
                 </div>
                 <hr class="colorgraph mt-0">
               </fieldset>
-            </form>
+           
           </div>
         </div>
-        </form>
+         
       </div>
+        </form>
     </div>
   </section>
   <div class="clearfix"></div>
-    
+   
     <!--   footer   -->
     <script type="text/javascript">
     $( document ).ready( function () {
@@ -175,6 +181,10 @@
           'data[User][first_name]': "required",
           'data[User][last_name]': "required",
           'data[User][mobile_number]': "required",
+          'data[User][address]': "required",
+          'data[User][state]': "required",
+          'data[User][city]': "required",
+          'data[User][country]': "required",
           'data[User][email]': {
             required: true           
           },
@@ -194,7 +204,12 @@
           'data[User][last_name]': "Please enter your lastname",
           'data[User][email]': "Please enter a valid email address", 
           'data[User][mobile_number]': "Please enter a valid mobileno.", 
-          'data[User][type]': "Please select user type",           
+          'data[User][type]': "Please select user type",  
+          'data[User][address]': "Please enter your address",
+          'data[User][state]': "Please enter your state",
+          'data[User][city]': "Please enter city", 
+          'data[User][country]': "Please enter country", 
+          
           'data[User][password]': {
             required: "Please provide a password",
             minlength: "Your password must be at least 6 characters long"

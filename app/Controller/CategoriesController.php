@@ -459,7 +459,10 @@ class CategoriesController extends AppController {
                     $redirectid='';
 				}
 				$this->request->data['Category']['id']=$id;
-                        
+                                $this->request->data['Category']['is_popular']=$this->request->data['Category']['is_popular'];
+                                if($this->request->data['Category']['is_popular']== ""){
+                                $this->request->data['Category']['is_popular']= 0;
+                                }
 				if ($this->Category->save($this->request->data)) 
 				{                    
 					$this->Session->setFlash('The category has been saved.', 'default', array('class' => 'success'));

@@ -48,6 +48,10 @@ if(count($pass_data)>0){
                                           <label>Paypal Email</label>
                                           <input type="text" class="form-control" name="data[User][paypal_business_email]" value="<?=$user['User']['paypal_business_email']?>" placeholder="Enter paypal id here">
                                       </div>
+                                      <div class="form-group">
+                                      <input type="checkbox"  name="data[User][is_loyalty]" value='1' <?php if($user['User']['is_loyalty']==1){echo "checked";}?>> Loyalty
+                                      </div>
+                                      
 
                                       <div class="form-group">
                                           <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>

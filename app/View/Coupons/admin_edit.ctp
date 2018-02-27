@@ -91,6 +91,9 @@
             <?php
                 echo $this->Form->input('id');
                 echo $this->Form->input('name',array('required'=>'required','label'=>'Coupon Name'));
+                
+                echo $this->Form->input('description', array('label' => 'Coupon Description', 'class' => 'ckeditor'));
+                
             ?>
                 <div class="input text">
                     <label for="CouponCouponType">Type of Uses</label>
@@ -189,4 +192,11 @@
             yearRange: "-150:+1"
         });
     });
+</script>
+
+<?php echo $this->Html->script('ckeditor/ckeditor'); ?>
+<script type="text/javascript">
+    CKEDITOR.config.toolbar = 'Custom_medium';
+    CKEDITOR.config.height = '200';
+    CKEDITOR.replace('PagePDesc');
 </script>

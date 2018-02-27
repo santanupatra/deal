@@ -15,22 +15,22 @@ class City extends AppModel {
 		
 	);
 
-	public $belongsTo = array(
-		'Country' => array(
-		  'className' => 'Country',
-		  'foreignKey' => 'country_id',
-		  'conditions' => '',
-		  'fields' => '',
-		  'order' => ''
-		),
-		'State' => array(
-		  'className' => 'State',
-		  'foreignKey' => 'state_id',
-		  'conditions' => '',
-		  'fields' => '',
-		  'order' => ''
-		)
-		
-	);
+//	public $belongsTo = array(
+//		'Country' => array(
+//		  'className' => 'Country',
+//		  'foreignKey' => 'country_id',
+//		  'conditions' => '',
+//		  'fields' => '',
+//		  'order' => ''
+//		),
+//		'State' => array(
+//		  'className' => 'State',
+//		  'foreignKey' => 'state_id',
+//		  'conditions' => '',
+//		  'fields' => '',
+//		  'order' => ''
+//		)
+//		
+//	);
 	       
 }

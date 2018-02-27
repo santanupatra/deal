@@ -82,6 +82,12 @@
 <?php echo $this->Form->input('name', array('required' => 'required', 'label' => false, 'class' => 'form-control')); ?>
                                 </div>
                             </div>
+                            
+                            
+                            <div class="form-group">
+                                          <label>Description</label>
+                                          <textarea class="form-control ckeditor" name="data[Coupon][description]"  placeholder="Description here"></textarea>
+                                      </div>
 
 
                             <div class="form-group">
@@ -155,7 +161,18 @@
         text-align: left;
     }
 </style>
-
+<?php echo $this->Html->script('ckeditor/ckeditor');?>
+ <script type="text/javascript">
+       CKEDITOR.config.toolbar = 'MyToolbar';
+    CKEDITOR.config.toolbar_MyToolbar = 
+      [
+         ['Newplugin', 'Preview'],
+         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Scayt'],
+         ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat']
+      ];
+      CKEDITOR.config.height = '200';
+      CKEDITOR.replace('PagePDesc');
+  </script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
 

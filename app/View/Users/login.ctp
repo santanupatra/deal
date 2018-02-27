@@ -60,10 +60,10 @@
                   <hr class="colorgraph">
                   <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                        <input type="submit" class="btn btn-sm bg-light btn-block rounded-0" value="Log In">
+                        <input type="submit"  class="btn btn-sm bg-dark text-white btn-block rounded-0" value="Log In">
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">                      
-                      <input type="button" class="btn btn-sm bg-dark text-white btn-block rounded-0" value="Register">
+                      <input type="button" class="btn btn-sm bg-light btn-block rounded-0"  value="Register">
                     </div>
                   </div>
                 </fieldset>
