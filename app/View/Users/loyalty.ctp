@@ -18,15 +18,24 @@
       <div class="row">
         <div class="col-md-4">
           <div class="loyality-leftdiv card mt-2 mb-2">
-            <h4 class="text-center text-dark bg-light p-2 text-uppercase ">saller Name</h4>
+            <h4 class="text-center text-dark bg-light p-2 text-uppercase ">seller Name</h4>
             <ul class="list-group">
-              <li class="list-group-item">Cras justo odio <span class="badge badge-danger badge-pill float-md-right">14</span></li>
-              <li class="list-group-item">Dapibus ac facilisis in <span class="badge badge-danger badge-pill float-md-right">14</span></li>
+                
+                <?php if(!empty($sellers)){
+                    
+                 foreach($sellers as $seller){?>
+              <li class="list-group-item"><?php echo $seller['User']['first_name'].' '.$seller['User']['last_name']?></li>
+              
+                <?php } }else{ ?>
+                    
+                    <li class="list-group-item">No seller found. </li>
+             <?php   } ?>
+<!--              <li class="list-group-item">Dapibus ac facilisis in <span class="badge badge-danger badge-pill float-md-right">14</span></li>
               <li class="list-group-item">Morbi leo risus <span class="badge badge-danger badge-pill float-md-right">14</span></li>
               <li class="list-group-item">Porta ac consectetur ac <span class="badge badge-danger badge-pill float-md-right">14</span></li>
               <li class="list-group-item">Vestibulum at eros <span class="badge badge-danger badge-pill float-md-right">14</span></li>
               <li class="list-group-item">Cras justo odio <span class="badge badge-danger badge-pill float-md-right">14</span></li>
-              <li class="list-group-item">Dapibus ac facilisis in <span class="badge badge-danger badge-pill float-md-right">14</span></li>
+              <li class="list-group-item">Dapibus ac facilisis in <span class="badge badge-danger badge-pill float-md-right">14</span></li>-->
             </ul>            
           </div>
         </div>

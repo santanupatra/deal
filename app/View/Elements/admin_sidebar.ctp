@@ -69,6 +69,14 @@ if(count($pass_data)>0){
         
         
         
+         <li <?php if($this->params['controller']=='users' && ($this->params['action']=='admin_location_list' || $this->params['action']=='admin_location_edit' ||  $this->params['action']=='admin_location_add'))
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/users/location_list"><?php if($this->params['controller']=='users' && ($this->params['action']=='admin_location_list' || $this->params['action']=='admin_location_edit' ||  $this->params['action']=='admin_location_add'))
+        {?><i class="icon-chevron-right"></i><?php } ?><span <?php if($this->params['controller']=='users' && ($this->params['action']=='admin_location_list' || $this->params['action']=='admin_location_add' || $this->params['action']=='admin_location_edit' ))
+        {?>class="badge badge-info1 pull-right"<?php }else{ ?>class="badge badge-info pull-right"<?php } ?>></span> Location Management</a>
+	</li>
+        
+        
+        
         
         
         

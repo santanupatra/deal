@@ -35,7 +35,11 @@ $cakeDescription = __d('cake_dev', 'DEAL');
     <?php echo $this->Html->css('flexslider'); ?>
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<?php echo $this->Html->script('jquery.validate'); ?> 
+    
   </head>
   <body>
      <header>
@@ -299,7 +303,9 @@ $cakeDescription = __d('cake_dev', 'DEAL');
         </div>
       </div>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+      
+
+   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
     
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -307,7 +313,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
   
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.flexslider'); ?> 
-    <?php echo $this->Html->script('jquery.validate'); ?> 
+    
   
    <script>
   $( function() {

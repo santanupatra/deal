@@ -12,7 +12,7 @@
                            echo $this->Form->input('hid_img',array('type'=>'hidden','value'=>$this->request->data['Category']['image']));
 				echo $this->Form->input('id');
 				echo $this->Form->input('name',array('required'=>'required'));
-                                
+                                echo $this->Form->input('description', array('label' => 'Description', 'class' => 'ckeditor'));
                                 echo $this->Form->input('image',array('type'=>'file'));
                              ?>   
 				<div>
@@ -36,9 +36,16 @@
 				echo $this->Form->input('is_active');
 				echo $this->Form->input('parent_id',array('type' => 'hidden'));        
 			   ?>
+                            <input type="checkbox" name="data[Category][is_popular]" value='1' <?php if($this->request->data['Category']['is_popular']==1){echo 'checked';}?>> Show in Home page
 			</fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>
 			</div>
 		</div>
 	</div>
 </div>
+<?php echo $this->Html->script('ckeditor/ckeditor'); ?>
+<script type="text/javascript">
+    CKEDITOR.config.toolbar = 'Custom_medium';
+    CKEDITOR.config.height = '200';
+    CKEDITOR.replace('PagePDesc');
+</script>

@@ -99,6 +99,16 @@ foreach ($cities as $city) {
 <?php echo $this->Form->input('name', array('required' => 'required', 'label' => false, 'class' => 'form-control')); ?>
                                         </div>
                                     </div>
+                                    
+                                    
+                                    
+                                    
+                                    <div class="form-group row">
+                                          <label class="col-sm-4 control-label">Description</label>
+                                          <div class="col-sm-6">
+                                          <textarea class="form-control ckeditor" name="data[Coupon][description]"  placeholder="Description here"><?php echo $this->request->data['Coupon']['description'];?></textarea>
+                                          </div>
+                                      </div>
 
 
 
@@ -184,7 +194,18 @@ foreach ($cities as $city) {
         text-align: left;
     }
 </style>
-
+<?php echo $this->Html->script('ckeditor/ckeditor');?>
+ <script type="text/javascript">
+       CKEDITOR.config.toolbar = 'MyToolbar';
+    CKEDITOR.config.toolbar_MyToolbar = 
+      [
+         ['Newplugin', 'Preview'],
+         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Scayt'],
+         ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat']
+      ];
+      CKEDITOR.config.height = '200';
+      CKEDITOR.replace('PagePDesc');
+  </script>
 <script>
     function f(){
     

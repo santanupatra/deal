@@ -1714,22 +1714,22 @@ class ProductsController extends AppController {
   }
   
   
-   public function purchase_payment(){
-       
-       
-    $this->autoRender = false;
-    $this->layout = false;
-    $this->loadModel('Order');
-    $this->loadModel('Coupon');
-    $post = array();
+  public function purchase_payment() {
+
+
+        $this->autoRender = false;
+        $this->layout = false;
+        $this->loadModel('Order');
+        $this->loadModel('Coupon');
+        $post = array();
         foreach ($_POST as $field => $value) {
-            array_push($post,urlencode($field)."=".urlencode($value));
+            array_push($post, urlencode($field) . "=" . urlencode($value));
         }
 
         $id = $_POST["txn_id"];
-        
-        
-    
+
+
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://www.sandbox.paypal.com/cgi-bin/webscr");
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -1738,88 +1738,179 @@ class ProductsController extends AppController {
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&",$post)."&cmd=_notify-validate");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post) . "&cmd=_notify-validate");
         $post = curl_exec($ch);
 
         curl_close($ch);
-        
-                  
 
-    if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed')
-      {
-        
-        
-           $custom = explode('_',$_POST["custom"]); 
-          //$this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$custom); 
-         $userid= $custom[0];
-         $couponid =$custom[1];
-         
-           $options_cart = array('conditions' => array('Coupon.id' => $couponid));
-           $tempid = $this->Coupon->find('first', $options_cart);
+$this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$_POST["payment_status"]); 
+
+        if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed') {
+
+
+            $custom = explode('_', $_POST["custom"]);
             
-           
-           $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-           $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
-           $codeAlphabet.= "0123456789";
-           $max = strlen($codeAlphabet); // edited
+            $userid = $custom[0];
+            $couponid = $custom[1];
+
+            $options_cart = array('conditions' => array('Coupon.id' => $couponid));
+            $tempid = $this->Coupon->find('first', $options_cart);
 
 
-            for ($i=0; $i < 6; $i++) {
-                    $couponcode .= $codeAlphabet[random_int(0, $max-1)];
-                   
+            $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+            $codeAlphabet.= "0123456789";
+            $max = strlen($codeAlphabet); // edited
+
+
+            for ($i = 0; $i < 6; $i++) {
+                $couponcode .= $codeAlphabet[random_int(0, $max - 1)];
+            }
+
+            $options = array('conditions' => array('Order.coupon_code' => $couponcode));
+            $code_ex = $this->Order->find('all', $options);
+
+            if (count($code_ex) > 0) {
+
+                $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+                $codeAlphabet.= "0123456789";
+                $max = strlen($codeAlphabet); // edited
+
+
+                for ($i = 0; $i < 6; $i++) {
+                    $couponcode .= $codeAlphabet[random_int(0, $max - 1)];
                 }
-           
-           $options = array('conditions' => array('Order.coupon_code' => $couponcode));
-           $code_ex = $this->Order->find('all', $options);
-           
-           if(count($code_ex) > 0){
-               
-              $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-           $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
-           $codeAlphabet.= "0123456789";
-           $max = strlen($codeAlphabet); // edited
+            } else {
 
-
-            for ($i=0; $i < 6; $i++) {
-                    $couponcode .= $codeAlphabet[random_int(0, $max-1)];
-                   
-                } 
-               
-           }
-           
-          else{
-            
                 //pr($cart);exit;
-                
-                $this->request->data['Order']['user_id']= $userid;
-                $this->request->data['Order']['coupon_id']=$couponid;
-                $this->request->data['Order']['coupon_code']=$couponcode;
-                $this->request->data['Order']['coupon_owner_id']=$tempid['Coupon']['user_id'];
-                $this->request->data['Order']['payment_type']='Paypal';
-                $this->request->data['Order']['total_amount']=$tempid['Coupon']['amount'];
-                $this->request->data['Order']['payment_type']='paypal';
-                $this->request->data['Order']['transaction_id']=$id;
-                $this->request->data['Order']['payment_date']=date('Y-m-d');
-                
-                $this->Order->create(); 
-               $this->Order->save($this->request->data);
-            
-           }  
-            
-      }
+
+                $this->request->data['Order']['user_id'] = $userid;
+                $this->request->data['Order']['coupon_id'] = $couponid;
+                $this->request->data['Order']['coupon_code'] = $couponcode;
+                $this->request->data['Order']['coupon_owner_id'] = $tempid['Coupon']['user_id'];
+                $this->request->data['Order']['payment_type'] = 'Paypal';
+                $this->request->data['Order']['total_amount'] = $tempid['Coupon']['amount'];
+                $this->request->data['Order']['payment_type'] = 'paypal';
+                $this->request->data['Order']['transaction_id'] = $id;
+                $this->request->data['Order']['payment_date'] = date('Y-m-d');
+
+                $this->Order->create();
+                $this->Order->save($this->request->data);
 
 
-  }
-    
-   public function success_payment(){
+
+
+              /*  //qr code
+                require_once 'phpqrcode/qrlib.php';
+                $PNG_TEMP_DIR = QRB_IMAGE; //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
+                //echo $PNG_TEMP_DIR;exit;
+                //html PNG location prefix
+                $PNG_WEB_DIR = HTP_QRB_IMAGE; //'/var/www/html/gqual/private/phpqrcode/temp/';
+                //ofcourse we need rights to create temp dir
+                if (!file_exists($PNG_TEMP_DIR))
+                    mkdir($PNG_TEMP_DIR);
+
+
+                $filename = $PNG_TEMP_DIR . 'test.png';
+
+                //processing form input
+                //remember to sanitize user input in real-life solution !!!
+                $errorCorrectionLevel = 'L';
+                if (isset($_REQUEST['level']) && in_array($_REQUEST['level'], array('L', 'M', 'Q', 'H')))
+                    $errorCorrectionLevel = $_REQUEST['level'];
+
+                $matrixPointSize = 4;
+                if (isset($_REQUEST['size']))
+                    $matrixPointSize = min(max((int) $_REQUEST['size'], 1), 10);
+
+
+                if (isset($_REQUEST['data'])) {
+
+                    //it's very important!
+                    if (trim($_REQUEST['data']) == '')
+                        die('data cannot be empty! <a href="?">back</a>');
+
+                    // user data
+                    $filename = $PNG_WEB_DIR . 'test' . md5($_REQUEST['data'] . '|' . $errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
+                    $code = QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                } else {
+
+                    //default data
+
+                    $code = QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                }
+
+
+                $this->loadModel('EmailTemplate');
+                $EmailTemplate = $this->EmailTemplate->find('first', array('conditions' => array('EmailTemplate.id' => 21)));
+                $this->loadModel('User');
+                $receveremail = $this->User->find('first', array('conditions' => array('User.id' => $userid)));
+                $couponname = $tempid['Coupon']['name'];
+                $price = $tempid['Coupon']['amount'];
+                $exdate = $tempid['Coupon']['to_date'];
+                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]'), array($couponname, $price, $exdate, $code), $EmailTemplate['EmailTemplate']['content']);
+
+                $this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);*/
+            }
+        }
+    }
+
+    public function success_payment(){
       $userid = $this->Session->read('Auth.User.id');
       if(!isset($userid) && $userid=='')
       {
       $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
       return $this->redirect(array('action' => 'login'));
       }
+      
+      
+        //qr code
+                require_once 'phpqrcode/qrlib.php';
+                $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
+               //echo $PNG_TEMP_DIR;exit;
+                //html PNG location prefix
+                $PNG_WEB_DIR = Configure::read('HTP_QRB_IMAGE'); //'/var/www/html/gqual/private/phpqrcode/temp/';
+                //ofcourse we need rights to create temp dir
+                if (!file_exists($PNG_TEMP_DIR))
+                    mkdir($PNG_TEMP_DIR);
+
+
+                $filename = $PNG_TEMP_DIR . '/' .'test.png';
+
+                //processing form input
+                //remember to sanitize user input in real-life solution !!!
+                $errorCorrectionLevel = 'L';
+                if (isset($_REQUEST['level']) && in_array($_REQUEST['level'], array('L', 'M', 'Q', 'H')))
+                    $errorCorrectionLevel = $_REQUEST['level'];
+
+                $matrixPointSize = 4;
+                if (isset($_REQUEST['size']))
+                    $matrixPointSize = min(max((int) $_REQUEST['size'], 1), 10);
+
+
+                if (isset($_REQUEST['data'])) {
+
+                    //it's very important!
+                    if (trim($_REQUEST['data']) == '')
+                        die('data cannot be empty! <a href="?">back</a>');
+
+                    // user data
+                    $filename = $PNG_WEB_DIR . '/' .'test' . md5($errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
+                    
+                    
+                    $code = QRcode::png("1234", $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                } else {
+
+                    $code = QRcode::png("1234", $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                }
+
+
+                //print_r($code); 
+      
+      
 
   }
         

@@ -1046,16 +1046,15 @@ class ShopsController extends AppController {
          $this->request->data['User']['first_name']=$this->request->data['User']['first_name'];
          $this->request->data['User']['last_name']=$this->request->data['User']['last_name'];
          $this->request->data['User']['email']=$this->request->data['User']['email'];
-         
-         $this->request->data['User']['company_name']=$this->request->data['User']['company_name'];
          $this->request->data['User']['mobile_number']=$this->request->data['User']['mobile_number'];
-         
-         $this->request->data['User']['dba'] = $this->request->data['User']['dba'];
-         $this->request->data['User']['ein'] = $this->request->data['User']['ein'];
          $this->request->data['User']['type']='V';
          $this->request->data['User']['id'] = $this->request->data['User']['id'];
          $this->request->data['User']['is_active'] = $this->request->data['User']['is_active'];
-         $this->request->data['User']['percentage_id'] = $this->request->data['User']['percentage_id'];
+         
+         if($this->request->data['User']['is_loyalty']==""){
+             
+             $this->request->data['User']['is_loyalty'] = 0;
+         }
          
          if ($this->User->save($this->request->data)) 
           {
@@ -1085,10 +1084,8 @@ class ShopsController extends AppController {
          $this->request->data['User']['last_name']=$this->request->data['User']['last_name'];
          $this->request->data['User']['email']=$this->request->data['User']['email'];
        
-         $this->request->data['User']['company_name']=$this->request->data['User']['company_name'];
          $this->request->data['User']['mobile_number']=$this->request->data['User']['mobile_number'];
-         $this->request->data['User']['dba']=$this->request->data['User']['dba'];
-         $this->request->data['User']['ein']=$this->request->data['User']['ein'];
+         
 		}
                 $optionuser = array('conditions' => array('User.is_active'  => 1,'User.is_admin' => 0), 'fields' => array('User.id','User.name'));
                 $users = $this->User->find('list',$optionuser);

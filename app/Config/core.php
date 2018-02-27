@@ -410,6 +410,13 @@ $productuploadPath = WWW_ROOT . $productimagesFolder;
 $message_imgFolder = "message_img";
 $message_img_uploadPath = WWW_ROOT . $message_imgFolder;
 
+$qr_imgFolder = "qr_images";
+$qr_img_uploadPath = WWW_ROOT . $qr_imgFolder;
+
+
+$htp_qr_imgFolder = "htp_qr_images";
+$htpqr_img_uploadPath = WWW_ROOT . $htp_qr_imgFolder;
+
 //$uploadFolderCatagory = "catagory_images";
 //$uploadPathCatagory = WWW_ROOT . $uploadFolderCatagory;
 
@@ -421,6 +428,9 @@ Configure::write(array(
     'CONTACT_EMAIL'=>'contact@widding.com',
     'UPLOAD_USER_IMG_PATH'=>$uploadPath,
     
+    //qr images
+    'QRB_IMAGE'=>$qr_img_uploadPath,
+    'HTP_QRB_IMAGE'=>$htpqr_img_uploadPath,
     //'UPLOAD_CATAGORY_IMG_PATH'=>$uploadPathCatagory,
     
     'UPLOAD_USER_LOGO_PATH'=>$uploadPathLogo,

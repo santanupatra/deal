@@ -32,11 +32,12 @@
                     <div class="col-lg-4">
                         <div class="search-btn">
                             <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
-                                <option value="" selected>Location. . . . . . .</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                                <option value="" selected>Select Location . . . . . . .</option>
+                                <?php
+                              foreach ($cities as $city) {
+                                echo '<option value="'.$city['City']['id'].'">'.$city['City']['name'].'</option>';
+                              }
+                            ?> 
                             </select>
                           <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
                         </div>
@@ -185,7 +186,30 @@
                Here
             </h3>
         <div class="card-deck card-home">
+            
+            <?php if(!empty($couponcategory)){ 
+                foreach($couponcategory as $dt){?>
+            
           <div class="card rounded-0">
+            <img class="card-img-top rounded-0" src="<?php echo $this->webroot.'category_images/'.$dt['Category']['image'];?>" alt="Card image cap">
+            <div class="corner-add text-white">
+              <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            </div>
+            <div class="card-block p-2">
+              <h4 class="card-title"><?php echo $dt['Category']['name'];?></h4>
+              <p class="card-text"><?php echo $dt['Category']['description'];?></p>
+            </div>
+
+          </div>
+            
+            <?php } }else{ ?>
+            
+            <div class="card rounded-0">
+                No Coupon available.
+            </div>
+            
+            <?php } ?>
+<!--          <div class="card rounded-0">
             <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
             <div class="corner-add text-white">
               <i class="fa fa-plus-square-o" aria-hidden="true"></i>
@@ -200,8 +224,8 @@
                 <i class="fa fa-plus-square-o" aria-hidden="true"></i>
               </small>
             </div>
-          </div>
-          <div class="card rounded-0">
+          </div>-->
+<!--          <div class="card rounded-0">
             <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
             <div class="corner-add text-white">
               <i class="fa fa-plus-square-o" aria-hidden="true"></i>
@@ -216,23 +240,7 @@
                 <i class="fa fa-plus-square-o" aria-hidden="true"></i>
               </small>
             </div>
-          </div>
-          <div class="card rounded-0">
-            <img class="card-img-top rounded-0" src="img/item1.jpeg" alt="Card image cap">
-            <div class="corner-add text-white">
-              <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-            </div>
-            <div class="card-block p-2">
-              <h4 class="card-title">Lorem ipsum dolor sit amet.</h4>
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted pull-left"><i class="fa fa-clock-o" aria-hidden="true"></i> June 26, 2018</small>
-              <small class="pull-right text-theme">
-                <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-              </small>
-            </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </section>
@@ -273,3 +281,4 @@
         </div>
       </div>
     </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>

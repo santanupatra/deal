@@ -46,6 +46,7 @@
 					echo $this->Form->input('is_active');
                                         
 				?>
+                                <input type="checkbox"  name="data[User][is_loyalty]" value='1'> Loyalty
 				</fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>
 			</div>

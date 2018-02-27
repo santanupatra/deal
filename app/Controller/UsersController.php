@@ -37,19 +37,34 @@ class UsersController extends AppController {
            
 
           $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
-          $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1)));
+          $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1,'type' => 'D')));
           $video = $this->Banner->find("first",array('conditions'=>array('is_active'=> 1)));
 
           $advertise = $this->Advertise->find("first",array('conditions'=>array('status'=> 1)));
 
           $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
 
+          $cities = $this->City->find("all",array('conditions'=>array('is_active'=> 1)));
           
-       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops'));
+          $couponcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'C','is_popular'=> 1)));
+       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops','couponcategory','cities'));
                 
     }
 
     public function loyalty(){
+        
+        
+        $title_for_layout='Loyalty';
+        $this->loadModel('User');
+        
+        
+
+        $sellers = $this->User->find("all",array('conditions'=>array('User.is_active'=> 1,'User.type'=> 'V','User.is_loyalty'=> 1), 'fields'=>array('User.id', 'User.first_name','User.last_name')));
+
+          
+       $this->set(compact('sellers'));
+        
+        
 
     }
    
@@ -803,6 +818,133 @@ class UsersController extends AppController {
         }
         
         
+        
+        //Location management start
+        
+        
+        
+        public function admin_location_list() {	
+            
+                 $this->loadModel('City');
+                
+                $userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+		$title_for_layout = 'Location List';
+                $this->paginate = array(
+			'order' => array(
+				'City.id' => 'desc'
+			),'conditions'=>array('City.is_active'=>1)
+		);
+		
+                
+                $this->Paginator->settings = $this->paginate;
+		$this->set('cities', $this->Paginator->paginate('City'));
+		$this->set(compact('title_for_layout'));
+	}
+
+        public function admin_location_add() {
+            $this->loadModel('City');
+		$title_for_layout = 'Add Location';
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+		    $this->redirect('/admin');
+		}
+		if ($this->request->is(array('post', 'put'))) {
+
+         
+         $this->request->data['City']['name']=$this->request->data['City']['name'];
+         
+        
+         $this->City->create();
+         if ($this->City->save($this->request->data)) 
+          {
+            $this->Session->setFlash('Location added successfully.', 'default', array('class' => 'success'));
+            
+           return $this->redirect(array('action' => 'location_list'));
+          }else 
+          {
+            $this->Session->setFlash(__('Location could not be saved. Please, try again.'));
+          }	
+	        }
+                
+               
+                
+		$is_active = array('0'=>'No','1'=>'Yes');
+	        $this->set(compact('title_for_layout','is_active'));
+	}
+
+        
+        
+        public function admin_location_edit($id = null) {
+                $title_for_layout = 'Edit Location';
+                $this->loadModel('City');
+                
+		$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+		    $this->redirect('/admin');
+		}
+		if ($this->request->is(array('post', 'put'))) 
+		{
+		
+         $this->request->data['City']['name']=$this->request->data['City']['name'];
+         
+         if ($this->City->save($this->request->data)) 
+          {
+            
+           $this->Session->setFlash('Location successfully updated.','default', array('class' => 'success'));
+          } 
+          else 
+          {
+            $this->Session->setFlash(__('Location could not be saved. Please, try again.'));
+          }
+          }
+		else 
+		{
+			$options = array('conditions' => array('City.' . $this->City->primaryKey => $id));
+			$this->request->data = $this->City->find('first', $options);
+			
+         $this->request->data['City']['name']=$this->request->data['City']['name'];
+         
+		}
+               
+		$is_active = array('0'=>'No','1'=>'Yes');
+	        $this->set(compact('title_for_layout','is_active'));
+	}
+
+
+	
+	
+        public function admin_location_delete($id = null) {
+            $this->loadModel('City');
+	   $userid = $this->Session->read('Auth.User.id');
+	   if(!isset($userid) && $userid=='')
+	   {
+		$this->redirect('/admin');
+	   }
+	   $this->City->id = $id;
+	   if (!$this->City->exists()) {
+	      throw new NotFoundException(__('Invalid City.'));
+	   }
+	   if ($this->City->delete($id)) {
+		$this->Session->setFlash('The City has been deleted.', 'default', array('class' => 'success'));
+	   } else {
+		$this->Session->setFlash(__('The City could not be deleted. Please, try again.'));
+	   }
+	   return $this->redirect(array('action' => 'location_list'));
+	}
+	
+	
+        
+        
+        //Location management end
+        
+        
+        
         public function admin_vendor_request_list() {
             $this->loadModel('VendorRequest');
             $userid = $this->Session->read('Auth.User.id');
@@ -941,9 +1083,10 @@ class UsersController extends AppController {
             $this->request->data['User']['last_name'] = $this->request->data['User']['last_name'];
             $this->request->data['User']['email'] = $this->request->data['User']['email'];
             $this->request->data['User']['mobile_number'] = $this->request->data['User']['mobile_number'];
-            $this->request->data['User']['company_name'] = $this->request->data['User']['company_name'];
-            $this->request->data['User']['dba'] = $this->request->data['User']['dba'];
-            $this->request->data['User']['ein'] = $this->request->data['User']['ein'];
+            if($this->request->data['User']['is_loyalty']==""){
+                
+              $this->request->data['User']['is_loyalty']= 0;
+            }
                     
             if ($this->User->save($this->request->data)) {
         				$this->Session->setFlash('Profile successfully updated.','default', array('class' => 'success'));
