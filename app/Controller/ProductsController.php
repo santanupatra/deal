@@ -54,12 +54,13 @@ class ProductsController extends AppController {
     public function product_list($type = null,$id = null) {
         $this->loadModel('Category');
         $this->loadModel('Shop');
+
         $condition = array();
-        if($type ='c' && isset($id) && $id != ""){
+        if($type =='c' && isset($id) && $id != ""){
           $cid = base64_decode($id);
           $condition[] = array('category_id' => $cid);
         }
-        elseif($type ='s' && isset($id) && $id != ""){
+        elseif($type =='s' && isset($id) && $id != ""){
           $sid = base64_decode($id);
           $condition[] = array('shop_id' => $sid);
         }
@@ -74,8 +75,15 @@ class ProductsController extends AppController {
         }
         
         $title_for_layout = 'Product List';
-
-        $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));
+        if(isset($cid) && $cid != ""){
+          $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));
+          $name = $category['Category']['name'];
+        }
+        if(isset($sid) && $sid != ""){
+          $shop = $this->Shop->find('first', array('conditions' => array('Shop.id' => $sid)));
+          $name = $shop['Shop']['name'];
+        }
+        
 
         $this->paginate = array('conditions' => $condition, 'limit' => 10, 'order' => array('Product.id' => 'desc'),
         );
@@ -87,7 +95,7 @@ class ProductsController extends AppController {
 
         $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
 
-        $this->set(compact('category', 'allcategory', 'shops'));
+        $this->set(compact('name', 'allcategory', 'shops'));
     }
 
     public function details($id){
