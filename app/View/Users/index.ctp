@@ -1,4 +1,5 @@
 <section class="home-after-header">
+    <div id="AjaxMsgFrom"></div>
         <section class="filter-home py-5 mb-5">
             <div class="container">
                 <h3 class="text-white mb-4 text-uppercase">You will not miss any great discount never ever again!</h3>
@@ -191,7 +192,7 @@
                 foreach($couponcategory as $dt){?>
             
           <div class="card rounded-0">
-            <img class="card-img-top rounded-0" src="<?php echo $this->webroot.'category_images/'.$dt['Category']['image'];?>" alt="Card image cap">
+              <a href="<?php echo $this->webroot.'coupons/coupon_list/c/'.base64_encode($dt['Category']['id']);?>"><img class="card-img-top rounded-0" src="<?php echo $this->webroot.'category_images/'.$dt['Category']['image'];?>" alt="Card image cap"></a>
             <div class="corner-add text-white">
               <i class="fa fa-plus-square-o" aria-hidden="true"></i>
             </div>
@@ -272,8 +273,10 @@
             <div class="text-center">
               <div class="font-18"><i class="fa fa-envelope-o text-red mr-2 " aria-hidden="true"></i>Sign up for our weekly email newsletter with the best money-saving coupons.</div>
                 <div class="search-btn my-3">
-                  <input type="text" class="form-control" placeholder="Email">
-                  <button class="btn btn-src btn-danger">Subscribe</button>
+                    
+                  <input type="email" id="email" class="form-control" placeholder="Email">
+                  <button onclick="subscribe()" class="btn btn-src btn-danger">Subscribe</button>
+                    
                 </div>
               <p class="font-14 pb-0">Sign up for our weekly email newsletter with the best money-saving coupons.</p>
             </div>
@@ -282,3 +285,41 @@
       </div>
     </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+
+<script>
+    
+    function subscribe(){
+        //alert('ok');
+        
+        var email = $('#email').val();
+        if(email!=""){
+       $.ajax({
+                type: 'POST',
+                url: '<?php echo $this->webroot;?>users/subscribe',
+                data: {email: email},
+                //dataType: 'json',
+                success: function(response) {
+                    var obj = jQuery.parseJSON( response );
+                    
+                    $("#AjaxMsgFrom").html('');
+                    if(obj.Ack == 1){
+                        $('#email').val("");
+                        $("html, body").animate({ scrollTop: 0 }, 600);
+                        $("#AjaxMsgFrom").html('<div class="row"><div class="col-md-12"><div class="alert alert-success alert-dismissible" style="text-align: center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Success!</strong> '+obj.data+'</div></div></div>');
+                    }else{
+                       $("html, body").animate({ scrollTop: 0 }, 600);
+                       $("#AjaxMsgFrom").html('<div class="row"><div class="col-md-12"><div class="alert alert-danger alert-dismissible" style="text-align: center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> '+obj.data+'</div></div></div>');
+                        
+                    }
+                   
+                }
+            });
+            }else{
+            
+            alert('Please enter your email');
+            }
+        
+    }
+    
+    
+</script>

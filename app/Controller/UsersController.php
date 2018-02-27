@@ -17,7 +17,7 @@ class UsersController extends AppController {
     public $components = array('Paginator','Session');
     public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus', 'loyalty');
+	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus', 'loyalty','subscribe');
    }
 /**
  * index method
@@ -49,6 +49,45 @@ class UsersController extends AppController {
           $couponcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'C','is_popular'=> 1)));
        	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops','couponcategory','cities'));
                 
+    }
+    
+    
+    
+    function subscribe(){
+        
+        $this->layout = false;
+        $this->loadModel('EmailSubscriber');
+        
+        $email= $_REQUEST['email'];
+        
+        
+         if ($this->request->is('post')) {
+             
+             $this->request->data['email_id'] = $email;
+             $this->request->data['date'] = gmdate('Y-m-d H:i:s');
+             
+            $subscribersExist = $this->EmailSubscriber->find("all",array('conditions'=>array('email_id'=> $email))); 
+            if (!empty($subscribersExist)) {
+                
+            $Msg = array('Ack'=>0, 'data'=> 'Already Subscribed.');
+        }else{
+            
+          $this->EmailSubscriber->create();
+		
+                    
+              if($this->EmailSubscriber->save($this->request->data)){
+                  
+                $Msg = array('Ack'=> 1, 'data'=> 'Successfully Subscribed.');  
+              }  
+            
+        } 
+             
+         }
+        
+              
+       echo json_encode($Msg);
+       exit(); 
+        
     }
 
     public function loyalty(){
