@@ -64,7 +64,7 @@
                               <?php
                                 foreach($popular_category as $pcat){
                                   //print_r($pcat);
-                                  echo '<li><a href="'.$this->webroot.'products/product_list/'.base64_encode($pcat['Category']['id']).'"><img src="'.$this->webroot.'category_images/'.$pcat['Category']['image'].'" /></a></li>';
+                                  echo '<li><a href="'.$this->webroot.'products/product_list/c/'.base64_encode($pcat['Category']['id']).'"><img src="'.$this->webroot.'category_images/'.$pcat['Category']['image'].'" /></a></li>';
                                 }
                               ?>                             
                               
@@ -86,7 +86,7 @@
                             <ul class="cat-list p-0 m-0 list-unstyled">
                               <?php
                                 foreach($allcategory as $cat){
-                                  echo '<li class=""><a href="'.$this->webroot.'products/product_list/'.base64_encode($cat['Category']['id']).'">'.$cat['Category']['name'].'</a></li>';
+                                  echo '<li class=""><a href="'.$this->webroot.'products/product_list/c/'.base64_encode($cat['Category']['id']).'">'.$cat['Category']['name'].'</a></li>';
                                 }
                               ?>
                                                              
