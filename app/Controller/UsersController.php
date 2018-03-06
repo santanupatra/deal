@@ -36,7 +36,7 @@ class UsersController extends AppController {
           $this->loadModel('City');
            
 
-          $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));
+          $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1)));
           $popular_category = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'is_popular' => 1,'type' => 'D')));
           $video = $this->Banner->find("first",array('conditions'=>array('is_active'=> 1)));
 
@@ -95,13 +95,15 @@ class UsersController extends AppController {
         
         $title_for_layout='Loyalty';
         $this->loadModel('User');
-        
+        $this->loadModel('Content');
         
 
         $sellers = $this->User->find("all",array('conditions'=>array('User.is_active'=> 1,'User.type'=> 'V','User.is_loyalty'=> 1), 'fields'=>array('User.id', 'User.first_name','User.last_name')));
 
+        $loyalty = $this->Content->find("first",array('conditions'=>array('Content.id'=> 7)));
+        
           
-       $this->set(compact('sellers'));
+       $this->set(compact('sellers','loyalty'));
         
         
 
@@ -570,13 +572,13 @@ class UsersController extends AppController {
            
     	$fb_id=$this->User->find("first",array('conditions'=>array('User.facebook_id'=>$this->request->data['User']['facebook_id'])));
     	
-    	if(count($fb_id)<1)
+    	if(count($fb_id) < 1)
     	{
           //$email=$this->request->data('email_address');
     		if(isset($this->request->data['User']['email']))
     	{
              $email=$this->User->find("first",array('conditions'=>array('User.email'=>$this->request->data['User']['email'])));
-              if(count($email)<1)
+              if(count($email) < 1)
               {
               	$this->User->save($this->request->data);
               	$user=$this->User->find("first",array('conditions'=>array('User.email'=>$this->request->data['User']['email'])));
@@ -586,7 +588,7 @@ class UsersController extends AppController {
             $this->Auth->login($user['User']);
 				//$this->Auth->login() ;
 			
-				$data['url']= $this->webroot.'users/home';
+				$data['url']= $this->webroot.'users/dashboard';
 				//$data['url']= $this->webroot;
 				$data['is_active']=1;
               }
@@ -606,7 +608,7 @@ class UsersController extends AppController {
               	//$this->Session->write('userid', $user['User']['id']);
                 //$this->Session->write('username', $user['User']['first_name']);
 				//$this->Session->write('user_type', $user['User']['user_type']);
-				$data['url']=Configure::read('SITE_URL').'users/home';
+				$data['url']=Configure::read('SITE_URL').'users/dashboard';
 				//$data['url']=Configure::read('SITE_URL');
 				$data['is_active']=1;//$user['User']['status'];
           }
@@ -616,7 +618,7 @@ class UsersController extends AppController {
 		
             $this->Auth->login($fb_id['User']) ;
 			//pr($this->Session->read());exit;
-				$data['url']=Configure::read('SITE_URL').'users/home';
+				$data['url']=Configure::read('SITE_URL').'users/dashboard';
 				//$data['url']=Configure::read('SITE_URL');
 				$data['status']=1;//$user['User']['status'];
 
@@ -626,6 +628,68 @@ class UsersController extends AppController {
     	echo json_encode($data);
     	
     }
+    
+    
+     public function googlelogin()
+          {
+    	  $this->autoRender = false;
+
+          //pr( $this->request->data['User']['goolge_id']);exit;
+    	   $google_id=$this->User->find("first",array('conditions'=>array('User.google_id'=>$this->request->data['User']['google_id'])));
+
+    	   if(count($google_id)<1)
+    	   {
+           //$email=$this->request->data('email_address');
+    		if(isset($this->request->data['User']['email_address']))
+    	   {
+             $email=$this->User->find("first",array('conditions'=>array('User.email'=>$this->request->data['User']['email_address'])));
+              if(count($email)<1)
+              {
+              	$this->User->save($this->request->data);
+              	$user=$this->User->find("first",array('conditions'=>array('User.email'=>$this->request->data['User']['email_address'])));
+              	$this->Session->write('userid', $user['User']['id']);
+                $this->Session->write('username', $user['User']['first_name']);
+                $this->Session->write('user_type', $user['User']['user_type']);
+                $data['url']= $this->webroot.'users/dashboard';
+                $data['status']=$user['User']['status'];
+              }
+              else
+              {
+                  $data='';
+              }
+                }
+                else
+                {
+                      //pr($this->request->data);exit;
+                      //echo "fghfgh";exit;
+                   $this->User->save($this->request->data);
+                      $user=$this->User->find("first",array('conditions'=>array('User.google_id'=>$this->request->data['User']['google_id'])));
+                      $this->Session->write('userid', $user['User']['id']);
+                      $this->Session->write('username', $user['User']['first_name']);
+                                      $this->Session->write('user_type', $user['User']['user_type']);
+                                      $data['url']=Configure::read('SITE_URL').'users/dashboard';
+                                      $data['status']=1;//$user['User']['status'];
+                }
+              }
+              else
+              {
+              $this->Session->write('userid', $google_id['User']['id']);
+              $this->Session->write('username', $google_id['User']['first_name']);
+				$this->Session->write('user_type', $google_id['User']['user_type']);
+
+				$data['url']=Configure::read('SITE_URL').'users/dashboard';
+				$data['status']=1;//$user['User']['status'];
+
+
+    	      }
+
+    	      echo json_encode($data);
+
+    }
+    
+    
+    
+    
     
     
     function twitterlogin()

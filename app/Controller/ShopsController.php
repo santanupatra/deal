@@ -957,7 +957,7 @@ class ShopsController extends AppController {
                 $this->paginate = array(
 			'order' => array(
 				'User.id' => 'desc'
-			),'conditions'=>array('User.type'=>'V','User.is_active'=>1)
+			),'conditions'=>array('User.type'=>'V')
 		);
 		$this->User->recursive = -1;
                 
@@ -1264,7 +1264,8 @@ class ShopsController extends AppController {
 			{
 				$uploadPath= Configure::read('UPLOAD_SHOP_LOGO_PATH');
 				$extensionValid = array('jpg','jpeg','png','gif');
-				if(in_array($ext[1],$extensionValid)){
+				if(in_array($ext,$extensionValid))
+				{
 					$imageName = rand().'_'.(strtolower(trim($this->request->data['Shop']['logo']['name'])));
 					$full_image_path = $uploadPath . '/' . $imageName;
 					move_uploaded_file($this->request->data['Shop']['logo']['tmp_name'],$full_image_path);
@@ -1273,7 +1274,7 @@ class ShopsController extends AppController {
 				else
 				{
 					$this->Session->setFlash(__('Invalid image type.'));
-					return $this->redirect(array('action' => 'shop_edit',$id));
+					return $this->redirect(array('action' => 'shop_add'));
 				 }
 			 }
 		  }

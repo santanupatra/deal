@@ -392,8 +392,8 @@ $prefix = 'myapp_';
 	'duration' => $duration
 ));*/
 
-//$SITE_URL="http://localhost/widding/";
-$SITE_URL="http://111.93.169.90/team6/widding/";
+$SITE_URL="http://localhost/deal/deal";
+//$SITE_URL="http://111.93.169.90/team6/deal/";
 
 $uploadFolder = "user_images";
 $uploadPath = WWW_ROOT . $uploadFolder;

@@ -29,24 +29,11 @@
 				?>
                                 <font color="red">Please uploade image of .jpg, .jpeg, .png or .gif format.</font>
                                 
-                    <input type="hidden" name="data[SiteSetting][hidbanner_image]" id="SiteSettingHidbanner_image" value="<?php echo($this->request->data['SiteSetting']['banner_image']);?>"/>
-				<?php
-				$uploadFolder = "banner_image";
-				$uploadPath = WWW_ROOT . $uploadFolder;
-				$imageName = $this->request->data['SiteSetting']['banner_image'];
-				if(file_exists($uploadPath . '/' . $imageName) && $imageName!=''){
-					echo($this->Html->image('/banner_image/'.$imageName, array('alt' => 'Banner Image')));
-				}
-				else
-				{
-
-				}
-				?>
+                    
 				
-				<?php
-					echo $this->Form->input('banner_image',array('type'=>'file'));
-				?>
-                                <font color="red">Please uploade image of .jpg, .jpeg, .png or .gif format.</font>            
+				
+				
+                                          
 				
 			</fieldset>
 			<?php echo $this->Form->end(__('Submit')); ?>

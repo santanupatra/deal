@@ -42,7 +42,7 @@ class ProductsController extends AppController {
             return $this->redirect(array('controller' => 'users', 'action' => 'login'));
         }
 
-
+        //$curdate= date('Y-m-d H:i:s');
 
         $this->paginate = array('conditions' => array('Product.user_id' => $userid), 'limit' => 10, 'order' => array('Product.id' => 'desc'),
         );
@@ -51,10 +51,86 @@ class ProductsController extends AppController {
         $this->set('products', $this->Paginator->paginate('Product'));
     }
 
+    //spa
+    
+
+    
+
+
+
+public function product_list($type = null,$id = null) {
+        $this->loadModel('Category');
+        $this->loadModel('Shop');
+        $this->loadModel('Product');
+        $curdate= date('Y-m-d H:i:s');
+        $condition[] = array('Product.end_date >=' => $curdate);
+        if($type =='c' && isset($id) && $id != ""){
+          $cid = base64_decode($id);
+          $condition[] = array('category_id' => $cid);
+        }
+        elseif($type =='s' && isset($id) && $id != ""){
+          $sid = base64_decode($id);
+          $condition[] = array('shop_id' => $sid);
+        }
+         elseif($type =='l' && isset($id) && $id != ""){
+          $lid = base64_decode($id);
+          $condition[] = array('city_id' => $lid);
+        }
+
+        if(isset($this->request->data['Product']['category_id']) && $this->request->data['Product']['category_id'] !=""){
+          $condition[] = array('category_id' => $this->request->data['Product']['category_id']);
+          $cid = $this->request->data['Product']['category_id'];
+        }
+
+        if(isset($this->request->data['Product']['shop_id']) && $this->request->data['Product']['shop_id'] !=""){
+          $condition[] = array('shop_id' => $this->request->data['Product']['shop_id']);
+          $sid = $this->request->data['Product']['shop_id'];
+        }
+        
+         if(isset($this->request->data['Product']['city_id']) && $this->request->data['Product']['city_id'] !=""){
+          $condition[] = array('city_id' => $this->request->data['Product']['city_id']);
+          $lid = $this->request->data['Product']['city_id'];
+        }
+        
+        $title_for_layout = 'Product List';
+        if(isset($cid) && $cid != ""){
+          $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));
+          $name = $category['Category']['name'];
+        }
+        if(isset($sid) && $sid != ""){
+          $shop = $this->Shop->find('first', array('conditions' => array('Shop.id' => $sid)));
+          $name = $shop['Shop']['name'];
+        }
+        
+       // print_r($condition) ;exit;
+
+        $this->paginate = array('conditions' => $condition, 'limit' => 10, 'order' => array('Product.id' => 'desc'),
+        );
+        $this->Paginator->settings = $this->paginate;
+        //$this->Product->recursive = 1;
+        $this->set('products', $this->Paginator->paginate('Product'));
+
+        $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1)));       
+
+        $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+
+        $this->set(compact('name', 'allcategory', 'shops'));
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  /*  
     public function product_list($type = null,$id = null) {
         $this->loadModel('Category');
         $this->loadModel('Shop');
-
+        $this->loadModel('City');
         $condition = array();
         if($type =='c' && isset($id) && $id != ""){
           $cid = base64_decode($id);
@@ -91,12 +167,14 @@ class ProductsController extends AppController {
         //$this->Product->recursive = 1;
         $this->set('products', $this->Paginator->paginate('Product'));
 
-        $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));       
+        $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1)));       
 
         $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+        $cities = $this->City->find("all",array('conditions'=>array('is_active'=> 1)));
+        
 
-        $this->set(compact('name', 'allcategory', 'shops'));
-    }
+        $this->set(compact('name', 'allcategory', 'shops','cities'));
+    }*/
 
     public function details($id){
 
@@ -240,6 +318,12 @@ class ProductsController extends AppController {
             $user = $this->User->find('first', $options);
 
             if ($this->request->is('post')) {
+                
+                if($user['User']['total_deal']< 1){
+                    
+                  $this->Session->setFlash(__('You can not upload new deal. Please subscribe our package.'));
+                  
+                }else{
 
               $this->Product->create();
               $this->request->data['Product']['created_at'] = gmdate('Y-m-d H:i:s');
@@ -272,12 +356,17 @@ class ProductsController extends AppController {
                 
        // print_r($this->request->data);exit;      
                 if ($this->Product->save($this->request->data)) {
-
-                    $this->Session->setFlash('The Deal has been saved.', 'default', array('class' => 'success'));
-                    //return $this->redirect(array('action' => 'index'));
+                  
+                $this->request->data['User']['id']=  $userid; 
+                $this->request->data['User']['total_deal']= $user['User']['total_deal'] -1;
+                $this->User->save($this->request->data); 
+            
+                $this->Session->setFlash('The Deal has been saved.', 'default', array('class' => 'success'));
+                    return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('The Deal could not be saved. Please, try again.'));
                 }
+            }
             }
 
             $categories = $this->Product->Category->find('all',array('conditions'=>array('Category.is_active'=>1, 'Category.type'=> 'D')));
@@ -1803,18 +1892,18 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
 
 
 
-              /*  //qr code
+                //qr code
                 require_once 'phpqrcode/qrlib.php';
-                $PNG_TEMP_DIR = QRB_IMAGE; //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
+                $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
                 //echo $PNG_TEMP_DIR;exit;
                 //html PNG location prefix
-                $PNG_WEB_DIR = HTP_QRB_IMAGE; //'/var/www/html/gqual/private/phpqrcode/temp/';
+                $PNG_WEB_DIR = Configure::read('HTP_QRB_IMAGE'); //'/var/www/html/gqual/private/phpqrcode/temp/';
                 //ofcourse we need rights to create temp dir
                 if (!file_exists($PNG_TEMP_DIR))
                     mkdir($PNG_TEMP_DIR);
 
 
-                $filename = $PNG_TEMP_DIR . 'test.png';
+                $filename = $PNG_TEMP_DIR . '/' . 'test.png';
 
                 //processing form input
                 //remember to sanitize user input in real-life solution !!!
@@ -1834,7 +1923,7 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
                         die('data cannot be empty! <a href="?">back</a>');
 
                     // user data
-                    $filename = $PNG_WEB_DIR . 'test' . md5($_REQUEST['data'] . '|' . $errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
+                    $filename = $PNG_WEB_DIR . '/' .'test' . md5($errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
                     $code = QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
                 } else {
 
@@ -1851,9 +1940,10 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
                 $couponname = $tempid['Coupon']['name'];
                 $price = $tempid['Coupon']['amount'];
                 $exdate = $tempid['Coupon']['to_date'];
-                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]'), array($couponname, $price, $exdate, $code), $EmailTemplate['EmailTemplate']['content']);
+                $image = "<img src='$filename'>";
+                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]'), array($couponname, $price, $exdate, $image), $EmailTemplate['EmailTemplate']['content']);
 
-                $this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);*/
+                $this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);
             }
         }
     }
@@ -1867,7 +1957,7 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
       }
       
       
-        //qr code
+       /* //qr code
                 require_once 'phpqrcode/qrlib.php';
                 $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
                //echo $PNG_TEMP_DIR;exit;
@@ -1909,7 +1999,7 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
 
 
                 //print_r($code); 
-      
+      */
       
 
   }

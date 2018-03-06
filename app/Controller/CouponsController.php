@@ -179,6 +179,7 @@ class CouponsController extends AppController {
             if(!isset($userid) && $userid==''){
                 $this->redirect('/');
             }
+            $date=date('Y-m_d');
             $this->paginate = array(
             'limit' =>25,
             'conditions' => array('Coupon.user_id' => $userid),
@@ -200,12 +201,17 @@ class CouponsController extends AppController {
                 $this->redirect('/');
             }
             $this->loadModel('Product');
-           
+            $this->loadModel('User');
+            $options = array('conditions' => array('User.' . $this->User->primaryKey => $userid));
+            $user = $this->User->find('first', $options);
             
             if ($this->request->is('post','put')) {
-                //$CouponName=trim($this->request->data['Coupon']['coupon_code']);
-                //$options = array('conditions' => array('Coupon.coupon_code' => $CouponName));
-                //$CouponExist=$this->Coupon->find('first', $options);
+                
+                if($user['User']['total_coupon']< 1){
+                    
+                  $this->Session->setFlash(__('You can not upload new coupon. Please subscribe our package.'));
+                  
+                }else{
                 
                     $this->request->data['Coupon']['user_id']=$userid;
                     $this->request->data['Coupon']['post_date']=gmdate('Y-m-d');
@@ -213,12 +219,20 @@ class CouponsController extends AppController {
                     $this->request->data['Coupon']['is_active']=1;
                     $this->Coupon->create();
                     if ($this->Coupon->save($this->request->data)) {
+                        
+                        
+                $this->request->data['User']['id']=  $userid; 
+                $this->request->data['User']['total_coupon']= $user['User']['total_coupon'] -1;
+                $this->User->save($this->request->data); 
+                        
+                        
                         $this->Session->setFlash(__('The Coupon has been saved.', 'default', array('class' => 'success')));
                         return $this->redirect(array('action' => 'index'));
                     } else {
                         $this->Session->setFlash(__('The Coupon could not be saved. Please, try again.', 'default', array('class' => 'error')));
                     }
                 
+            }
             }
             
              $this->loadModel('Shop'); 
@@ -292,15 +306,67 @@ class CouponsController extends AppController {
             $this->loadModel('Coupon');
             $this->loadModel('Category');
             $this->loadModel('Shop');
+            $this->loadModel('City');
+           // $id = base64_decode($id);
+            $url= "http://111.93.169.90/team6/deal/";
+            $condition = array();
+            if($type =='c' && isset($id) && $id != ""){
+               $cid = base64_decode($id);
+              $condition[] = array('category_id' => $cid);
+            }
+            elseif($type =='s' && isset($id) && $id != ""){
+              $sid = base64_decode($id);
+              $condition[] = array('shop_id' => $sid);
+            }elseif($type =='l' && isset($id) && $id != ""){
+              $lid = base64_decode($id);
+              $condition[] = array('city_id' => $lid);
+            }
 
-            $id = base64_decode($id);
+            if(isset($this->request->data['Coupon']['category_id']) && $this->request->data['Coupon']['category_id'] !=""){
+              $condition[] = array('category_id' => $this->request->data['Coupon']['category_id']);
+              $cid = $this->request->data['Coupon']['category_id'];
+            }
 
-            $category = $this->Category->find('first', array('conditions' => array('id' => $id)));
-
+            if(isset($this->request->data['Coupon']['shop_id']) && $this->request->data['Coupon']['shop_id'] !=""){
+              $condition[] = array('shop_id' => $this->request->data['Coupon']['shop_id']);
+              $sid = $this->request->data['Coupon']['shop_id'];
+            }
+            
+            if(isset($this->request->data['Coupon']['city_id']) && $this->request->data['Coupon']['city_id'] !=""){
+              $condition[] = array('city_id' => $this->request->data['Coupon']['city_id']);
+              $lid = $this->request->data['Coupon']['city_id'];
+            }
+            
+            $title_for_layout = 'Coupon List';
+            if(isset($cid) && $cid != ""){
+              $category = $this->Category->find('first', array('conditions' => array('id' => $cid)));
+              $Folder = "category_images/";
+              $Path = $url . $Folder;
+              $image=$Path.$category['Category']['image'];
+              $name = $category['Category']['name'];
+              
+            }
+            if(isset($sid) && $sid != ""){
+              $shop = $this->Shop->find('first', array('conditions' => array('Shop.id' => $sid)));
+              $Folder = "shop_images/";
+              $Path = $url . $Folder;
+              $image=$Path.$shop['Shop']['logo'];
+              $name = $shop['Shop']['name'];              
+            }
+            if(isset($lid) && $lid != ""){
+              $city = $this->City->find('first', array('conditions' => array('City.id' => $lid)));
+              $image="";
+              $name = $city['City']['name'];              
+            }
             $data = date('Y-m-d');
+            $condition[] = array('Coupon.to_date >=' => $data, 'Coupon.is_active' => 1);
+
+            //$category = $this->Category->find('first', array('conditions' => array('id' => $id)));
+
+            
             $this->paginate = array(
             'limit' =>25,
-            'conditions' => array('Coupon.is_active' => 1, 'Coupon.to_date >=' => $data,'Coupon.category_id' => $id),
+            'conditions' => $condition,
             'order' => array(
                     'Coupon.id' => 'desc'
                 ) 
@@ -311,10 +377,10 @@ class CouponsController extends AppController {
             $this->set('coupons', $this->Paginator->paginate());
 
 
-            $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'D')));  
+            $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1)));  
             $shops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
 
-            $this->set(compact('category', 'allcategory', 'shops'));
+            $this->set(compact('category', 'allcategory', 'shops','name','image'));
 
     }
 }

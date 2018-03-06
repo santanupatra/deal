@@ -49,7 +49,7 @@ class CategoriesController extends AppController {
                 'order' => array(
                    'Category.id' => 'asc'
                 ),'conditions' => array(
-                   'Category.type'=> 'D'
+                   'Category.is_active'=> 1
                 )
             );
             $this->set('categories', $this->Paginator->paginate('Category'));

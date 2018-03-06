@@ -44,7 +44,7 @@ if(count($pass_data)>0){
         
         
         <li <?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_index' || $this->params['action']=='admin_edit'))
-        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/index"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_index' || $this->params['action']=='admin_edit')){?><i class="icon-chevron-right"></i><?php } ?> Advertising Packages</a>
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/index"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_index' || $this->params['action']=='admin_edit')){?><i class="icon-chevron-right"></i><?php } ?> Subscription Packages</a>
 	</li>
        <!--  <li <?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_advertisement' || $this->params['action']=='admin_advertisement_edit'))
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/advertisement"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_advertisement' || $this->params['action']=='admin_advertisement_edit')){?><i class="icon-chevron-right"></i><?php } ?> Advertisement</a>
@@ -90,23 +90,23 @@ if(count($pass_data)>0){
         
 	<li <?php if($this->params['controller']=='categories' && $this->params['action']=='admin_add')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/add"><?php if($this->params['controller']=='categories')
-         { ?><i class="icon-chevron-right"></i><?php } ?> Add Deal Category</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?> Add Category</a>
 	</li>
 	
 	<li <?php if($this->params['controller']=='categories' && $this->params['action']=='admin_index')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/"><?php if($this->params['controller']=='categories')
-         { ?><i class="icon-chevron-right"></i><?php } ?>Deal Category Management</a>
+         { ?><i class="icon-chevron-right"></i><?php } ?> Category Management</a>
 	</li>
         
         
         
         
         
-        <li <?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_edit' ||  $this->params['action']=='admin_coupon_add'))
+<!--        <li <?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_edit' ||  $this->params['action']=='admin_coupon_add'))
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/categories/coupon_list"><?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_edit' ||  $this->params['action']=='admin_coupon_add'))
         {?><i class="icon-chevron-right"></i><?php } ?><span <?php if($this->params['controller']=='categories' && ($this->params['action']=='admin_coupon_list' || $this->params['action']=='admin_coupon_add' || $this->params['action']=='admin_coupon_edit'))
         {?>class="badge badge-info1 pull-right"<?php }else{ ?>class="badge badge-info pull-right"<?php } ?>></span> Coupon Category Management</a>
-	</li>
+	</li>-->
         
         
         
@@ -150,6 +150,16 @@ if(count($pass_data)>0){
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/contents/"><?php if($this->params['controller']=='contents')
         {?><i class="icon-chevron-right"></i><?php } ?> Content Management</a>
 	</li>
+        
+        
+        
+
+        <li <?php if($this->params['controller']=='faqs')
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/faqs/index">
+            <?php if($this->params['controller']=='faqs')
+        {?><i class="icon-chevron-right"></i><?php } ?> FAQ Management</a>
+	</li>
+        
         <!--spandan 4/10-->
     <li <?php if($this->params['controller']=='advertises')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/advertises/list">

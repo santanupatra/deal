@@ -9,7 +9,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
-                            <option selected>Select Category . . . . . . .</option>
+                                <option value="" selected>Select Category . . . . . . .</option>
                             <?php
                               foreach($allcategory as $cat){
                                 echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
@@ -66,7 +66,7 @@
                               <?php
                                 foreach($popular_category as $pcat){
                                   //print_r($pcat);
-                                  echo '<li><a href="'.$this->webroot.'products/product_list/c/'.base64_encode($pcat['Category']['id']).'"><img src="'.$this->webroot.'category_images/'.$pcat['Category']['image'].'" /></a></li>';
+                                  echo '<li><a href="'.$this->webroot.'products/product_list/c/'.base64_encode($pcat['Category']['id']).'"><img src="'.$this->webroot.'category_images/'.$pcat['Category']['image'].'" style="height :150px" /></a></li>';
                                 }
                               ?>                             
                               
