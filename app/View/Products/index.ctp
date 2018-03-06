@@ -62,7 +62,7 @@
                             <div class="col-lg-4 col-md-3 col-12 text-md-right">
 
                                 <a href="<?php echo($this->webroot);?>products/edit/<?php echo $product['Product']['id']?>" class="btn btn-sm btn-secondary">Edit</a>
-                                <a href="<?php echo($this->webroot);?>products/delete/<?php echo $product['Product']['id']?>" class="btn btn-sm btn-danger">Delete</a>
+                                <a href="<?php echo($this->webroot);?>products/delete/<?php echo $product['Product']['id']?>" onclick="return confirm('Are you sure to delete?')" class="btn btn-sm btn-danger">Delete</a>
                             </div>
                         </div>
                         <?php } } ?>

@@ -17,7 +17,7 @@
 					echo $this->Form->input('first_name',array('required'=>'required'));
 					echo $this->Form->input('last_name',array('required'=>'required'));
 					echo $this->Form->input('email',array('required'=>'required','type'=>'email'));
-                                         echo $this->Form->input('paypal_business_email',array('required'=>'required','type'=>'email','label'=>'Paypal business email'));
+                                         echo $this->Form->input('paypal_business_email',array('type'=>'email','label'=>'Paypal business email'));
 					
 					//echo $this->Form->input('company_name',array('required'=>'required','label'=>'Legit Business Name'));
 					

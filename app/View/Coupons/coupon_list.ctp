@@ -41,14 +41,14 @@
         <div class="item col-xs-12 col-sm-12 col-md-3">
           <div class="coupon-list-left">
               
-              <div class="coupon-list-left-logo"> <img alt="" src="<?php echo $this->webroot.'category_images/'.$category['Category']['image'];?>" class="img-responsive" width="50px" height="50px">
-              <p> <a href="#"> <?php echo $category['Category']['name'];?> </a> </p>
+              <div class="coupon-list-left-logo"> <?php if($image!=""){?><img alt="" src="<?php echo $image?>" class="img-responsive" width="50px" height="50px"><?php } ?>
+              <p> <a href="#"> <?php echo $name;?> </a> </p>
               <div class="coupon-ava">
                 <h1>221</h1>
                 <p>Coupons Available</p>
               </div>
             </div>
-            <div class="related-coupons text-uppercase">
+<!--            <div class="related-coupons text-uppercase">
               <div class="half-mark-header"> <span></span> </div>
               <h4>Related Coupons</h4>
               <ul>
@@ -59,7 +59,7 @@
                 <li> Coupon - 1 </li>
                 <li> Coupon - 1 </li>
               </ul>
-            </div>
+            </div>-->
           </div>
         </div>
 
@@ -70,11 +70,11 @@
                 
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
-                            <option selected>Select Category . . . . . . .</option>
+                            <select name="data[Coupon][category_id]" class="form-control rounded-0 bg-transparent">
+                            <option value="" selected>Select Category . . . . . . .</option>
                             <?php
                               foreach($allcategory as $cat){
-                                echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
+                                echo '<option value="'.$cat['Category']['id'].'" '.(($this->request->data['Coupon']['category_id']==$cat['Category']['id'])? "selected" : "").'>'.$cat['Category']['name'].'</option>';
                               }
                             ?>                            
                             </select>
@@ -82,11 +82,11 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <select name="data[Product][shop_id]" class="form-control rounded-0 bg-transparent">
+                            <select name="data[Coupon][shop_id]" class="form-control rounded-0 bg-transparent">
                             <option value="" selected>Select Shop . . . . . . .</option>
                             <?php
                               foreach ($shops as $shop) {
-                                echo '<option value="'.$shop['Shop']['id'].'">'.$shop['Shop']['name'].'</option>';
+                                echo '<option value="'.$shop['Shop']['id'].'" '.(($this->request->data['Coupon']['shop_id']==$shop['Shop']['id'])? "selected" : "").'>'.$shop['Shop']['name'].'</option>';
                               }
                             ?>                            
                             </select>
@@ -94,12 +94,13 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="search-btn">
-                            <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
+                            <select name="data[Coupon][city_id]" class="form-control rounded-0 bg-transparent">
                                 <option value="" selected>Location. . . . . . .</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                                <?php
+                              foreach ($allcities as $city) {
+                                echo '<option value="'.$city['City']['id'].'" '.(($this->request->data['Coupon']['city_id']==$city['City']['id'])? "selected" : "").'>'.$city['City']['name'].'</option>';
+                              }
+                            ?>
                             </select>
                           <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
                         </div>
@@ -180,13 +181,7 @@
                             <h5>Amazon: Up To 75% Off | Amazon Promo Codes & Coupons February 2018</h5>
                             <p> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                           </div>
-<!--                          <div class="modal-body get-coupon-modal gray-bg-modal">
-                            <h5>Never miss a great Amazon coupon and get our best coupons every week!</h5>
-                            <div class="search-btn my-3">
-                              <input type="text" placeholder="Email" class="form-control">
-                              <button class="btn btn-src btn-danger">Subscribe</button>
-                            </div>
-                          </div>-->
+
                           <div class="modal-footer">
                             <ul class="w-100 list-unstyled m-0 text-center">
                               <li class="d-inline p-1"> <a href="#"> <i aria-hidden="true" class="fa fa-facebook"></i> </a> </li>

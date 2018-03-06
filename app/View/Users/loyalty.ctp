@@ -40,7 +40,13 @@
           </div>
         </div>
 
-        <div class="col-md-8">
+          
+          <?php echo $loyalty['Content']['content']?>
+          
+          
+          
+          
+<!--        <div class="col-md-8">
           <div class="loyality-rightdiv mt-2 mb-2">
             <div class="loyality-mainpart jumbotron jumbotron-fluid p-3 rounded">
               <h5 class="pb-2"> <i class="fa fa-hand-o-right"></i> <strong>We’re confident in the Deal experience and back it with the Deal Promise.</strong></h5>
@@ -140,7 +146,7 @@
 
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
   </section>

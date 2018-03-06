@@ -69,7 +69,7 @@ class AppController extends Controller {
         $this->loadModel('SiteSetting');
         $this->loadModel('Category');
         $this->loadModel('Shop');
-
+        $this->loadModel('City');
         $SITE_URL = Configure::read('SITE_URL');
 
         $userid = $this->Session->read('Auth.User.id');
@@ -90,16 +90,18 @@ class AppController extends Controller {
         $options = array('conditions' => array('SiteSetting.' . $this->SiteSetting->primaryKey => 1));
         $sitesetting = $this->SiteSetting->find('first', $options);
 
-        $options = array('conditions' => array('Category.parent_id' => 0,'Category.is_active'=>1, 'Category.type' => 'D'),'order' => array('Category.ordering' => 'asc'));
+        $options = array('conditions' => array('Category.is_active'=>1),'order' => array('Category.ordering' => 'asc'));
         $dealcategory = $this->Category->find('all', $options);
 
-        $options1 = array('conditions' => array('Category.parent_id' => 0,'Category.is_active'=>1, 'Category.type' => 'C'),'order' => array('Category.ordering' => 'asc'));
+        $options1 = array('conditions' => array('Category.is_active'=>1),'order' => array('Category.ordering' => 'asc'));
         $couponcategory = $this->Category->find('all', $options1);
        
         $allshops = $this->Shop->find("all",array('conditions'=>array('Shop.is_active'=> 1), 'fields'=>array('Shop.id', 'Shop.name')));
+        
+        $allcities = $this->City->find("all",array('conditions'=>array('City.is_active'=> 1), 'fields'=>array('City.id', 'City.name')));
       
       //end
-        $this->set(compact('sitesetting','SITE_URL','userid','dealcategory','couponcategory', 'allshops'));
+        $this->set(compact('sitesetting','SITE_URL','userid','dealcategory','couponcategory', 'allshops','allcities'));
 		
       
     }

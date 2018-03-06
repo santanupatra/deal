@@ -127,18 +127,18 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                     <div class="card-body pl-0 pr-0 pb-0">
                                       <h5 class="card-title text-center pt-1 pb-1"><strong>Locations</strong></h5>
                                       <ul class="list-unstyled list-group">
+                                          <?php
+                                          foreach ($allcities as $city) {
+                                         ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Alabama                                             
+                                            <a href="<?php echo $this->webroot.'products/product_list/l/'.base64_encode($city['City']['id']);?>" class="text-capitalize text-dark">
+                                                <?php echo $city['City']['name'];?>
                                             </a>
                                             </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Indaho                                               
-                                            </a>                                              
-                                          </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">ohino                                                
-                                            </a>                                               
-                                        </li>
+                                          <?php
+                                            }
+                                            ?> 
+                                          
                                       </ul>
                                     </div>
                                   </div>                                
@@ -203,21 +203,17 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                     <div class="card-body pl-0 pr-0 pb-0">
                                       <h5 class="card-title text-center pt-1 pb-1"><strong>Locations</strong></h5>
                                       <ul class="list-unstyled list-group">
+                                          <?php
+                                          foreach ($allcities as $city) {
+                                         ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Alabama
-                                               
+                                            <a href="<?php echo $this->webroot.'coupons/coupon_list/l/'.base64_encode($city['City']['id']);?>" class="text-capitalize text-dark">
+                                                <?php echo $city['City']['name'];?>
                                             </a>
                                             </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">Indaho
-                                               
-                                            </a>                                              
-                                          </li>
-                                          <li class="list-group-item rounded-0 p-1">
-                                            <a href="#" class="text-capitalize text-dark">ohino
-                                               
-                                            </a>                                               
-                                        </li>
+                                          <?php
+                                            }
+                                            ?>
                                       </ul>
                                     </div>
                                   </div>                                
@@ -256,7 +252,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                                           foreach ($allshops as $shop) {
                                          ?>   
                                           <li class="list-group-item rounded-0 p-1">
-                                            <a href="<?php echo $this->webroot.'products/coupon_list/s/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
+                                            <a href="<?php echo $this->webroot.'coupons/coupon_list/s/'.base64_encode($shop['Shop']['id']);?>" class="text-capitalize text-dark">
                                                 <?php echo $shop['Shop']['name'];?>
                                             </a>
                                             </li>
@@ -273,9 +269,15 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                       
                       
                       <li class="nav-item dropdown">
-                        <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>users/loyalty">Loyalty</a>
+                        <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>users/loyalty">Loyalty Program</a>
                         
                       </li>
+                      
+                      <li class="nav-item dropdown">
+                        <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>faqs/faq">FAQ</a>
+                        
+                      </li>
+                      
                       <li class="nav-item">
                         <a class="nav-link text-uppercase" href="<?php echo $this->webroot;?>users/contactus"> contacts</a>
                       </li>

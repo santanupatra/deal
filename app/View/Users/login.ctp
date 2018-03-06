@@ -34,21 +34,29 @@
                   <div class="form-group">
                     <div class="row">
                       <div class="col-lg-6">
-                        <a href="#">
+                        <a class="flogin">
                           <div class="bg-primary text-white text-md-center text-capitalize p-md-2 w-100">
-                             <i class="fa fa-facebook fa-1x pr-2"></i> Also Login with Facebook
+                             <i class="fa fa-facebook fa-1x pr-2 "></i> Also Login with Facebook
                           </div>
                         </a>
                       </div>
 
-                      <div class="col-lg-6">
+<!--                      <div class="col-lg-6">
                         <a href="#">
                           <div class="bg-info text-white text-md-center text-capitalize p-md-2 w-100">
                              <a href="<?php echo $this->webroot ?>users/twitterlogin"><i class="fa fa-twitter fa-1x pr-2"></i> Also Login with Twitter</a>
                           </div>
                         </a>
-                      </div>
+                      </div>-->
 
+
+                      <div class="col-lg-6">
+                        <a href="#" onclick="google_login()">
+                          <div class="bg-info text-white text-md-center text-capitalize p-md-2 w-100">
+                             <i class="fa fa-google-plus fa-1x pr-2"></i> Login with Google Plus
+                          </div>
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -104,7 +112,7 @@
 
  /*************** Sign Up Facebook ***********************/
             $.getScript('//connect.facebook.net/en_US/all.js', function(){
-                FB.init({ appId: '142000989862434'});    
+                FB.init({ appId: '154347671946103'});    
                 $(".flogin").on("click", function(e){ 
                     
                     
@@ -170,3 +178,101 @@
                
      
 </script>  
+
+<script src="https://apis.google.com/js/client:plusone.js" type="text/javascript"></script>
+<script>
+    (function() {
+                 var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                 po.src = 'https://apis.google.com/js/client:plusone.js?onload=googleonLoadCallback1';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+               })();
+
+               function googleonLoadCallback1()
+                {
+                    gapi.client.setApiKey('AIzaSyCs7rIwP92AkdYAcE0JAJUuRAj8lhpSums'); //set your API KEY
+                    gapi.client.load('plus', 'v1',function(){});//Load Google + API
+                }
+
+                function google_login()
+                {
+                  var myParams = {
+                    'clientid' : '813284760510-2kktrll1vci78afap7t49nr8pe0f7unu.apps.googleusercontent.com', //You need to set client id
+                    'cookiepolicy' : 'single_host_origin',
+                    'callback' : 'googleloginCallback', //callback function
+                    'approvalprompt':'force',
+                    'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+                  };
+                  gapi.auth.signIn(myParams);
+                }
+
+                function googleloginCallback(result)
+                {
+                    //alert(result);
+
+                    if(result['status']['signed_in'])
+                    {
+                        console.log(result);
+                       // alert(login successfull);
+                        gapi.client.load('plus', 'v1', function() {
+
+                       var request = gapi.client.plus.people.get({
+                       'userId': 'me'
+                        });
+                       //alert(userId);
+                       request.execute(function(resp) {
+
+                            console.log(resp);
+
+                       // alert(resp);
+
+                          var email = '';
+                            if(resp['emails'])
+                            {
+                                for(i = 0; i < resp['emails'].length; i++)
+                                {
+                                    if(resp['emails'][i]['type'] == 'account')
+                                    {
+                                        email = resp['emails'][i]['value'];
+                                    }
+                                }
+                            }
+			     var name1 = resp['displayName'];
+			     var name = name1.split(' ');
+                             var first_name = name[0];
+                             var last_name = name[1];
+			     var google_id = resp['id'];
+                             alert(email);
+
+                              $.ajax({
+                            url: '<?php echo $this->webroot; ?>users/googlelogin',
+                            dataType: 'json',
+                            type: 'post',
+                            data: {"data" : {"User" : {"email_address" : email,  "first_name" : first_name, "last_name" : last_name, "google_id" : google_id }}},
+                            success: function(data){ //alert(data);
+                                if(data.status)
+                                {
+                                    window.location = data.url;
+                                    //$(this).closest('form').find("input[type=text]").val("");
+                                    //showSuccess('Registration successfull.');
+                                     //$('.email_error').hide();
+                                    //$('.sign-up-btn').removeAttr('disabled');
+                                }
+                                else
+                                {
+                                    window.location = '';
+                                    //showError(data.message);
+                                    //showError('Internal Error. Please try again later.');
+                                   // $('.email_error').show();
+                                    //$('.sign-up-btn').attr('disabled','disabled');
+                                }
+                            }
+                    });
+
+    });
+});
+
+
+                    }
+
+                }
+</script>

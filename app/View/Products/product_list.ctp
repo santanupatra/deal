@@ -39,10 +39,10 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <select name="data[Product][category_id]" class="form-control rounded-0 bg-transparent">
-                            <option selected>Select Category . . . . . . .</option>
+                                <option value="" selected>Select Category . . . . . . .</option>
                             <?php
                               foreach($allcategory as $cat){
-                                echo '<option value="'.$cat['Category']['id'].'">'.$cat['Category']['name'].'</option>';
+                                echo '<option value="'.$cat['Category']['id'].'" '.(($this->request->data['Product']['category_id']==$cat['Category']['id'])? "selected" : "").'>'.$cat['Category']['name'].'</option>';
                               }
                             ?>                            
                             </select>
@@ -54,7 +54,7 @@
                             <option value="" selected>Select Shop . . . . . . .</option>
                             <?php
                               foreach ($shops as $shop) {
-                                echo '<option value="'.$shop['Shop']['id'].'">'.$shop['Shop']['name'].'</option>';
+                                echo '<option value="'.$shop['Shop']['id'].'" '.(($this->request->data['Product']['shop_id']==$shop['Shop']['id'])? "selected" : "").'>'.$shop['Shop']['name'].'</option>';
                               }
                             ?>                            
                             </select>
@@ -64,10 +64,11 @@
                         <div class="search-btn">
                             <select name="data[Product][city_id]" class="form-control rounded-0 bg-transparent">
                                 <option value="" selected>Location. . . . . . .</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                                <?php
+                              foreach ($allcities as $city) {
+                                echo '<option value="'.$city['City']['id'].'" '.(($this->request->data['Product']['city_id']==$city['City']['id'])? "selected" : "").'>'.$city['City']['name'].'</option>';
+                              }
+                            ?>   
                             </select>
                           <button type="submit" class="btn btn-src btn-danger rounded-0">Search</button>
                         </div>
@@ -80,9 +81,9 @@
         <div class="list-innerdiv w-100" id="products">
           <div class="row">
             <?php foreach ($products as $product) {  ?>
-            <div class="item col-xs-12 col-sm-12 col-md-4">
-              <div class="img-thumbnail">
-                <div class="ll-imgdiv">
+              <div class="item col-xs-12 col-sm-12 col-md-4" >
+              <div class="img-thumbnail" style="height: 340px">
+                  <div class="ll-imgdiv" >
                     <img class="group list-group-image img-responsive"  src="<?php echo $this->webroot.'product_images/'.$product['Product']['product_image'];?>" alt="" />
                 </div>  
                 <div class="caption">

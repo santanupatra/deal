@@ -17,23 +17,14 @@ $Ord_sl_no= Configure::read('ORDER_SL_NO');
                                             <input type="number" min="1" class="form-control" id="order_no" name="order_no" placeholder="Order No." value="<?php echo isset($order_no)?$order_no:'';?>">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" class="form-control" id="" name="product_name" placeholder="Product name" value="<?php echo isset($product_name)?$product_name:'';?>">
+                                            <input type="text" class="form-control" id="" name="coupon_name" placeholder="Coupon name" value="<?php echo isset($product_name)?$product_name:'';?>">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" class="form-control" id="" name="product_sku" placeholder="Product sku" value="<?php echo isset($product_sku)?$product_sku:'';?>">
+                                            <input type="text" class="form-control" id="" name="coupon_code" placeholder="Coupon code" value="<?php echo isset($product_sku)?$product_sku:'';?>">
                                         </div>
-                                        <div class="span3">
-                                            <input type="text" class="form-control" id="from_date" name="from_date" placeholder="From Date" value="<?php echo isset($from_date)?$from_date:'';?>">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" class="form-control" id="to_date" name="to_date" placeholder="To Date" value="<?php echo isset($to_date)?$to_date:'';?>">
-                                        </div>
+                                        
                                         <button style=" height: 40px; margin-left: 15px;" type="submit" class="btn btn-default">Search</button>
-                                        <!--<div class="form-group">
-                                              <select name="" class="form-control">
-                                                      <option>More Filter</option>
-                                              </select>
-                                        </div>-->
+                                        
                                     </form>
                                 </div>
                             </div>
@@ -42,13 +33,12 @@ $Ord_sl_no= Configure::read('ORDER_SL_NO');
 					<thead>
 					<tr>
                                             <th><?php echo $this->Paginator->sort('order_id'); ?></th>
-                                            <th>Product Name</th>
-                                            <th>Product Code</th>
+                                            <th>Coupon Name</th>
+                                            <th>Coupon Code</th>
                                             <th>Buyer Name</th>
                                             <th>Amount</th>
-                                            <th>Order Date</th>
-                                            <!--<th><?php echo $this->Paginator->sort('created_at','Created On'); ?></th>-->
-                                            <th><?php echo $this->Paginator->sort('status'); ?></th>
+                                            <th>Purchase Date</th>
+                                            
                                             <th class="actions"><?php echo __('Actions'); ?></th>
 					</tr>
 					</thead>
@@ -56,45 +46,28 @@ $Ord_sl_no= Configure::read('ORDER_SL_NO');
 					<?php 
                                         if(count($orders)>0){
                                         foreach ($orders as $product):
-                                            $Order_det_id=$product['OrderDetail']['id'];
-                                            $Order_id=$product['OrderDetail']['order_id'];
-                                            $product_name=$product['Product']['name'];
-                                            $product_sku=$product['Product']['product_code'];
-                                            $buyer_name=$product['Buyer']['first_name'].' '.$product['Buyer']['last_name'];
-                                            $Order_amount=$product['OrderDetail']['amount'];
-                                            //$Order_id=$product['OrderDetail']['order_id'];
-                                            $order_date=date('dS M, Y',strtotime($product['Order']['order_date']));
-                                            $order_status=$product['OrderDetail']['order_status'];
-                                            if($order_status=='U'){
-                                                $order_status_text='Under Processing';
-                                            }elseif($order_status=='D'){
-                                                $order_status_text='Deliverd';
-                                            }elseif($order_status=='C'){
-                                                $order_status_text='Canceled';
-                                            }elseif($order_status=='DP'){
-                                                $order_status_text='Dispute';
-                                            }elseif($order_status=='S'){
-                                                $order_status_text='Awaiting Shipment';
-                                            }elseif($order_status=='F'){
-                                                $order_status_text='Completed';
-                                            }
+                                            
+                                            $Order_id=$product['Order']['id'];
+                                            $coupon_name=$product['Coupon']['name'];
+                                            $coupon_code=$product['Order']['coupon_code'];
+                                            $buyer_name=$product['User']['first_name'].' '.$product['User']['last_name'];
+                                            $Order_amount=$product['Order']['total_amount'];
+                                            
+                                            $order_date=date('dS M, Y',strtotime($product['Order']['payment_date']));
+                                           
                                             ?>
 					<tr>
                                             <td><?php echo h($Order_id+$Ord_sl_no); ?>&nbsp;</td>
-                                            <td>
-                                                    <?php echo h($product_name); ?>
-                                            </td>
-                                            <td><?php echo h($product_sku); ?></td>
+                                            <td><?php echo h($coupon_name); ?></td>
+                                            <td><?php echo h($coupon_code); ?></td>
                                             <td><?php echo h($buyer_name); ?>&nbsp;</td>
                                             <td>$<?php echo h($Order_amount); ?>&nbsp;</td>
                                             <td><?php echo h($order_date); ?>&nbsp;</td>
-                                            <td><?php echo h($order_status_text); ?>&nbsp;</td>
+                                            
                                             <td class="actions">                                               
-                                                <a href="<?php echo $this->webroot;?>admin/orders/order_details/<?php echo base64_encode($Order_det_id);?>"><img src="<?php echo $this->webroot;?>img/view.png" title="View Order"></a>
+                                                <a href="<?php echo $this->webroot;?>admin/orders/order_details/<?php echo base64_encode($Order_id);?>"><img src="<?php echo $this->webroot;?>img/view.png" title="View Order"></a>
 
-                                                <!--<a href="<?php echo $this->webroot;?>admin/products/edit/<?php echo $product['Product']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Product" width="22" height="21"></a>
-
-                                                <a href="<?php echo $this->webroot;?>admin/products/delete/<?php echo $product['Product']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Product" width="24" height="24"></a>-->
+                                                
                                             </td>
 					</tr>
                    

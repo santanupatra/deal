@@ -4274,78 +4274,52 @@ class OrdersController extends AppController {
 	}
         
         public function admin_order_list($type=null){
-            $this->loadModel('OrderDetail');
+            $this->loadModel('Order');
             $userid = $this->Session->read('Auth.User.id');
             if(!isset($userid)){
                 $this->redirect('/admin');
             }
             $title_for_layout = 'Order History';
-            $QueryStr="(OrderDetail.user_id !='0')";
+            $QueryStr="(Order.user_id !='0')";
             
-            if($type=='cancel'){
-                $QueryStr.=" AND (OrderDetail.order_status = 'C')";
-            }elseif($type=='dispute'){
-                $QueryStr.=" AND (OrderDetail.order_status = 'DP')";
-            }elseif($type=='complete'){
-                $QueryStr.=" AND (OrderDetail.order_status = 'F')";
-            }elseif($type=='delivered'){
-                $QueryStr.=" AND (OrderDetail.order_status = 'D')";
-            }elseif($type=='shipment'){
-                $QueryStr.=" AND (OrderDetail.order_status = 'S')";
-            }
+           
             
             if ($this->request->is(array('post', 'put'))) {
                 $Ord_sl_no= Configure::read('ORDER_SL_NO');
                 $order_no=$this->request->data['order_no'];
-                $product_name=$this->request->data['product_name'];
-                $product_sku=$this->request->data['product_sku'];
-                $from_date=$this->request->data['from_date'];
-                $to_date=$this->request->data['to_date'];
+                $product_name=$this->request->data['coupon_name'];
+                $product_sku=$this->request->data['coupon_code'];
+                
                 if($order_no!=''){
                     $new_order_no=$order_no-$Ord_sl_no;
-                    $QueryStr.=" AND (OrderDetail.order_id = '".$new_order_no."')";
+                    $QueryStr.=" AND (Order.id = '".$new_order_no."')";
                 }
                 if($product_name!=''){
-                    $QueryStr.=" AND (Product.name LIKE '%".$product_name."%')";
+                    $QueryStr.=" AND (Coupon.name LIKE '%".$product_name."%')";
                 }
                 if($product_sku!=''){
-                    $QueryStr.=" AND (Product.sku LIKE '%".$product_sku."%')";
-                }
-                if($from_date!='' && $to_date==''){
-                    $QueryStr.=" AND (Order.order_date >= '".$from_date."')";
-                }
-                if($from_date=='' && $to_date!=''){
-                    $QueryStr.=" AND (Order.order_date <= '".$to_date."')";
-                }
-                if($from_date!='' && $to_date!=''){
-                    $QueryStr.=" AND (Order.order_date BETWEEN '".$from_date."' AND '".$to_date."')";
+                    $QueryStr.=" AND (Order.coupon_code LIKE '%".$product_sku."%')";
                 }
                 
-                $options = array('conditions' => array($QueryStr), 'order' => array('OrderDetail.id' => 'desc'));
+                
+                $options = array('conditions' => array($QueryStr), 'order' => array('Order.id' => 'desc'));
             }else{
                 //$options = array('conditions' => array('Order.user_id' => $userid), 'order' => array('Order.id' => 'desc'), 'limit' => 10);
-                $options = array('conditions' => array($QueryStr), 'order' => array('OrderDetail.id' => 'desc'));
+                $options = array('conditions' => array($QueryStr), 'order' => array('Order.id' => 'desc'));
                 $order_no='';
                 $product_name='';
                 $product_sku='';
-                $from_date='';
-                $to_date='';
+                
             }
             $this->Paginator->settings = $options;
-            $orders=$this->Paginator->paginate('OrderDetail');
-            $this->set(compact('orders','title_for_layout','order_no','product_name','product_sku','from_date','to_date'));
+            $orders=$this->Paginator->paginate('Order');
+            $this->set(compact('orders','title_for_layout','order_no','product_name','product_sku'));
 	}
         
         public function admin_order_details($id=null) {
-            $this->loadModel('OrderDetail');
-            $this->loadModel('Comment');
-            $this->loadModel('DisputeMessage');
-            $this->loadModel('OrderDetail');
-            $this->loadModel('Dispute');
-            $this->loadModel('ManageInventory');
-            $this->loadModel('Product');
-            $this->loadModel('SiteSetting');
-            $this->loadModel('Payment');
+            
+            $this->loadModel('Order');
+            
             
             $userid = $this->Session->read('Auth.User.id');
             $Ord_sl_no= Configure::read('ORDER_SL_NO');
@@ -4354,254 +4328,11 @@ class OrdersController extends AppController {
             }
             $title_for_layout = 'Order Details';
             $ord_id=  base64_decode($id);
-            if($id==''){
+            if($ord_id==''){
                 return $this->redirect(array('action' => 'admin_order_list'));
             }
             
-            if ($this->request->is(array('post', 'put'))) {
-                $form_type=$this->request->data['form_type'];
-                if($form_type=='AcceptDispute'){
-                    $dispute_id=$this->request->data['dispute_id'];
-                    $full_amount=$this->request->data['full_amount'];
-                    $refund_amount=$this->request->data['refund_amount'];
-                    $partial_amount=$this->request->data['partial_amount'];
-                    $details=$this->request->data['details'];
-                    $order_details_id=$this->request->data['order_details_id'];
-                    if($dispute_id!=''){
-                        $user_data=$this->OrderDetail->find('first',array('conditions'=>array('OrderDetail.id'=>$order_details_id)));
-                        $OrderPay_key=$user_data['Order']['pay_key'];
-                        $seller_business_email=$user_data['User']['paypal_business_email'];
-                        $paykey=isset($OrderPay_key)?$OrderPay_key:'';
-                        
-                        $options_site_set = array('conditions' => array('SiteSetting.' . $this->SiteSetting->primaryKey => 1));
-                        $sitesetting = $this->SiteSetting->find('first', $options_site_set);
-
-                        $admin_paypal_email=$sitesetting['SiteSetting']['paypal_email'];
-                        $admin_percentage=$sitesetting['SiteSetting']['admin_percentage'];
-                        $PayPalFeesPercentage=Configure::read('PayPalFeesPercentage');
-                        $PayPalFeesStatic=Configure::read('PayPalFeesStatic');
-                        
-                        if($paykey!=''){
-                            $admin_amount=0;
-                            if($refund_amount=='Full Refund'){
-                                $new_dispute_amt=$full_amount;
-                                $admin_amount=(($new_dispute_amt*$admin_percentage)/100);
-                            }else{
-                                $new_dispute_amt=$partial_amount;
-                            }
-                            
-                            $PayPalFeesPer=(($new_dispute_amt*$PayPalFeesPercentage)/100);
-                            $PayPalTotFees=($PayPalFeesPer+$PayPalFeesStatic);
-                            $cal_new_dispute_amt=($new_dispute_amt);
-                            $seller_tot_amount=($new_dispute_amt-$admin_amount);
-
-                            require_once(ROOT . '/app/Vendor' . DS  . 'Paypal_adaptive'.DS.'PPBootStrap.php');
-                            $refundRequest = new RefundRequest(new RequestEnvelope("en_US"));
-                            $refundRequest->currencyCode = 'USD';
-                            $refundRequest->payKey = $paykey;
-
-                            $receiver = array();
-                            $receiver[0] = new Receiver();
-                            $receiver[0]->email = $admin_paypal_email;
-                            //$receiver[0]->email = 'payments@errandchampion.com';
-                            //$receiver[0]->email = 'nits.arpita@gmail.com';
-                            $receiver[0]->amount = round($cal_new_dispute_amt, 2);
-                            $receiver[0]->primary = "true";
-                            $receiver[0]->paymentType = "SERVICE";
-
-                            $receiver[1] = new Receiver();
-                            $receiver[1]->email = $seller_business_email;
-                            $receiver[1]->amount = round($seller_tot_amount, 2);
-                            $receiver[1]->primary = "false";
-                            $receiver[1]->paymentType = "SERVICE";
-
-                            $receiverList = new ReceiverList($receiver);
-                            $refundRequest->receiverList = $receiverList;
-
-                            $PayPalService = new AdaptivePaymentsService(Configuration::getAcctAndConfig());
-                            $PayPalResult = $PayPalService->Refund($refundRequest);
-                            $PayPalAck = $PayPalResult->responseEnvelope->ack;
-                            $EncryptedTransactionID=$PayPalResult->responseEnvelope->correlationId;
-                            if($PayPalAck=='Success'){
-                                $dispute_data['DisputeMessage']['user_id']=$userid;
-                                $dispute_data['DisputeMessage']['dispute_id']=$dispute_id;
-                                $dispute_data['DisputeMessage']['reason']=$details;
-                                $dispute_data['DisputeMessage']['received_goods']='No';
-                                $dispute_data['DisputeMessage']['refund_request']=$refund_amount;
-                                $dispute_data['DisputeMessage']['return_goods']='No';
-                                $dispute_data['DisputeMessage']['refund_amount']=$new_dispute_amt;
-                                $dispute_data['DisputeMessage']['action']='Twop accepted the dispute';
-                                $dispute_data['DisputeMessage']['user_type']=3;
-                                $dispute_data['DisputeMessage']['cdate']=gmdate('Y-m-d H:i:s');
-                                $this->DisputeMessage->create();
-                                $this->DisputeMessage->save($dispute_data);
-
-                                $data_ord['Dispute']['id']=$dispute_id;
-                                $data_ord['Dispute']['seller_response']=1;
-                                $data_ord['Dispute']['seller_dispute_action']=1;
-                                $data_ord['Dispute']['is_close']=1;
-                                $data_ord['Dispute']['cancel_transcation_id']=$EncryptedTransactionID;
-                                $this->Dispute->save($data_ord);
-
-                                $seller_user_name=$user_data['User']['first_name'].' '.$user_data['User']['last_name'];
-                                $seller_email=$user_data['User']['email'];
-                                //$to_user_name=$user_data['User']['first_name'];
-                                //$to_email=$user_data['User']['email'];
-                                $to_user_name=$user_data['Buyer']['first_name'];
-                                $to_email=$user_data['Buyer']['email'];
-
-                                //Manage Inventory List
-                                $inventory_data['ManageInventory']['order_id'] = $user_data['OrderDetail']['order_id'];
-                                $inventory_data['ManageInventory']['order_details_id'] = $user_data['OrderDetail']['id'];
-                                $inventory_data['ManageInventory']['type'] = '+';
-                                $inventory_data['ManageInventory']['comment'] = 'Twop accepted the dispute.';
-                                $inventory_data['ManageInventory']['product_id'] = $user_data['OrderDetail']['product_id'];
-                                $inventory_data['ManageInventory']['quantity'] = $user_data['OrderDetail']['quantity'];
-                                $inventory_data['ManageInventory']['price'] = $user_data['OrderDetail']['price'];
-                                $inventory_data['ManageInventory']['user_id'] = $userid;
-                                $inventory_data['ManageInventory']['create_date'] = gmdate('Y-m-d H:i:s');
-                                $this->ManageInventory->create();
-                                $this->ManageInventory->save($inventory_data);
-
-                                //Update Product Inventory
-                                $data_prd['Product']['id'] = $user_data['OrderDetail']['product_id'];
-                                $data_prd['Product']['quantity'] = ($user_data['Product']['quantity']+$user_data['OrderDetail']['quantity']);
-                                $this->Product->save($data_prd);
-                                $thread_data=$this->Comment->find('first',array('conditions'=>array('Comment.order_id'=>$user_data['OrderDetail']['order_id'], 'Comment.comment_type'=>0)));
-
-                                $NewOrderId=$Ord_sl_no+$user_data['OrderDetail']['order_id'];
-                                //Insert Inbox Message 
-                                $comment_data['Comment']['user_id'] = $userid;
-                                $comment_data['Comment']['to_user_id'] = $user_data['OrderDetail']['user_id'];
-                                $comment_data['Comment']['comment_type'] = 6;
-                                $comment_data['Comment']['is_notification'] = 1;
-                                $comment_data['Comment']['order_id'] = $user_data['OrderDetail']['order_id'];
-                                $comment_data['Comment']['order_details_id'] = $user_data['OrderDetail']['id'];
-                                $comment_data['Comment']['thread_id'] = isset($thread_data['Comment']['thread_id'])?$thread_data['Comment']['thread_id']:0;
-                                $comment_data['Comment']['folder_id']=isset($thread_data['Comment']['folder_id'])?$thread_data['Comment']['folder_id']:0;
-                                $comment_data['Comment']['subject'] = 'Twop accepted the dispute. Order ID: '.$NewOrderId;
-                                $comment_data['Comment']['comments'] = $details.' <br />The Order ID is '.$NewOrderId.'.<br /> Product Name :'.$user_data['Product']['name'].' <br />Refund Amount: $'.$cal_new_dispute_amt;
-                                $comment_data['Comment']['cdate'] = gmdate('Y-m-d H:i:s');
-
-                                $this->Comment->create();			 
-                                $this->Comment->save($comment_data);
-
-                                $payment_arr['Payment']['userid']= $userid;
-                                $payment_arr['Payment']['amount']= $cal_new_dispute_amt;
-                                $payment_arr['Payment']['datetime']= gmdate('Y-m-d H:i:s');
-                                $payment_arr['Payment']['transaction_id']= $EncryptedTransactionID;
-                                $payment_arr['Payment']['for']= "debited for accepted the dispute order";
-                                $payment_arr['Payment']['status']= "Completed";
-                                $payment_arr['Payment']['type'] = 1;
-                                $this->Payment->create();
-                                $this->Payment->save($payment_arr);
-
-                                $payment_arr1['Payment']['userid']= $user_data['OrderDetail']['user_id'];
-                                $payment_arr1['Payment']['amount']= $cal_new_dispute_amt;
-                                $payment_arr1['Payment']['datetime']= gmdate('Y-m-d H:i:s');
-                                $payment_arr1['Payment']['transaction_id']= $EncryptedTransactionID;
-                                $payment_arr1['Payment']['for']= "credited amount for accepted the dispute order by seller";
-                                $payment_arr1['Payment']['status']= "Completed";
-                                $payment_arr1['Payment']['type'] = 2;
-                                $this->Payment->create();
-                                $this->Payment->save($payment_arr1);
-                                
-                                $key = Configure::read('CONTACT_EMAIL');
-                                $SITE_URL = Configure::read('SITE_URL');
-                                $this->loadModel('EmailTemplate');
-
-                                $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>9)));
-                                $product_name=$user_data['Product']['name'];
-                                $link=$SITE_URL.'orders/buyer_disputes';
-
-                                $mail_body =str_replace(array('[NAME]','[LINK]','[SELLERNAME]','[EMAIL]','[PRODUCTNAME]','[AMOUNT]'),array($to_user_name,$link,$seller_user_name,$seller_email,$product_name,$cal_new_dispute_amt),$EmailTemplate['EmailTemplate']['content']);
-                                $this->send_mail($key,$to_email,$EmailTemplate['EmailTemplate']['subject'],$mail_body);
-                                $this->Session->setFlash(__('You have successfully accept the dispute.'));
-                            }else{
-                                $this->Session->setFlash(__('The payment could not be refunded due to internal error.'));
-                            }
-                        }else{
-                            $this->Session->setFlash(__('The payment could not be refunded due to internal error.'));
-                        }
-                    }
-                }elseif($form_type=='RejectDispute'){
-                    $dispute_id=$this->request->data['dispute_id'];
-                    $details=$this->request->data['reject_details'];
-                    $order_details_id=$this->request->data['order_details_id'];
-                    if($dispute_id!=''){
-                        
-                        $dispute_data['DisputeMessage']['user_id']=$userid;
-                        $dispute_data['DisputeMessage']['dispute_id']=$dispute_id;
-                        $dispute_data['DisputeMessage']['reason']=$details;
-                        $dispute_data['DisputeMessage']['received_goods']='No';
-                        $dispute_data['DisputeMessage']['refund_request']='';
-                        $dispute_data['DisputeMessage']['return_goods']='No';
-                        $dispute_data['DisputeMessage']['refund_amount']='';
-                        $dispute_data['DisputeMessage']['action']='Twop reject the dispute';
-                        $dispute_data['DisputeMessage']['user_type']=3;
-                        $dispute_data['DisputeMessage']['cdate']=gmdate('Y-m-d H:i:s');
-                        $this->DisputeMessage->create();
-                        $this->DisputeMessage->save($dispute_data);
-                        
-                        $data_ord['Dispute']['id']=$dispute_id;
-                        $data_ord['Dispute']['seller_response']=1;
-                        $data_ord['Dispute']['seller_dispute_action']=2;
-                        $data_ord['Dispute']['is_close']=1;
-                        $this->Dispute->save($data_ord);
-                        
-                        $user_data=$this->OrderDetail->find('first',array('conditions'=>array('OrderDetail.id'=>$order_details_id)));
-                        $seller_user_name=$user_data['User']['first_name'].' '.$user_data['User']['last_name'];
-                        $seller_email=$user_data['User']['email'];
-                        //$to_user_name=$user_data['User']['first_name'];
-                        //$to_email=$user_data['User']['email'];
-                        $to_user_name=$user_data['Buyer']['first_name'];
-                        $to_email=$user_data['Buyer']['email'];
-                        
-                        $order_received_date=$user_data['OrderDetail']['order_received_date'];
-                        if($order_received_date=='0000-00-00 00:00:00'){
-                            $data_ord_det['OrderDetail']['order_status']='S';
-                        }else{
-                            $data_ord_det['OrderDetail']['order_status']='F';
-                        }
-                        
-                        $data_ord_det['OrderDetail']['id']=$order_details_id;
-                        $this->OrderDetail->save($data_ord_det);
-                        
-                        $thread_data=$this->Comment->find('first',array('conditions'=>array('Comment.order_id'=>$user_data['OrderDetail']['order_id'], 'Comment.comment_type'=>0)));
-                        
-                        $NewOrderId=$Ord_sl_no+$user_data['OrderDetail']['order_id'];
-                        //Insert Inbox Message 
-                        $comment_data['Comment']['user_id'] = $userid;
-                        $comment_data['Comment']['to_user_id'] = $user_data['OrderDetail']['user_id'];
-                        $comment_data['Comment']['comment_type'] = 6;
-                        $comment_data['Comment']['is_notification'] = 1;
-                        $comment_data['Comment']['order_id'] = $user_data['OrderDetail']['order_id'];
-                        $comment_data['Comment']['order_details_id'] = $user_data['OrderDetail']['id'];
-                        $comment_data['Comment']['thread_id'] = isset($thread_data['Comment']['thread_id'])?$thread_data['Comment']['thread_id']:0;
-                        $comment_data['Comment']['folder_id']=isset($thread_data['Comment']['folder_id'])?$thread_data['Comment']['folder_id']:0;
-                        $comment_data['Comment']['subject'] = 'Twop Reject the dispute. Order ID: '.$NewOrderId;
-                        $comment_data['Comment']['comments'] = $details.' <br />The Order ID is '.$NewOrderId.'.<br /> Product Name :'.$user_data['Product']['name'];
-                        $comment_data['Comment']['cdate'] = gmdate('Y-m-d H:i:s');
-
-                        $this->Comment->create();			 
-                        $this->Comment->save($comment_data);
-
-                        $key = Configure::read('CONTACT_EMAIL');
-                        $SITE_URL = Configure::read('SITE_URL');
-                        $this->loadModel('EmailTemplate');
-
-                        $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>10)));
-                        $product_name=$user_data['Product']['name'];
-                        $link=$SITE_URL.'orders/buyer_disputes';
-
-                        $mail_body =str_replace(array('[NAME]','[LINK]','[SELLERNAME]','[EMAIL]','[PRODUCTNAME]'),array($to_user_name,$link,$seller_user_name,$seller_email,$product_name),$EmailTemplate['EmailTemplate']['content']);
-                        $this->send_mail($key,$to_email,$EmailTemplate['EmailTemplate']['subject'],$mail_body);
-                        $this->Session->setFlash(__('You have successfully reject the dispute.'));
-                    }
-                }
-            }
-            //$this->Order->recursive = 0;
-            $orderdetail = $this->OrderDetail->find('first',array('conditions' => array('OrderDetail.id'=>$ord_id),'order' => array('OrderDetail.id' => 'desc')));
+            $orderdetail = $this->Order->find('first',array('conditions' => array('Order.id'=>$ord_id),'order' => array('Order.id' => 'desc')));
             if(count($orderdetail)==0){
                 return $this->redirect(array('action' => 'admin_order_list'));
             }
