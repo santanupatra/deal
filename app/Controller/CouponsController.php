@@ -40,9 +40,23 @@ class CouponsController extends AppController {
              ), 
             );
             $this->Paginator->settings = $this->paginate;
-
+            $coupons=$this->Paginator->paginate('Coupon');
+            $this->loadModel('OfflineOrder');
+            $this->loadModel('Order');
+            
+             foreach($coupons as $dt){
+                 
+               $soptions = array('conditions' => array('OfflineOrder.coupon_id'=> $dt['Coupon']['id']));
+               $storesold = $this->OfflineOrder->find('count', $soptions);
+               $ooptions = array('conditions' => array('Order.coupon_id'=> $dt['Coupon']['id']));
+               $onlinesold = $this->Order->find('count', $ooptions);
+                    
+                    $allcoupon[] =array('storesold'=>$storesold,'onlinesold'=>$onlinesold,'coupon'=>$dt);
+                    
+                }
+                    
             $this->Coupon->recursive = 0;
-            $this->set('coupons', $this->Paginator->paginate());
+            $this->set('coupons', $allcoupon);
 	}
 
 /**
@@ -373,7 +387,7 @@ class CouponsController extends AppController {
             );
             $this->Paginator->settings = $this->paginate;
 
-            $this->Coupon->recursive = 0;
+            //$this->Coupon->recursive = 0;
             $this->set('coupons', $this->Paginator->paginate());
 
 
@@ -383,4 +397,131 @@ class CouponsController extends AppController {
             $this->set(compact('category', 'allcategory', 'shops','name','image'));
 
     }
+    
+    
+    
+     public function redeem($id) {
+            $title_for_layout='Redeem Coupon';
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid) && $userid==''){
+                $this->redirect('/');
+            }
+            $this->loadModel('User');
+            $this->loadModel('Coupon');
+            $this->loadModel('OfflineOrder');
+            $id = base64_decode($id);
+            $user = $this->User->find("first",array('conditions'=>array('User.id'=> $userid)));
+            $options = array('conditions' => array('Coupon.id' => $id));
+            $coupon_details = $this->Coupon->find('first', $options);
+            
+            if ($this->request->is(array('post', 'put'))) {
+                
+                
+            $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+            $codeAlphabet.= "0123456789";
+            $max = strlen($codeAlphabet); // edited
+
+
+            for ($i = 0; $i < 6; $i++) {
+                $couponcode .= $codeAlphabet[random_int(0, $max - 1)];
+            }
+
+            $options = array('conditions' => array('OfflineOrder.coupon_code' => $couponcode));
+            $code_ex = $this->OfflineOrder->find('all', $options);
+
+            if (count($code_ex) > 0) {
+
+                $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $codeAlphabet = "abcdefghijklmnopqrstuvwxyz";
+                $codeAlphabet.= "0123456789";
+                $max = strlen($codeAlphabet); // edited
+
+
+                for ($i = 0; $i < 6; $i++) {
+                    $couponcode .= $codeAlphabet[random_int(0, $max - 1)];
+                }
+            } else {
+
+                
+                $this->request->data['OfflineOrder']['coupon_code'] = $couponcode;
+                $this->request->data['OfflineOrder']['book_name']=$this->request->data['OfflineOrder']['first_name']." ".$this->request->data['OfflineOrder']['last_name'];
+                $this->request->data['OfflineOrder']['book_date'] = date('Y-m-d H:i:s');
+                $cname=$this->request->data['OfflineOrder']['first_name']." ".$this->request->data['OfflineOrder']['last_name'];
+                $cphone=$this->request->data['OfflineOrder']['book_phone'];
+                $email=$this->request->data['OfflineOrder']['book_email'];
+                $this->OfflineOrder->create();
+               
+                if ($this->OfflineOrder->save($this->request->data)) {
+                  
+                //qr code
+                require_once 'phpqrcode/qrlib.php';
+                $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); 
+                $PNG_WEB_DIR = Configure::read('HTP_QRB_IMAGE'); 
+                if (!file_exists($PNG_TEMP_DIR))
+                    mkdir($PNG_TEMP_DIR);
+
+                $filename = $PNG_TEMP_DIR . '/' . 'test.png';
+
+                $errorCorrectionLevel = 'L';
+                
+                $matrixPointSize = 6;
+               
+                if (isset($couponcode)) {
+
+                    //it's very important!
+                    if (trim($couponcode) == '')
+                        die('data cannot be empty! <a href="?">back</a>');
+
+                    // user data
+                    $filename = $PNG_WEB_DIR . '/' .'test'.md5($couponcode).'.png';
+                    $img='test'.md5($couponcode).'.png';
+                    QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                } else {
+
+                     QRcode::png('No Code Found :)', $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                }
+
+
+                $this->loadModel('EmailTemplate');
+                $EmailTemplate = $this->EmailTemplate->find('first', array('conditions' => array('EmailTemplate.id' => 22)));
+                $this->loadModel('User');
+                
+                $options = array('conditions' => array('Coupon.id' => $this->request->data['OfflineOrder']['coupon_id']));
+                $coupon_detail = $this->Coupon->find('first', $options);
+                
+                
+                $couponname = $coupon_detail['Coupon']['name'];
+                $price = $coupon_detail['Coupon']['amount'];
+                $exdate = $coupon_detail['Coupon']['to_date'];
+                $offer = $coupon_detail['Coupon']['offer'].'% Discount';
+                $seller = $coupon_detail['User']['first_name'].' '.$tempid['User']['last_name'];
+                $shop = $coupon_detail['Shop']['name'];
+                $image = "<img src='http://111.93.169.90/team6/deal/htp_qr_images/$img'>";
+                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]','[CODETEXT]','[OFFER]','[SELLER]','[SHOP]','[CNAME]','[CMAIL]','[CPHONE]'), array($couponname, $price, $exdate, $image,$couponcode,$offer,$seller,$shop,$cname,$email,$cphone,), $EmailTemplate['EmailTemplate']['content']);
+
+                $this->send_smtpmail($email, 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);
+            
+               return $this->redirect(array('action' => 'success'));
+                    
+                } else {
+                    $this->Session->setFlash(__('Booking could not be saved. Please, try again.'));
+                }
+            }
+            }
+            
+            
+            $this->set(compact('title_for_layout','user','coupon_details'));
+	}
+    
+    public function success(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+    }
+    
+    
 }

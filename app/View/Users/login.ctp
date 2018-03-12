@@ -7,7 +7,7 @@
               <i class="fa fa-home"></i>
             </a></li>          
             <li class="breadcrumb-item active">Log In</li>
-            <li class="breadcrumb-item"><a href="res.html">Registration</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo $this->webroot; ?>users/registration">Registration</a></li>
           </ol>
         </div>
       </div>
@@ -36,10 +36,21 @@
                       <div class="col-lg-6">
                         <a class="flogin">
                           <div class="bg-primary text-white text-md-center text-capitalize p-md-2 w-100">
-                             <i class="fa fa-facebook fa-1x pr-2 "></i> Also Login with Facebook
+                             <i class="fa fa-facebook fa-1x pr-2"></i> Login with Facebook
                           </div>
                         </a>
                       </div>
+                        
+                        
+                        <div class="col-lg-6">
+                        <a href="#" onclick="google_login()">
+                          <div class="bg-info text-white text-md-center text-capitalize p-md-2 w-100">
+                             <i class="fa fa-google-plus fa-1x pr-2"></i> Login with Google Plus
+                          </div>
+                        </a>
+                      </div>
+                        
+                        
 
 <!--                      <div class="col-lg-6">
                         <a href="#">
@@ -49,15 +60,17 @@
                         </a>
                       </div>-->
 
-
-                      <div class="col-lg-6">
-                        <a href="#" onclick="google_login()">
-                          <div class="bg-info text-white text-md-center text-capitalize p-md-2 w-100">
-                             <i class="fa fa-google-plus fa-1x pr-2"></i> Login with Google Plus
+                    </div><br>
+                      <div class="row">
+                          <?php $login_url = 'https://api.instagram.com/oauth/authorize/?client_id=96d94515f8734c04ac8bef8d4f650af3&redirect_uri=http://111.93.169.90/team6/deal/users/instagramlogin&response_type=code&scope=basic';?>
+                        <div class="col-lg-6">
+                            <a href="<?php echo $login_url; ?>">
+                          <div class="bg-primary text-white text-md-center text-capitalize p-md-2 w-100">
+                             <i class="fa fa-instagram fa-1x pr-2"></i> Login with Instagram
                           </div>
                         </a>
+                      </div>  
                       </div>
-                    </div>
                   </div>
 
                   <span class="button-checkbox">
@@ -71,7 +84,7 @@
                         <input type="submit"  class="btn btn-sm bg-dark text-white btn-block rounded-0" value="Log In">
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">                      
-                      <input type="button" class="btn btn-sm bg-light btn-block rounded-0"  value="Register">
+                      <!--<input type="button" class="btn btn-sm bg-light btn-block rounded-0"  value="Register">-->
                     </div>
                   </div>
                 </fieldset>

@@ -22,22 +22,23 @@ class Coupon extends AppModel {
  *
  * @var array
  */
-	/*public $belongsTo = array(
-	        'User' => array(
+	public $belongsTo = array(
+	       
+	    'Shop' => array(
+			'className' => 'Shop',
+			'foreignKey' => 'shop_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+            'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-	    'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
 		)
-	);*/
+	);
 
 /**
  * hasMany associations

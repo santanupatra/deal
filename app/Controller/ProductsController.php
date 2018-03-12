@@ -179,14 +179,53 @@ public function product_list($type = null,$id = null) {
     public function details($id){
 
          $this->loadModel('Category');
+         $this->loadModel('Visitor');
          $id = base64_decode($id);
+         
+         
+         if (getenv('HTTP_CLIENT_IP')){
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+       
+       }else{
+          $ipaddress = $_SERVER['REMOTE_ADDR'];  
+       }
+        $existsvisitor = $this->Visitor->find('first',array('conditions' => array('deal_id' => $id,'ip_address' => $ipaddress)));
+        
+        //pr($existsvisitor);exit;
+       if(count($existsvisitor)< 1){
+       
+        $this->request->data['Visitor']['ip_address']=$ipaddress;
+        $this->request->data['Visitor']['visit_date'] = gmdate('Y-m-d H:i:s');
+        $this->request->data['Visitor']['deal_id']=$id;
+        $this->Visitor->create();
+        $this->Visitor->save($this->request->data);
+       }else{
+         $this->request->data['Visitor']['id']=  $existsvisitor['Visitor']['id']; 
+         $this->request->data['Visitor']['visit_date'] = gmdate('Y-m-d H:i:s');
+         $this->Visitor->save($this->request->data);
+           
+       }
+         
+         
          $details = $this->Product->find('first', array('conditions' => array('Product.id' => $id)));
          $this->set(compact('details'));
     }
 
     public function admin_index() {
         $this->Product->recursive = 0;
-        $this->set('products', $this->Paginator->paginate());
+        $this->loadModel('Visitor');
+        $products = $this->Paginator->paginate('Product');
+        foreach($products as $dt){
+                 
+                   $roptions = array('conditions' => array('Visitor.deal_id'=> $dt['Product']['id']));
+                   $visitor = $this->Visitor->find('count', $roptions);
+                    
+                    $allproduct[] =array('totalvisitor'=>$visitor,'product'=>$dt);
+                    
+                }
+        
+        
+        $this->set('products', $allproduct);
     }
 
     public function getwishlistcount($product_id = null, $user_id = null) {
@@ -356,12 +395,18 @@ public function product_list($type = null,$id = null) {
                 
        // print_r($this->request->data);exit;      
                 if ($this->Product->save($this->request->data)) {
-                  
+                    
+                   
                 $this->request->data['User']['id']=  $userid; 
                 $this->request->data['User']['total_deal']= $user['User']['total_deal'] -1;
-                $this->User->save($this->request->data); 
+                    
+                    
+                  $this->User->save($this->request->data); 
             
-                $this->Session->setFlash('The Deal has been saved.', 'default', array('class' => 'success'));
+                    
+                    
+
+                    $this->Session->setFlash('The Deal has been saved.', 'default', array('class' => 'success'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('The Deal could not be saved. Please, try again.'));
@@ -1834,7 +1879,7 @@ public function product_list($type = null,$id = null) {
 
         curl_close($ch);
 
-$this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$_POST["payment_status"]); 
+$this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'payment',$_POST["payment_status"]); 
 
         if ($_POST["payment_status"] == 'Pending' || $_POST["payment_status"] == 'Completed') {
 
@@ -1894,6 +1939,63 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
 
                 //qr code
                 require_once 'phpqrcode/qrlib.php';
+                $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); 
+                $PNG_WEB_DIR = Configure::read('HTP_QRB_IMAGE'); 
+                if (!file_exists($PNG_TEMP_DIR))
+                    mkdir($PNG_TEMP_DIR);
+
+                $filename = $PNG_TEMP_DIR . '/' . 'test.png';
+
+                $errorCorrectionLevel = 'L';
+                
+                $matrixPointSize = 6;
+               
+                if (isset($couponcode)) {
+
+                    //it's very important!
+                    if (trim($couponcode) == '')
+                        die('data cannot be empty! <a href="?">back</a>');
+
+                    // user data
+                    $filename = $PNG_WEB_DIR . '/' .'test'.md5($couponcode).'.png';
+                    $img='test'.md5($couponcode).'.png';
+                    QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                } else {
+
+                     QRcode::png('No Code Found :)', $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                }
+
+
+                $this->loadModel('EmailTemplate');
+                $EmailTemplate = $this->EmailTemplate->find('first', array('conditions' => array('EmailTemplate.id' => 21)));
+                $this->loadModel('User');
+                $receveremail = $this->User->find('first', array('conditions' => array('User.id' => $userid)));
+                $couponname = $tempid['Coupon']['name'];
+                $price = $tempid['Coupon']['amount'];
+                $exdate = $tempid['Coupon']['to_date'];
+                $offer = $tempid['Coupon']['offer'].'% Discount';
+                $seller = $tempid['User']['first_name'].' '.$tempid['User']['last_name'];
+                $shop = $tempid['Shop']['name'];
+                $image = "<img src='http://111.93.169.90/team6/deal/htp_qr_images/$img'>";
+                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]','[CODETEXT]','[OFFER]','[SELLER]','[SHOP]'), array($couponname, $price, $exdate, $image,$couponcode,$offer,$seller,$shop), $EmailTemplate['EmailTemplate']['content']);
+
+                $this->send_smtpmail($receveremail['User']['email'], 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);
+            }
+        }
+    }
+
+    public function success_payment(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+      
+      
+      
+      /* //qr code
+                require_once 'phpqrcode/qrlib.php';
                 $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
                 //echo $PNG_TEMP_DIR;exit;
                 //html PNG location prefix
@@ -1908,98 +2010,30 @@ $this->send_smtpmail('santanu@natitsolved.com', 'nits.santanupatra@gmail.com', '
                 //processing form input
                 //remember to sanitize user input in real-life solution !!!
                 $errorCorrectionLevel = 'L';
-                if (isset($_REQUEST['level']) && in_array($_REQUEST['level'], array('L', 'M', 'Q', 'H')))
-                    $errorCorrectionLevel = $_REQUEST['level'];
-
-                $matrixPointSize = 4;
-                if (isset($_REQUEST['size']))
-                    $matrixPointSize = min(max((int) $_REQUEST['size'], 1), 10);
-
-
-                if (isset($_REQUEST['data'])) {
+                
+                $matrixPointSize = 6;
+                $couponcode="xyz123";
+               
+                if (isset($couponcode)) {
 
                     //it's very important!
-                    if (trim($_REQUEST['data']) == '')
+                    if (trim($couponcode) == '')
                         die('data cannot be empty! <a href="?">back</a>');
 
                     // user data
-                    $filename = $PNG_WEB_DIR . '/' .'test' . md5($errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
-                    $code = QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                    $filename = $PNG_WEB_DIR . '/' .'test'.$couponcode.'.png';
+                    $img='test'.$couponcode.'.png';
+                    QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
                 } else {
 
                     //default data
 
-                    $code = QRcode::png($couponcode, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+                     QRcode::png('PHP QR Code :)', $filename, $errorCorrectionLevel, $matrixPointSize, 2);
                 }
-
-
-                $this->loadModel('EmailTemplate');
-                $EmailTemplate = $this->EmailTemplate->find('first', array('conditions' => array('EmailTemplate.id' => 21)));
-                $this->loadModel('User');
-                $receveremail = $this->User->find('first', array('conditions' => array('User.id' => $userid)));
-                $couponname = $tempid['Coupon']['name'];
-                $price = $tempid['Coupon']['amount'];
-                $exdate = $tempid['Coupon']['to_date'];
-                $image = "<img src='$filename'>";
-                $mail_body = str_replace(array('[NAME]', '[PRICE]', '[EXDATE]', '[CODE]'), array($couponname, $price, $exdate, $image), $EmailTemplate['EmailTemplate']['content']);
-
-                $this->send_smtpmail('spandan@natitsolved.com', 'nits.santanupatra@gmail.com', 'Coupon code', $mail_body);
-            }
-        }
-    }
-
-    public function success_payment(){
-      $userid = $this->Session->read('Auth.User.id');
-      if(!isset($userid) && $userid=='')
-      {
-      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
-      return $this->redirect(array('action' => 'login'));
-      }
-      
-      
-       /* //qr code
-                require_once 'phpqrcode/qrlib.php';
-                $PNG_TEMP_DIR = Configure::read('QRB_IMAGE'); //dirname(__FILE__).DIRECTORY_SEPARATOR.QRB_IMAGE.DIRECTORY_SEPARATOR;
-               //echo $PNG_TEMP_DIR;exit;
-                //html PNG location prefix
-                $PNG_WEB_DIR = Configure::read('HTP_QRB_IMAGE'); //'/var/www/html/gqual/private/phpqrcode/temp/';
-                //ofcourse we need rights to create temp dir
-                if (!file_exists($PNG_TEMP_DIR))
-                    mkdir($PNG_TEMP_DIR);
-
-
-                $filename = $PNG_TEMP_DIR . '/' .'test.png';
-
-                //processing form input
-                //remember to sanitize user input in real-life solution !!!
-                $errorCorrectionLevel = 'L';
-                if (isset($_REQUEST['level']) && in_array($_REQUEST['level'], array('L', 'M', 'Q', 'H')))
-                    $errorCorrectionLevel = $_REQUEST['level'];
-
-                $matrixPointSize = 4;
-                if (isset($_REQUEST['size']))
-                    $matrixPointSize = min(max((int) $_REQUEST['size'], 1), 10);
-
-
-                if (isset($_REQUEST['data'])) {
-
-                    //it's very important!
-                    if (trim($_REQUEST['data']) == '')
-                        die('data cannot be empty! <a href="?">back</a>');
-
-                    // user data
-                    $filename = $PNG_WEB_DIR . '/' .'test' . md5($errorCorrectionLevel . '|' . $matrixPointSize) . '.png';
-                    
-                    
-                    $code = QRcode::png("1234", $filename, $errorCorrectionLevel, $matrixPointSize, 2);
-                } else {
-
-                    $code = QRcode::png("1234", $filename, $errorCorrectionLevel, $matrixPointSize, 2);
-                }
-
-
-                //print_r($code); 
       */
+      
+      
+      
       
 
   }

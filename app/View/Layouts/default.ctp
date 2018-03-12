@@ -194,7 +194,7 @@ $cakeDescription = __d('cake_dev', 'DEAL');
                       </li>
                       <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
-                            cupons
+                            coupons
                         </a>
                        <div class="dropdown-menu rounded-0 p-2">
                            <div class="new-innermenudiv d-inline-block float-left">

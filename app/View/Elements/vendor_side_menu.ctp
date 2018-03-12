@@ -12,6 +12,21 @@
                             <a <?php if($this->params['controller']=='users' && $this->params['action']=='vendor_change_password') {?> class="active" <?php } ?> href="<?php echo($this->webroot);?>users/vendor_change_password"><i class="fa fa-fw fa-lock"></i> Change Password</a>
                         </li>
                         
+                        
+                        <li>
+                            <a <?php if($this->params['controller']=='shops' && $this->params['action']=='add')
+        {?> class="active" <?php } ?> href="<?php echo($this->webroot);?>shops/add"><i class="fa fa-fw fa-cube"></i> Add Shop</a>
+                        </li>
+                            <li>
+                            <a <?php if($this->params['controller']=='products' && $this->params['action']=='index')
+        {?> class="active" <?php } ?> href="<?php echo($this->webroot);?>shops/"><i class="fa fa-fw fa-cube"></i> Shop List</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
                         <li>
                             <a <?php if($this->params['controller']=='products' && $this->params['action']=='add')
         {?> class="active" <?php } ?> href="<?php echo($this->webroot);?>products/add"><i class="fa fa-fw fa-cube"></i> Add Deal</a>

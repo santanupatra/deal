@@ -29,6 +29,68 @@ class PackagesController extends AppController {
 		$this->Package->recursive = 0;
 		$this->set('categories', $this->Paginator->paginate());
 	}*/
+        
+        
+        public function admin_request_list() {		
+            $title_for_layout = 'Package Request List';
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid) && $userid==''){
+                $this->redirect('/admin');
+            }
+            $this->loadModel('PackageRequest');
+            $this->Paginator->settings = array(
+                'limit' =>15,
+                'order' => array(
+                   'PackageRequest.id' => 'desc'
+                )
+            );
+            $this->set('request_list', $this->Paginator->paginate('PackageRequest'));
+            $this->set(compact('title_for_layout'));
+	}
+        
+        public function admin_request_edit($id = null) {
+            $userid = $this->Session->read('Auth.User.id');
+            if(!isset($userid) && $userid==''){
+                $this->redirect('/admin');
+            }
+            $this->loadModel('PackageRequest');
+            $this->loadModel('User');
+            $id=  base64_decode($id);
+            
+            $requestdetails=  $this->PackageRequest->find('first',array('conditions' => array('PackageRequest.id'  => $id)));
+            $user=$this->User->find('first',array('conditions' => array('User.id'  => $requestdetails['PackageRequest']['user_id'])));
+            
+            $this->request->data['User']['id']= $requestdetails['PackageRequest']['user_id'];
+            $this->request->data['User']['total_deal']= $user['User']['total_deal']+$requestdetails['Package']['no_deal'];
+            $this->request->data['User']['total_coupon']= $user['User']['total_coupon']+$requestdetails['Package']['no_coupon'];
+            
+             if ($this->User->save($this->request->data)) {
+            
+            $this->request->data['PackageRequest']['id']= $id;
+            $this->request->data['PackageRequest']['status']= 1;
+           
+            $this->PackageRequest->save($this->request->data);
+              
+            
+               $this->loadModel('EmailTemplate');
+			   $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>24)));
+                           
+			   $mail_body = $EmailTemplate['EmailTemplate']['content'];
+
+			  $res= $this->send_smtpmail($user['User']['email'],'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+               
+               
+                $this->Session->setFlash('User account upgraded successfully.', 'default', array('class' => 'success'));
+               
+             }else {
+                $this->Session->setFlash(__('User account not upgraded successfully. Please, try again.'));
+            }
+            return $this->redirect(array('action' => 'request_list'));
+	}
+        
+        
+        
+        
 	
 	public function admin_index() {		
             $title_for_layout = 'Package List';
@@ -581,6 +643,11 @@ class PackagesController extends AppController {
                 return $this->redirect(array('action' => 'advertisement'));
             }
         }
+        
+        
+        
+        
+        
 	
         public function advertisement_delete($id = null) {
             $this->loadModel('Advertisement');
@@ -912,6 +979,70 @@ class PackagesController extends AppController {
         
         
         
+      public function package_request($id=NULL){
+       
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+        $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+        return $this->redirect(array('controller'=>'users','action' => 'login'));
+      }
+      $this->loadModel('PackageRequest');
+      $id= base64_decode($id);
+
+      if($this->request->is('post')) {
+                
+             $this->request->data['PackageRequest']['package_id']=$id;
+             $this->request->data['PackageRequest']['user_id']=$userid;
+             $this->request->data['PackageRequest']['request_date']=date('Y-m-d H:i:s');
+             $this->PackageRequest->create();
+             if ($this->PackageRequest->save($this->request->data)) {
+                 
+                 $this->loadModel('EmailTemplate');
+			   $EmailTemplate=$this->EmailTemplate->find('first',array('conditions'=>array('EmailTemplate.id'=>23)));
+                           $this->loadModel('SiteSetting');
+                           $contactemail=$this->SiteSetting->find('first',array('conditions'=>array('SiteSetting.id'=>1)));
+
+			   $mail_body = $EmailTemplate['EmailTemplate']['content'];
+
+			  $res= $this->send_smtpmail($contactemail['SiteSetting']['admin_email'],'nits.santanupatra@gmail.com',$EmailTemplate['EmailTemplate']['subject'],$mail_body);
+             
+             return $this->redirect(array('action' => 'success_request'));
+             
+                        }else{
+                            
+             return $this->redirect(array('action' => 'cancel_request'));             
+                        }           
+                      
+      }   
+            
+                   
+                                    
+            } 
+      
+            
+            
+       public function success_request(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+
+  }
+        
+    public function cancel_request(){
+      $userid = $this->Session->read('Auth.User.id');
+      if(!isset($userid) && $userid=='')
+      {
+      $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+      return $this->redirect(array('action' => 'login'));
+      }
+     
+  }
+            
+       
         
         
         public function payment($id)
@@ -951,7 +1082,7 @@ class PackagesController extends AppController {
         public function payment_process($id){
             
       $this->layout = false;
-      
+      $id=  base64_encode($id);
       $this->loadModel('SiteSetting');
       $this->loadModel('Package');
       $userid = $this->Session->read('Auth.User.id');

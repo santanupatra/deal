@@ -28,7 +28,7 @@ class ShopsController extends AppController {
 
  */
 
-	public $components = array('Paginator');
+	public $components = array('Paginator','Imagethumb');
         var $uses=array('Shop','User','Category','Percentage');
 
 	public function beforeFilter() {
@@ -953,7 +953,7 @@ class ShopsController extends AppController {
 		{
 			$this->redirect('/admin');
 		}
-		$title_for_layout = 'Shop List';
+		$title_for_layout = 'Vendor List';
                 $this->paginate = array(
 			'order' => array(
 				'User.id' => 'desc'
@@ -1111,6 +1111,17 @@ class ShopsController extends AppController {
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 		$this->set('shop', $this->User->find('first', $options));
+                $this->loadModel('Shop');
+                $this->loadModel('Product');
+                $this->loadModel('Coupon');
+                $this->loadModel('Order');
+                $countshop= $this->Shop->find('count', array('conditions' => array('Shop.user_id' => $id)));
+                $countdealupload= $this->Product->find('count', array('conditions' => array('Product.user_id' => $id)));
+                $countcouponupload= $this->Coupon->find('count', array('conditions' => array('Coupon.user_id' => $id)));
+                $countcouponsold= $this->Order->find('count', array('conditions' => array('Order.coupon_owner_id' => $id)));
+                
+                $this->set(compact('countshop','title_for_layout','countdealupload','countcouponupload','countcouponsold'));
+                
 	}
 	
         public function admin_delete($id = null) {
@@ -1452,5 +1463,179 @@ class ShopsController extends AppController {
              $product_count=$this->Product->find("count",array('conditions'=>array('Product.shop_id'=>$shop_id,'Product.status' => 'A', 'Product.is_deleted' => 0)));
              return $product_count;
         }
+        
+        
+        
+        
+        
+        public function add() {
+        $this->loadModel('User');
+        $this->loadModel('Shop');
+        $title_for_layout = 'Add Shop';
+        $userid = $this->Session->read('Auth.User.id');
+        $utype = $this->Session->read('Auth.User.type');
+
+        if ((!isset($userid) && $userid == '') || $utype != 'V') {
+
+            $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+            return $this->redirect(array('controller' => 'users', 'action' => 'login'));
+        } else {
+            $options = array('conditions' => array('User.' . $this->User->primaryKey => $userid));
+            $user = $this->User->find('first', $options);
+
+            if ($this->request->is('post')) {
+                
+              $this->Shop->create();
+              $this->request->data['Shop']['created_at'] = gmdate('Y-m-d H:i:s');
+ 
+       if(!empty($this->request->data['Shop']['logo']['name'])){
+      $pathpart=pathinfo($this->request->data['Shop']['logo']['name']);
+      $ext=$pathpart['extension'];
+      $extensionValid = array('jpg','jpeg','png','gif');
+      if(in_array(strtolower($ext),$extensionValid)){
+      $uploadFolder = "shop_images/";
+      $uploadPath = WWW_ROOT . $uploadFolder;
+      $filename =uniqid().'.'.$ext;
+      $full_flg_path = $uploadPath . '/' . $filename;
+      move_uploaded_file($this->request->data['Shop']['logo']['tmp_name'],$full_flg_path);
+     // $this->Imagethumb->generateThumb(WWW_ROOT .'shop_images/', WWW_ROOT."shop_images/thumbs/",$thumb_img_width='350', $filename);
+      
+      //echo WWW_ROOT;exit;
+      }
+      
+      else{
+       $this->Session->setFlash(__('Invalid image type.'));
+      }
+     }
+     else{
+      $filename='';
+     }
+        $this->request->data['Shop']['logo']= $filename;
+                
+       // print_r($this->request->data);exit;      
+                if ($this->Shop->save($this->request->data)) {
+                    
+                    
+
+                    $this->Session->setFlash('The Shop has been saved.', 'default', array('class' => 'success'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('The Shop could not be saved. Please, try again.'));
+                }
+            
+            }
+
+
+            $status = array('1' => 'Active', '0' => 'Inactive');
+            
+            
+            
+           
+            $this->set(compact('user',   'status', 'title_for_layout'));
+        }
+    }
+        
+        
+     public function index() {
+       
+        $title_for_layout = 'Shop List';
+        $this->loadModel('User');
+        $this->loadModel('Shop');
+
+        $userid = $this->Session->read('Auth.User.id');
+        $utype = $this->Session->read('Auth.User.type');
+        if ((!isset($userid) && $userid == '') || $utype != 'V') {
+            $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+            return $this->redirect(array('controller' => 'users', 'action' => 'login'));
+        }
+
+
+        $this->paginate = array('conditions' => array('Shop.user_id' => $userid), 'limit' => 10, 'order' => array('Shop.id' => 'desc'),
+        );
+        $this->Paginator->settings = $this->paginate;
+        //$this->Product->recursive = 1;
+        $this->set('shops', $this->Paginator->paginate('Shop'));
+    }    
+        
+     public function delete($id = null) {
+        $this->Shop->id = $id;
+        if (!$this->Shop->exists()) {
+            throw new NotFoundException(__('Invalid shop'));
+        }
+        //$this->request->allowMethod('post', 'delete');
+        if ($this->Shop->delete($id)) {
+            $this->Session->setFlash(__('The shop has been deleted.'));
+        } else {
+            $this->Session->setFlash(__('The shop could not be deleted. Please, try again.'));
+        }
+        return $this->redirect(array('action' => 'index'));
+    }   
+        
+   public function edit($id = null) {
+
+        $this->loadModel('User');
+       
+        $title_for_layout = 'Edit Shop';
+        $userid = $this->Session->read('Auth.User.id');
+        $utype = $this->Session->read('Auth.User.type');
+        if ((!isset($userid) && $userid == '') || $utype != 'V') {
+            $this->Session->setFlash(__('Please login to access profile.', 'default', array('class' => 'error')));
+            return $this->redirect(array('action' => 'login'));
+        }
+        $options = array('conditions' => array('User.' . $this->User->primaryKey => $userid));
+        $user = $this->User->find('first', $options);
+
+
+        if (!$this->Shop->exists($id)) {
+            throw new NotFoundException(__('Invalid Shop'));
+        }
+        if ($this->request->is(array('post', 'put'))) {
+            if (isset($this->request->data['Shop']['user_id']) && !empty($this->request->data['Shop']['user_id'])) {
+                if(!empty($this->request->data['Shop']['logo']['name'])){
+      $pathpart=pathinfo($this->request->data['Shop']['logo']['name']);
+      $ext=$pathpart['extension'];
+      $extensionValid = array('jpg','jpeg','png','gif');
+      if(in_array(strtolower($ext),$extensionValid)){
+      $uploadFolder = "shop_images/";
+      $uploadPath = WWW_ROOT . $uploadFolder;
+      $filename =uniqid().'.'.$ext;
+      $full_flg_path = $uploadPath . '/' . $filename;
+      move_uploaded_file($this->request->data['Shop']['logo']['tmp_name'],$full_flg_path);
+    
+      }
+      
+      else{
+       $this->Session->setFlash(__('Invalid image type.'));
+      }
+     }
+       else{
+        $filename=$this->request->data['Shop']['hid_img'];
+       }
+
+       $this->request->data['Shop']['logo']=$filename; 
+               
+                if ($this->Shop->save($this->request->data)) {
+
+
+                    $this->Session->setFlash('The Shop has been updated.', 'default', array('class' => 'success'));
+                    return $this->redirect(array('action' => 'edit/' . $id));
+                } else {
+                    $this->Session->setFlash(__('The Shop could not be updated. Please, try again.'));
+                    return $this->redirect(array('action' => 'edit/' . $id));
+                }
+            } 
+        } else {
+            $options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
+            $this->request->data = $this->Shop->find('first', $options);
+        }
+
+        
+         
+        $status = array('1' => 'Active',  '0' => 'Inactive');
+        
+        
+        $this->set(compact('user', 'status'));
+    }
+    
 }
 

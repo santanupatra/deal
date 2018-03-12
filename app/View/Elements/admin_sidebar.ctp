@@ -46,6 +46,15 @@ if(count($pass_data)>0){
         <li <?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_index' || $this->params['action']=='admin_edit'))
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/index"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_index' || $this->params['action']=='admin_edit')){?><i class="icon-chevron-right"></i><?php } ?> Subscription Packages</a>
 	</li>
+        
+        <li <?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_request_list' || $this->params['action']=='admin_request_edit'))
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/request_list"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_request_list' || $this->params['action']=='admin_request_edit')){?><i class="icon-chevron-right"></i><?php } ?> Subscription Request</a>
+	</li>
+        
+        
+        
+        
+        
        <!--  <li <?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_advertisement' || $this->params['action']=='admin_advertisement_edit'))
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/packages/advertisement"><?php if($this->params['controller']=='packages' && ($this->params['action']=='admin_advertisement' || $this->params['action']=='admin_advertisement_edit')){?><i class="icon-chevron-right"></i><?php } ?> Advertisement</a>
 	</li>  -->
@@ -152,13 +161,14 @@ if(count($pass_data)>0){
 	</li>
         
         
-        
-
         <li <?php if($this->params['controller']=='faqs')
         {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/faqs/index">
             <?php if($this->params['controller']=='faqs')
         {?><i class="icon-chevron-right"></i><?php } ?> FAQ Management</a>
 	</li>
+        
+        
+        
         
         <!--spandan 4/10-->
     <li <?php if($this->params['controller']=='advertises')
@@ -167,6 +177,22 @@ if(count($pass_data)>0){
         {?><i class="icon-chevron-right"></i><?php } ?> Advertise Management</a>
 	</li>
         <!--end-->
+        
+        
+        
+         <li <?php if($this->params['controller']=='users' && $this->params['action']=='admin_subscriber_list')
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/users/subscriber_list">
+            <?php if($this->params['controller']=='users' && $this->params['action']=='admin_subscriber_list')
+        {?><i class="icon-chevron-right"></i><?php } ?> Mail Subscribers</a>
+	</li>
+        
+        <li <?php if($this->params['controller']=='users' && $this->params['action']=='admin_send_mail' )
+        {?>class="active"<?php } ?>><a href="<?php echo($this->webroot)?>admin/users/send_mail">
+            <?php if($this->params['controller']=='users' && $this->params['action']=='admin_send_mail')
+        {?><i class="icon-chevron-right"></i><?php } ?> Send Mail</a>
+	</li>
+        
+        
         
 	<li>
 		<a href="<?php echo($this->webroot)?>admin/users/logout">Logout</a>

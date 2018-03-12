@@ -15,12 +15,8 @@
 						&nbsp;
 					</dd>
 
+					
 					<dt><?php echo __('Name'); ?></dt>
-					<dd>
-						<?php echo h($shop['User']['name']); ?>
-						&nbsp;
-					</dd>
-					<dt><?php echo __('Owner'); ?></dt>
 					<dd>
 						<?php echo h($shop['User']['first_name'].' '.$shop['User']['last_name']); ?>
 						&nbsp;
@@ -30,16 +26,8 @@
 						<?php echo h($shop['User']['email']); ?>
 						&nbsp;
 					</dd>
-<!--					<dt><?php echo __('Company Name'); ?></dt>
-					<dd>
-						<?php echo h($shop['User']['company_name']); ?>
-						&nbsp;
-					</dd>-->
-					<dt><?php echo __('Business Email'); ?></dt>
-					<dd>
-						<?php if(isset($shop['User']['paypal_business_email']) && $shop['User']['paypal_business_email']!=''){echo $shop['User']['paypal_business_email'];}else{echo 'N/A';} ?>
-						&nbsp;
-					</dd>
+
+					
 					<dt><?php echo __('Phone'); ?></dt>
 					<dd>
 						<?php if(isset($shop['User']['mobile_number']) && $shop['User']['mobile_number']!=''){echo $shop['User']['mobile_number'];}else{echo 'N/A';} ?>
@@ -47,13 +35,29 @@
 					</dd>
 					
 					
-<!--					<dt><?php echo __('Percentage'); ?></dt>
+					<dt><?php echo __('No of Shops'); ?></dt>
 					<dd>
-						<?php if(isset($shop['User']['percentage_id']) && $shop['User']['percentage_id']!=''){echo $shop['Percentage']['name'].' / '.$shop['Percentage']['percent'];}else{echo 'N/A';} ?>
+						<?php echo $countshop;?>
 						&nbsp;
-					</dd>-->
+					</dd>
 					
+                                        <dt><?php echo __('Deal Upload No.'); ?></dt>
+					<dd>
+						<?php echo $countdealupload;?>
+						&nbsp;
+					</dd>
+                                        
+                                        <dt><?php echo __('Coupon Upload No.'); ?></dt>
+					<dd>
+						<?php echo $countcouponupload;?>
+						&nbsp;
+					</dd>
 					
+                                        <dt><?php echo __('Coupon Sold No.'); ?></dt>
+					<dd>
+						<?php echo $countcouponsold;?>
+						&nbsp;
+					</dd>
 					
 					
 					
