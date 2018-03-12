@@ -38,6 +38,13 @@ class Product extends AppModel {
 			'order' => ''
         ),
             
+            'City' => array(
+			'className' => 'City',
+			'foreignKey' => 'city_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+        ),
             
 	);
         

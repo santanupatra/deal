@@ -1,3 +1,13 @@
+<style>
+.block-content {
+    margin: 1em;
+    background: #e8e8e8;
+    padding: 10px 10px;
+    min-height: 100px;
+}    
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 <div class="span9" id="content">
 	<div class="row-fluid">
 		<div class="navbar">
@@ -22,9 +32,51 @@
 				</div>
 			</div>
 			
-			<div class="block-content collapse in">
+<!--			<div class="block-content collapse in">
 			 Welcome To Admin Panel. Dashboard Statistics Coming Soon...
-			</div>
+			</div>-->
+<div class="row-fluid">
+    <div class="span3">
+        <div class="block-content collapse in" style="text-align: center;"> 
+          <i class="fa fa-user" aria-hidden="true"></i> <span style="font-size: 17px"> No of User </span> 
+          <br><br><span style="font-size: 50px"><?php echo $countuser;?></span>  
+        </div>
+    </div>
+    
+    <div class="span3">
+        <div class="block-content collapse in" style="text-align: center;"> 
+           <i class="fa fa-user" aria-hidden="true"></i> <span style="font-size: 17px"> No of Vendor </span> 
+           <br><br><span  style="font-size: 50px"><?php echo($countvendor)?></span> </a> 
+        </div>        
+    </div>
+    
+    <div class="span3">
+        <div class="block-content collapse in" style="text-align: center;"> 
+           <i class="fa fa-cloud-upload" aria-hidden="true"></i> <span style="font-size: 17px"> Deal Uploaded </span> 
+          <br><br><span style="font-size: 50px"><?php echo $countdealupload; ?></span>  
+        </div>        
+    </div>
+    <div class="span3">
+        <div class="block-content collapse in" style="text-align: center;"> 
+           <i class="fa fa-cloud-upload" aria-hidden="true"></i> <span style="font-size: 17px"> Coupon Uploaded </span> 
+          <br><br><span style="font-size: 50px"><?php echo $countcouponupload; ?></span>  
+        </div>        
+    </div>  
+</div>
+
+<div class="row-fluid">
+    <div class="span3">
+        <div class="block-content collapse in" style="text-align: center;"> 
+           <i class="fa fa-cart-plus" aria-hidden="true"></i> <span style="font-size: 17px"> Coupon Sold </span> 
+          <br><br><span style="font-size: 50px"><?php echo $countcouponsold; ?></span>  
+        </div>
+    </div>
+    
+    
+    <!--<a class="quick-btn" href=""></a>-->
+</div>
+
+                            
 		</div>
 		<!-- /block -->
 	</div>

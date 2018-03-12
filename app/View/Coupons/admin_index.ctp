@@ -18,24 +18,28 @@
                                             <th><?php echo $this->Paginator->sort('from_date'); ?></th>
                                             <th><?php echo $this->Paginator->sort('to_date'); ?></th>
                                             <th><?php echo $this->Paginator->sort('is_active'); ?></th>
+                                            <th><?php echo $this->Paginator->sort('Store order'); ?></th>
+                                            <th><?php echo $this->Paginator->sort('Online Order'); ?></th>
                                             <th class="actions"><?php echo __('Actions'); ?></th>
 					</tr>
                                     </thead>
                                     <tbody>
-					<?php foreach ($coupons as $val): ?>
+					<?php  foreach ($coupons as $val): ?>
 					<tr>
-                                            <td><?php echo h($val['Coupon']['id']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['name']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['coupon']['Coupon']['id']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['coupon']['Coupon']['name']); ?>&nbsp;</td>
                                             
-<!--                                            <td><?php echo ($val['Coupon']['type']==1)?'Amount':'Percentage'; ?>&nbsp;</td>-->
-                                            <td><?php echo h($val['Coupon']['amount']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['from_date']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['to_date']); ?>&nbsp;</td>
-                                            <td><?php echo h($val['Coupon']['is_active']==1?'Yes':'No'); ?>&nbsp;</td>
+<!--                                            <td><?php echo ($val['coupon']['Coupon']['type']==1)?'Amount':'Percentage'; ?>&nbsp;</td>-->
+                                            <td><?php echo h($val['coupon']['Coupon']['amount']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['coupon']['Coupon']['from_date']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['coupon']['Coupon']['to_date']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['coupon']['Coupon']['is_active']==1?'Yes':'No'); ?>&nbsp;</td>
+                                            <td><?php echo h($val['storesold']); ?>&nbsp;</td>
+                                            <td><?php echo h($val['onlinesold']); ?>&nbsp;</td>
                                             <td class="actions">
-                                                <a href="<?php echo $this->webroot;?>admin/coupons/edit/<?php echo $val['Coupon']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Coupon" width="22" height="21"></a>
+                                                <a href="<?php echo $this->webroot;?>admin/coupons/edit/<?php echo $val['coupon']['Coupon']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Coupon" width="22" height="21"></a>
 
-                                                <a href="<?php echo $this->webroot;?>admin/coupons/delete/<?php echo $val['Coupon']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Coupon" width="24" height="24"></a>
+                                                <a href="<?php echo $this->webroot;?>admin/coupons/delete/<?php echo $val['coupon']['Coupon']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Coupon" width="24" height="24"></a>
                                             </td>
 					</tr>
                                         <?php endforeach; ?>

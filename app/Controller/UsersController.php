@@ -17,7 +17,7 @@ class UsersController extends AppController {
     public $components = array('Paginator','Session');
     public function beforeFilter() {
 	parent::beforeFilter();
-	$this->Auth->allow('index','fblogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus', 'loyalty','subscribe');
+	$this->Auth->allow('index','fblogin','GetAccessToken','GetUserProfileInfo','instagramlogin','twitterlogin','home','vendor_change_password','change_password','active_account','signin','forgot_password','login','admin_index','admin_middle_list','admin_captcha','admin_login','admin_fotgot_password','activation','post_ad','dashboard','search','mapframe','mapframe1','autoLogin','autosignup','autosignuplogin','gpluslogin','thankyou','emailExists','appsignup','appsignin','appforgotpass','applogout','get_user_details','edit_photoservice','edit_profileservice','edit_shopservice','viewservice','app_update_email','verification_code','app_password_updated','registration', 'contactus', 'loyalty','subscribe');
    }
 /**
  * index method
@@ -34,6 +34,7 @@ class UsersController extends AppController {
           $this->loadModel('Advertise');
           $this->loadModel('Shop');
           $this->loadModel('City');
+          $this->loadModel('Content');
            
 
           $allcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1)));
@@ -47,7 +48,11 @@ class UsersController extends AppController {
           $cities = $this->City->find("all",array('conditions'=>array('is_active'=> 1)));
           
           $couponcategory = $this->Category->find("all",array('conditions'=>array('is_active'=> 1, 'type' => 'C','is_popular'=> 1)));
-       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops','couponcategory','cities'));
+          
+          
+          $homecontent = $this->Content->find("first",array('conditions'=>array('Content.id'=> 8)));
+          
+       	  $this->set(compact('allcategory', 'popular_category', 'video', 'advertise', 'shops','couponcategory','cities','homecontent'));
                 
     }
     
@@ -340,8 +345,11 @@ class UsersController extends AppController {
       $title_for_layout = 'Sign In';
       
 
-      if(isset($userid) && $userid!='' && $is_admin!=1){
-         return $this->redirect(array('action' => 'home'));
+      if(isset($userid) && $userid!='' && $is_admin!=1 && $utype=='C'){
+         return $this->redirect(array('action' => 'dashboard'));
+      }elseif(isset($userid) && $userid!='' && $is_admin!=1 && $utype=='V'){
+          
+          return $this->redirect(array('action' => 'vendor_dashboard'));
       }else{
       if ($this->request->is('post')) 
 	     {
@@ -565,6 +573,94 @@ class UsersController extends AppController {
 	  $this->redirect('/');
         }
         
+        
+        
+         public function instagramlogin()
+    {
+    	$this->autoRender = false;
+         
+        
+        if(isset($_GET['code'])) {
+	
+		$client_id='96d94515f8734c04ac8bef8d4f650af3';
+		$redirect_uri='http://111.93.169.90/team6/deal/users/instagramlogin';
+                $client_secret='297762e5c4b7423dab0fd80e32d1e47e';
+                $code= $_GET['code'];
+                
+                $url = 'https://api.instagram.com/oauth/access_token';
+	
+	$curlPost = 'client_id='. $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code='. $code . '&grant_type=authorization_code';
+	$ch = curl_init();		
+	curl_setopt($ch, CURLOPT_URL, $url);		
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, 1);		
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);			
+	$data = json_decode(curl_exec($ch), true);	
+	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);	
+	curl_close($ch); 		
+	if($http_code != '200')			
+		throw new Exception('Error : Failed to receieve access token');
+	
+	$access_token= $data['access_token'];
+               
+	$url = 'https://api.instagram.com/v1/users/self/?access_token=' . $access_token;	
+
+	$ch = curl_init();		
+	curl_setopt($ch, CURLOPT_URL, $url);		
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);	
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	$data = json_decode(curl_exec($ch), true);
+	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);	
+	curl_close($ch); 
+	if($data['meta']['code'] != 200 || $http_code != 200)
+		throw new Exception('Error : Failed to get user information');
+
+	$user_info= $data['data'];	
+		
+
+         //print_r($user_info);exit;
+
+	if(isset($user_info['id'])){
+            
+	$insta_id=$this->User->find("first",array('conditions'=>array('User.instagram_id'=>$user_info['id'])));
+    	
+    	if(count($insta_id) < 1)
+    	{
+            $name=  explode(" ", $user_info['full_name']);
+            $this->request->data['User']['instagram_id']=$user_info['id'];
+            $this->request->data['User']['first_name']=$name[0];
+            $this->request->data['User']['last_name']=$name[1];
+            $this->request->data['User']['profile_image']=$user_info['profile_picture'];
+            $this->request->data['User']['type']='C';
+            $this->request->data['User']['is_active']=1;
+             
+              	$this->User->save($this->request->data);
+              	$user=$this->User->find("first",array('conditions'=>array('User.instagram_id'=>$this->request->data['User']['instagram_id'])));
+              	
+
+            //log in the user with facebook credentials
+            $this->Auth->login($user['User']);
+				//$this->Auth->login() ;
+			
+                return $this->redirect(array('controller'=>'users','action' => 'dashboard'));
+		
+              
+          }else{
+              
+              $this->Auth->login($insta_id['User']) ;
+              return $this->redirect(array('controller'=>'users','action' => 'dashboard'));
+          }
+          
+    	}
+    	
+	
+                }
+        
+    	
+    }
+    
+    
         
          public function fblogin()
     {
@@ -1152,7 +1248,7 @@ class UsersController extends AppController {
             }else{
                 
               $this->Session->setFlash(__('Email already exists. Please, try another.', 'default', array('class' => 'error')));
-                return $this->redirect($this->request->referer());  
+                //return $this->redirect($this->request->referer());  
                 
             }
           }
@@ -1474,6 +1570,22 @@ class UsersController extends AppController {
     	    {
     		    $this->redirect('/admin');
     	    }
+            
+            $this->loadModel('Shop');
+            $this->loadModel('Product');
+            $this->loadModel('Coupon');
+            $this->loadModel('Order');
+            $this->loadModel('User');
+            $countshop= $this->Shop->find('count');
+            $countdealupload= $this->Product->find('count');
+            $countcouponupload= $this->Coupon->find('count');
+            $countcouponsold= $this->Order->find('count');
+            $countuser= $this->User->find('count', array('conditions' => array('User.type' => 'C','User.is_active' => 1,'User.is_admin !=' => 1)));
+            $countvendor= $this->User->find('count', array('conditions' => array('User.type' => 'V','User.is_active' => 1)));
+                
+            $this->set(compact('countshop','title_for_layout','countdealupload','countcouponupload','countcouponsold','countuser','countvendor'));
+            
+            
        }
 	
        public function admin_logout() 
@@ -3495,5 +3607,87 @@ public function emailExists($email = null) {
 	$this->set(compact('user','follow','title_for_layout'));	
  }
 	/******************Kundu*****************/
+ 
+ 
+ 
+ 
+        public function admin_subscriber_list() { 
+            
+	$userid = $this->Session->read('Auth.User.id');
+		if(!isset($userid) && $userid=='')
+		{
+			$this->redirect('/admin');
+		}
+      $title_for_layout='Subscriber List';
+      $this->loadModel('EmailSubscriber');
+      $this->set('users', $this->Paginator->paginate('EmailSubscriber'));
+      $this->set(compact('title_for_layout'));
+  }
+ 
+ 
+  public function admin_subscriber_delete($id = null) 
+    {
+        $this->loadModel('EmailSubscriber');
+	$this->EmailSubscriber->id = $id;
+	$userid = $this->Session->read('Auth.User.id');
+	if(!isset($userid) && $userid=='')
+	{
+		$this->redirect('/admin');
+	}
+	if (!$this->EmailSubscriber->exists()) 
+	{
+		throw new NotFoundException(__('Invalid subscriber.'));
+	}
+	if ($this->EmailSubscriber->delete($id)) 
+	{
+		$this->Session->setFlash('The subsciber has been deleted.', 'default', array('class' => 'success'));
+	} else 
+	{
+		$this->Session->setFlash(__('The subsciber could not be deleted. Please, try again.'));
+	}
+	return $this->redirect(array('action' => 'subscriber_list'));
+   }
+   
+   
+    public function admin_send_mail() 
+     {
+	$title_for_layout = 'Admin Add';
+	
+	$userid = $this->Session->read('Auth.User.id');
+        $this->loadModel('EmailSubscriber');
+        
+	if(!isset($userid) && $userid=='')
+	{
+		$this->redirect('/admin');
+	}
+	if ($this->request->is('post')) { 
+		
+           
+		 $email = $this->request->data['EmailSubscriber']['email'];
+                 $content=$this->request->data['EmailSubscriber']['item_description'];
+		  //print_r($email);exit;
+                 //echo count($email);
+               foreach($email as $dt){
+                 
+                 $mail_body = $content;
+
+                     $this->send_smtpmail($dt,'nits.santanupatra@gmail.com','New updates',$mail_body);
+               }
+		  
+              
+	}
+        
+       $options = array('conditions' => array('EmailSubscriber.status'  => 1));
+       $users=  $this->EmailSubscriber->find('all',$options);
+       $this->set(compact('users','title_for_layout'));
+        
+    }
+   
+   
+   
+   
+ 
+ 
+ 
 }
 ?>

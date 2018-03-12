@@ -36,7 +36,7 @@
 	    							</td>
 	    							<td>
                                                                     
-	    							<?php echo $package_details['Package']['price'] ; ?>
+	    							$<?php echo $package_details['Package']['price'] ; ?>
 	    							</td>
 	    							<td class="">
 	    							<?php echo $package_details['Package']['no_deal'] ; ?>	
@@ -55,12 +55,22 @@
 									<td colspan="10" class="text-right">
                                                                             <br>
 										<h5 class="font-weight-bold"> Total Payable: $<?php echo $package_details['Package']['price'] ; ?></h5>
-                                                                                <form class="mt-4" method="post" action="<?php echo $this->webroot;?>packages/payment_process/<?php echo $package_details['Package']['id'] ; ?>">                                                      
+                                                                                
+                        <div style="float: right; width: 200px">
+                            <div style="float:left">
+                                <form class="mt-4" method="post" action="<?php echo $this->webroot; ?>packages/package_request/<?php echo base64_encode($package_details['Package']['id']); ?>">                                                      
+                                <button type="submit" class="btn btn-primary" >Pay Cash</button>
                             
-                    <div class="">
-                        <button type="submit" class="btn btn-primary" >Pay Now</button>
-                    </div>
-                           </form>
+                        </form>
+                            </div>
+                            <div style="float:left;padding: 1px">
+                                <form class="mt-4" method="post" action="<?php echo $this->webroot; ?>packages/payment_process/<?php echo base64_decode($package_details['Package']['id']); ?>">                                                      
+                            
+                                <button type="submit" class="btn btn-primary" >Pay Now</button>
+                            
+                        </form>
+                            </div>
+                        </div>
 									</td>
 								</tr>
                                                         

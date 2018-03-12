@@ -98,15 +98,8 @@
                             <div class="half-mark-header">
                                 <span></span>
                             </div>
-                            <h5 class="mb-3 text-uppercase">Rating and feedback</h5>
-                            <!-- <ul class="m-0 p-0 list-unstyled feedback">
-                                <li>
-                                    <div class="img"></div>
-                                    <div class="txt">
-                                        <h5></h5>
-                                    </div>
-                                </li>
-                            </ul> -->
+<!--                            <h5 class="mb-3 text-uppercase">Rating and feedback</h5>
+                            
                             <div class="feebbk">
                                 <div class="media">
                                   <img class="mr-3" src="img/img2.png" alt="Generic placeholder image">
@@ -134,52 +127,16 @@
                                       </div>
                                   </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
      </section>
-    <section class="pt-3">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-4">
-            <div class="img-wrp">
-              <img src="img/bg-2.png" class="w-100" alt="">
-              <div class="img-inr">
-                <div class="text-white text-uppercase font-36">
-                  <strong>Get the </strong> offer</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8">
-            <a href="" class="underline-text">Lorem ipsum dolor sit amet,.</a>
-            <p class="text-secondary">Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien et, rhoncus feugiat justo.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="py-2">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8">
-            <h3 class="home-hdng">
-              <span>Deals</span>
-              benefit
-            </h3>
-            <div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien.</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, </p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget convallis purus. Nam ultrices, neque a euismod pulvinar, lectus magna varius nunc, vitae faucibus neque risus a mi. Donec ante dui, mattis vitae sapien et, rhoncus feugiat justo.</p>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <img src="img/bg-1.png" class="w-100" alt="">
-          </div>
-        </div>
-      </div>
-    </section>
+    
+     <?php echo $homecontent['Content']['content'];?>
+
     <section class="pb-4">
       <div class="container">
         <h3 class="home-hdng">

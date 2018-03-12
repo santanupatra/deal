@@ -156,19 +156,13 @@ foreach ($cities as $city) {
                                             <input type="radio" name="data[Coupon][type]"  value="O" <?php if ($this->request->data['Coupon']['type'] == 'O') {
     echo "checked";
 } ?>>Online Use
-                                            <input type="radio" name="data[Coupon][type]" value="S" onclick="f()"  <?php if ($this->request->data['Coupon']['type'] == 'S') {
+                                            <input type="radio" name="data[Coupon][type]" value="S"   <?php if ($this->request->data['Coupon']['type'] == 'S') {
     echo "checked";
 } ?>>Store Use
                                         </div>
                                     </div>
 
-                                    <div class="form-group row" id="textbox" <?php if ($this->request->data['Coupon']['type'] == 'O') { ?> style="display: none" <?php } ?>>
-                                <label class="col-sm-4 control-label">Redirect Link:</label>
-                                <div class="col-sm-6">
-
-<?php echo $this->Form->input('link', array('label' => false, 'class' => 'form-control')); ?>
-                                </div>
-                            </div>
+                                    
 
 
                                     <div class="form-group row">
@@ -206,10 +200,4 @@ foreach ($cities as $city) {
       CKEDITOR.config.height = '200';
       CKEDITOR.replace('PagePDesc');
   </script>
-<script>
-    function f(){
-    
-   $('#textbox').show();
-    
-}
-    </script>
+

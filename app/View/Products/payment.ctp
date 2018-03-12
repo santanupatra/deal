@@ -35,7 +35,7 @@
 	    							</td>
 	    							<td>
                                                                     
-	    							<?php echo $coupon_details['Coupon']['amount'] ; ?>
+	    							$<?php echo $coupon_details['Coupon']['amount'] ; ?>
 	    							</td>
 	    							<td class="">
 	    							<?php echo $coupon_details['Coupon']['offer'] ; ?>% Discount	

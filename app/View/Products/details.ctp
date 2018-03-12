@@ -1,3 +1,17 @@
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
 <div class="clearfix"></div>
 
     <section class="page-title p-4">
@@ -30,17 +44,17 @@
                 <ul class="list-unstyled d-block">
                     <li class="d-inline-block font-13 text-dark mr-2">
                       <i class="fa fa-map-marker"></i> 
-                      MULTIPLE LOCATIONS 
+                      <?php echo $details['City']['name']; ?>
                     </li>
-                    <li class="d-inline-block font-13 text-dark">
+<!--                    <li class="d-inline-block font-13 text-dark">
                       <i class="fa fa-gg-circle pr-1"></i> lorem ipsum
-                    </li>
+                    </li>-->
                     
                 </ul>  
                 <h5 class="text-dark"><strong><?php echo $details['Product']['name'];?></strong></h5>
                 <hr class="mt-2 mb-2">                            
               <p class="font-13 text-gray mb-2"><?php echo $details['Product']['item_description'];?></p>
-              <div class="review-div w-100">
+<!--              <div class="review-div w-100">
                  <form action="#">
                    <div class="form-group">
                      <label for="wr">Write a review</label>
@@ -53,7 +67,7 @@
                    <button type="button" class="btn btn-theme mt-1 mb-1 rounded-0">
                     <i class="fa fa-hand-o-up btn-sm"></i>Post Here</button>
                  </form> 
-              </div>    
+              </div>    -->
             </div>
           </div>
 
@@ -88,30 +102,11 @@
 
                 <div class="social-div text-center w-100 d-block">
                   <ul class="list-unstyled d-block w-100 table-bordered p-1 m-0">
+                      
+                      <!-- Go to www.addthis.com/dashboard to customize your tools --> <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a818b2d23ba2aab"></script>
+                      <!-- Go to www.addthis.com/dashboard to customize your tools --> <div class="addthis_inline_share_toolbox_s675"></div>
 
-                    <li class="d-inline-block">
-                      <a href="#" class="d-inline-block pl-2 pr-2">
-                        <i class="fa fa-facebook"></i>
-                      </a>
-                    </li>
 
-                    <li class="d-inline-block">
-                      <a href="#" class="d-inline-block pl-2 pr-2">
-                        <i class="fa fa-twitter"></i>
-                      </a>
-                    </li>
-
-                    <li class="d-inline-block">
-                      <a href="#" class="d-inline-block pl-2 pr-2">
-                          <i class="fa fa-google-plus"></i>
-                      </a>                      
-                    </li>
-
-                    <li class="d-inline-block">
-                      <a href="#" class="d-inline-block pl-2 pr-2">
-                        <i class="fa fa-google"></i>
-                      </a>
-                    </li>     
                   </ul>   
                 </div> 
                 
@@ -119,7 +114,9 @@
                   <h5 class="text-dark p-2 text-center">
                     Our location
                   </h5>
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26361218.62275926!2d-113.75471927574468!3d36.24138396069964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited+States!5e0!3m2!1sen!2sin!4v1518689536814" width="100%" height="330" frameborder="0" style="border:0" allowfullscreen></iframe>                    
+                 <!--  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26361218.62275926!2d-113.75471927574468!3d36.24138396069964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited+States!5e0!3m2!1sen!2sin!4v1518689536814" width="100%" height="330" frameborder="0" style="border:0" allowfullscreen></iframe>   -->
+                 <div id="map"></div>                  
+                    
                 </div>
               </div>
             </div>
@@ -128,3 +125,26 @@
       </div>
     </section>
     <div class="clearfix"></div>
+     <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>  
+    
+    <script>
+      function initMap() {
+        var uluru = {lat: <?php echo $details['City']['latitude']; ?>, lng: <?php echo $details['City']['longitude']; ?>};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPCFTHLy2vABYWMKAwTV6zftOl4vwMGy0&callback=initMap">
+    </script>

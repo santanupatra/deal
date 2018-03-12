@@ -129,17 +129,11 @@
                                 <div>
 
                                     <input type="radio" name="data[Coupon][type]"  value="O" checked="">Online Use
-                                    <input type="radio" name="data[Coupon][type]"  onclick="f()" value="S">Store Use
+                                    <input type="radio" name="data[Coupon][type]"  value="S">Store Use
                                 </div>
                             </div>
                             
-                            <div class="form-group" id="textbox" style="display: none">
-                                <label>Redirect Link:</label>
-                                <div>
-
-<?php echo $this->Form->input('link', array('label' => false, 'class' => 'form-control')); ?>
-                                </div>
-                            </div>
+                            
 
                             <div class="form-group">
                                 <div class="col-sm-offset-4 col-sm-6">
@@ -191,11 +185,7 @@
     }
 
 
-function f(){
-    
-   $('#textbox').show();
-    
-}
+
 
 
 

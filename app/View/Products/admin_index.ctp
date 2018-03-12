@@ -25,31 +25,36 @@
                                                 
                                                 <th><?php echo $this->Paginator->sort('created_at','Created On'); ?></th>
                                                 <th><?php echo $this->Paginator->sort('status'); ?></th>
+                                                <th><?php echo $this->Paginator->sort('Total Visitors'); ?></th>
                                                 <th class="actions"><?php echo __('Actions'); ?></th>
 					</tr>
 					</thead>
 					<tbody>
+                                            
 					<?php foreach ($products as $product): ?>
 					<tr>
-                                            <td><?php echo h($product['Product']['id']); ?>&nbsp;</td>
+                                            <td><?php echo h($product['product']['Product']['id']); ?>&nbsp;</td>
                                             <td>
-                                                    <?php echo $this->Html->link($product['User']['first_name'], array('controller' => 'users', 'action' => 'view', $product['User']['id'])); ?>
+                                                    <?php echo $this->Html->link($product['product']['User']['first_name'], array('controller' => 'users', 'action' => 'view', $product['product']['User']['id'])); ?>
                                             </td>
                                             <td>
-                                                    <?php echo $this->Html->link($product['Category']['name'], array('controller' => 'categories', 'action' => 'view', $product['Category']['id'])); ?>
+                                                    <?php echo $this->Html->link($product['product']['Category']['name'], array('controller' => 'categories', 'action' => 'view', $product['product']['Category']['id'])); ?>
                                             </td>
-                                            <td><?php echo h($product['Product']['name']); ?>&nbsp;</td>
+                                            <td><?php echo h($product['product']['Product']['name']); ?>&nbsp;</td>
                                             
-                                            <td><?php echo h($product['Product']['created_at']); ?>&nbsp;</td>
-                                            <td><?php echo h($product['Product']['status']=='A'?'Active':($product['Product']['status']=='P'?'Pending':'Inactive')); ?>&nbsp;</td>
+                                            <td><?php echo h($product['product']['Product']['created_at']); ?>&nbsp;</td>
+                                            <td><?php echo h($product['product']['Product']['status']=='A'?'Active':($product['product']['Product']['status']=='P'?'Pending':'Inactive')); ?>&nbsp;</td>
+                                            
+                                            <td><?php echo h($product['totalvisitor']); ?>&nbsp;</td>
+                                            
                                             <td class="actions">                                               
                                                 
                                                 
 <!--                                                <a href="<?php echo $this->webroot;?>admin/products/view/<?php echo $product['Product']['id'];?>"><img src="<?php echo $this->webroot;?>img/view.png" title="View Product"></a>-->
 
-                                                <a href="<?php echo $this->webroot;?>admin/products/edit/<?php echo $product['Product']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Product" width="22" height="21"></a>
+                                                <a href="<?php echo $this->webroot;?>admin/products/edit/<?php echo $product['product']['Product']['id'];?>"><img src="<?php echo $this->webroot;?>img/edit.png" title="Edit Product" width="22" height="21"></a>
 
-                                                <a href="<?php echo $this->webroot;?>admin/products/delete/<?php echo $product['Product']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Product" width="24" height="24"></a>
+                                                <a href="<?php echo $this->webroot;?>admin/products/delete/<?php echo $product['product']['Product']['id'];?>" onclick="return confirm('Are you sure to delete?')"><img src="<?php echo $this->webroot;?>img/delete.png" title="Delete Product" width="24" height="24"></a>
                                             </td>
 					</tr>
                    

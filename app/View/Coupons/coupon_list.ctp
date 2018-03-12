@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="col-lg-6 text-right">
-          <form action="#" class="d-inline-block pl-1">
+<!--          <form action="#" class="d-inline-block pl-1">
             <div class="form-group mb-0 search-category">
               <select class="text-dark text-left h6 font-14">
                 <option value="1">Search Coupon By Category</option>
@@ -32,7 +32,7 @@
                 <option value="3">Option 1</option>
               </select>
             </div>
-          </form>
+          </form>-->
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                           </div>
                           <div class="modal-body get-coupon-modal">
-                              <a href="<?php echo $coupon['Coupon']['link']?>" class="btn btn-success get-coupon">Redeem Coupon Code</a>
+                              <a href="<?php echo $this->webroot.'coupons/redeem/'.base64_encode($coupon['Coupon']['id']);?>" class="btn btn-success get-coupon">Redeem Coupon Code</a>
                             <h5>Amazon: Up To 75% Off | Amazon Promo Codes & Coupons February 2018</h5>
                             <p> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                           </div>
